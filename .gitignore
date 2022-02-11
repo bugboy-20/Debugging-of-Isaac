@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# --IGNORA I FILE ESEGUIBILI SENZA ESTENSIONE--
+# Ignore all
+*
+# Unignore all with extensions
+!*.*
+# Unignore all dirs
+!*/
+# --FINE--
