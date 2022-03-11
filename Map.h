@@ -17,13 +17,31 @@ struct Porta{ //dovrebbe essere un oggetto?
     room *next_room;
 };
 
+
+
+struct item_node {
+    Item mob;
+    Item *next;
+};
+typedef Item *ListItem;
+
+struct mob_node {
+    Mob mob;
+    Mob *next;
+};
+typedef Mob *ListMob;
+
+
+
 struct room{
-    Item *items; //array degli elementi non vivi della stanza
-    Mob *mobs; //personaggi vivi
+    ListItem items; //array degli elementi non vivi della stanza
+    ListMob *mobs; //personaggi vivi
     Porta porte[4];
 };
 
 struct Map{
     room *current_room;
-    room rooms[];
+    room *rooms; /* puntatore alla prima stanza, tutte le altre sono collegate dalle porte
+                    Porta linka a doppia direzione le stanze
+                    */
 };
