@@ -36,7 +36,7 @@ typedef Mob *ListMob;
 struct room{
     ListItem items; //array degli elementi non vivi della stanza
     ListMob mobs;   //personaggi vivi
-    Porta porte[4];
+    Porta *porte[4]; // se la porta è NULL vuol dire che lì c'è un muro, se porta->next_room è NULL vuol dire che non è ancora stata creata la stanza sucessiva
 };
 
 struct Map{

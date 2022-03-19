@@ -52,11 +52,23 @@ int main() {
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
 void controller() {
-    int key = getch();
-
-    while (key != ERR) { //finché ci sono tasti da leggere
+    int key;
+    do {
+        key = getch();
         switch (key) {
+            case 'w':
+                Player.moveUp(dummy_map.current_room);
+                /*
+                 * PREMETTO CHE È SOLO UN ESEMPIO. L'ho pensato come un metodo della classe Player che richiama un metodo privato del tipo
+                 * move( const room r, int x, int y) {
+                 *      if(!collision(this->x,this->y,r)) // collision è un metodo fatto da Saad che ritorna True quando nella posizione c'è già un oggetto incompenetrabile della stanza
+                 *          this->x += x
+                 *          this->y += y
+                 * }
+                 */
+                break;
+            default: break;
             // ...
         }
-    }
+    } while (key != ERR);  //finché ci sono tasti da leggere
 }
