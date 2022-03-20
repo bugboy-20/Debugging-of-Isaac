@@ -39,3 +39,6 @@
 # Unignore all dirs
 !*/
 # --FINE--
+
+# ripristina la visualizzazione dei Makefile (disattiva perchè non ha estensione)
+!Makefile
