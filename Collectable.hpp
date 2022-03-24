@@ -1,6 +1,6 @@
-using namespace std;
-#include "c_core.hpp"
-class c_collectable: public c_core{
+#include "Core.hpp"
+
+class Collectable: public Core {
 protected:
     // odio messina
 public:

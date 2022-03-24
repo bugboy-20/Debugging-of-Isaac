@@ -1,7 +1,6 @@
-using namespace std;
 struct coords{int x,y;};
 
-class c_core{
+class Core{
 protected:
     coords pos;
     char display;
