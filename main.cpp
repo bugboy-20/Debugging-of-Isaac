@@ -1,4 +1,5 @@
 #include <bits/types/time_t.h>
+#include <cstddef>
 #include <iostream>
 #include <ncurses.h>
 #include <ctime>
@@ -27,22 +28,40 @@ void do_room(room *r); //fa cose sulla stanza
 
 bool game_over();
 
-Map dummy_map;
+Map *dummy_map;
 
+room a{ //stanza finta
+    NULL, //nessun oggetto
+    NULL, //nessun mob
+    { //2 porte (una sopra e una a destra
+        new Porta {
+            PORTA_DESTA,
+            NULL
+        },
+        new Porta {
+            PORTA_SOPRA,
+            NULL
+        },
+        NULL,
+        NULL
+    }
+};
 
 
 int main() {
     //init schermo
     time_t inizio_frame, fine_frame;
     Screen schermo = Screen();
+    //init della mappa
+    dummy_map=init_map(a);
 
     //game loop
     while (!game_over()) {
         inizio_frame=time(0);
 
         controller();
-        do_room(dummy_map.current_room);
-        schermo.print(*dummy_map.current_room);
+        do_room(dummy_map->current_room);
+        schermo.print(*dummy_map->current_room);
 
         fine_frame=time(0);
         usleep(1000*(FRAMETIME-(fine_frame-inizio_frame))); //usleep specifica quanti micro secondi sospendere l'esecuzione

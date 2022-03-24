@@ -23,13 +23,13 @@ struct item_node {
     Item item;
     Item *next;
 };
-typedef Item *ListItem;
+typedef item_node *ListItem;
 
 struct mob_node {
     Mob mob;
     Mob *next;
 };
-typedef Mob *ListMob;
+typedef mob_node *ListMob;
 
 
 
@@ -46,5 +46,11 @@ struct Map{
                   */
 };
 
+// inizializza la mappa, restituisce un puntatore alla mappa il cui uso è facoltativo.
+// quando la mappa viene inizializzata crea una stanza come quella in input.
+Map *init_map(room stanza_iniziale);
+
 //cambia la stanza in cui il personaggio si trova in quella passata per indirizzo dalla funzione
 void change_room(room *new_room);
+
+
