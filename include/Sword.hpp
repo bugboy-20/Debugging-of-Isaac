@@ -1,3 +1,4 @@
+#pragma once
 #include "Item.hpp"
 
 class Sword: public Collectable {

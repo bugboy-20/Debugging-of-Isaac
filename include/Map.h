@@ -1,7 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "Collectable.hpp"
 #include "Room.h"
 
 struct Map
