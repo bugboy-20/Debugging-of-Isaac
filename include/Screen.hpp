@@ -1,3 +1,4 @@
+#pragma once
 #include <ncursesw/ncurses.h>
 #include "Map.h"
 

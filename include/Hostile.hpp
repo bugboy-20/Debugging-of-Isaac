@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Entity.hpp"
 
 class Hostile: public Entity{
