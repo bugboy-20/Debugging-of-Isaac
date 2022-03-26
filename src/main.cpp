@@ -35,12 +35,12 @@ room a{ //stanza finta
     NULL, //nessun oggetto
     NULL, //nessun mob
     { //2 porte (una sopra e una a destra
-        new Porta {
-            PORTA_DESTA,
+        new door {
+            RIGHT_ROOM,
             NULL
         },
-        new Porta {
-            PORTA_SOPRA,
+        new door {
+            UPPER_ROOM,
             NULL
         },
         NULL,
