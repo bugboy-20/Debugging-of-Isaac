@@ -1,8 +1,5 @@
-#pragma once
-
 #include "Core.hpp"
-
-struct room;
+#include "Map.h"
 
 class Entity: public Core{
 
@@ -16,18 +13,19 @@ public:
         this->health=0;
         this->damage=0;
     };
+private:
+    bool move( const room r, int x, int y) {
+     if(!collision(this->pos.x+x,this->pos.y+y,r)) {
+         this->pos.x += x;
+         this->pos.y += y;
+         return true;
+    } else return false;
+}
 //chiede una copia della "planimetria" della stanza
 //cerca di muovere l'entità, restituisce true qualora la cosa abbia sucesso
 // btw se hai non hai idee su come implementare questo metodo, una proposta l'avevo scritta sul main
-// collision è un metodo fatto da Saad che ritorna True quando nella posizione c'è già un oggetto incompenetrabile della stanza    
-    bool move_up(room room){   
-        move( const room r, int x, int y) {
-            if(!collision(this->x,this->y,r)){
-                this->y += 1;
-                return true;
-                    } else return false;
-                }
-    bool move_down(room room);
-    bool move_left(room room);
-    bool move_right(room room);
+    bool move_up(room room){return move(room,0,-1);};  
+    bool move_down(room room){return move(room,0,1);};
+    bool move_left(room room){return move(room,1,0);};
+    bool move_right(room room){return move(room,-1,0);};
 };
