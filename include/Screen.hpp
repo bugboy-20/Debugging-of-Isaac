@@ -8,6 +8,8 @@ private:
     WINDOW *wroom;
     int room_height, room_width;
 
+    void printDoors(door *doors[]);
+
 public:
     Screen();
     // stampa sullo schermo l'intera stanza
