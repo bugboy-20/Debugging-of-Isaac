@@ -1,7 +1,8 @@
 #pragma once
 #include "Core.hpp"
 
-class Collectable: public Core {
+class Item : public Core
+{
 protected:
     // odio messina
 public:

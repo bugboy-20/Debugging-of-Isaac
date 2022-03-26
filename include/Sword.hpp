@@ -1,7 +1,8 @@
 #pragma once
 #include "Item.hpp"
 
-class Sword: public Collectable {
+class Sword : public Item
+{
 protected:
     int damage;
 };
