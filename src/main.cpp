@@ -1,15 +1,16 @@
 #include <bits/types/time_t.h>
 #include <cstddef>
 #include <iostream>
-#include <ncurses.h>
 #include <ctime>
 #include "Map.h"
 #include "Player.hpp"
 
-#ifdef _WIN32 //sleep fn
+#ifdef _WIN32 // sleep fn
 #include <Windows.h>
+#include <ncursesw/ncurses.h>
 #else
 #include <unistd.h>
+#include <ncurses.h>
 #endif
 
 using namespace std;
