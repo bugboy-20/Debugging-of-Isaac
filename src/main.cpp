@@ -30,7 +30,7 @@ void do_room(room *r); //fa cose sulla stanza
 
 bool game_over();
 
-Map *dummy_map;
+map *dummy_map;
 
 room a{ //stanza finta
     NULL, //nessun oggetto
