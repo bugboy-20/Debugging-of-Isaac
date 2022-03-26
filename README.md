@@ -17,3 +17,7 @@
 - Ale:	 Creazione delle classi per le entità del gioco
 - Saad:	 Gestione della fisica del gioco
 - Piske: Stampa a video
+
+https://virtuale.unibo.it/pluginfile.php/1059665/mod_resource/content/1/presentazioneProgetto.pdf
+
+
