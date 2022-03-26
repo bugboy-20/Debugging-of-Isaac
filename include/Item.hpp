@@ -1,3 +1,4 @@
+#pragma once
 #include "Core.hpp"
 
 class Collectable: public Core {

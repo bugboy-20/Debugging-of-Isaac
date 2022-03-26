@@ -1,5 +1,6 @@
+#pragma once
 #include <ncursesw/ncurses.h>
-#include "Map.h"
+#include "Room.h"
 
 class Screen
 {
