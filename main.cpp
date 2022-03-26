@@ -4,6 +4,7 @@
 #include <ncurses.h>
 #include <ctime>
 #include "Map.h"
+#include "Player.hpp"
 
 #ifdef _WIN32 //sleep fn
 #include <Windows.h>
@@ -15,7 +16,7 @@ using namespace std;
 
 
 #define FRAMETIME 250 //durata di un frame ~~ velocità del gioco
-void controller(); // è solamente dimostrativa ma sicuramente ci sarà qualcosa del genere
+void controller(Player); // è solamente dimostrativa ma sicuramente ci sarà qualcosa del genere
 
 //dummy class and funtions
 //  [andranno poi implementate]
@@ -54,12 +55,14 @@ int main() {
     Screen schermo = Screen();
     //init della mappa
     dummy_map=init_map(a);
+    //init del player
+    Player player = Player();
 
     //game loop
     while (!game_over()) {
         inizio_frame=time(0);
 
-        controller();
+        controller(player);
         do_room(dummy_map->current_room);
         schermo.print(*dummy_map->current_room);
 
@@ -70,13 +73,13 @@ int main() {
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
-void controller() {
+void controller(Player player) {
     int key;
     do {
         key = getch();
         switch (key) {
             case 'w':
-                Player.moveUp(dummy_map.current_room);
+                player.move_up(*dummy_map->current_room);
                 /*
                  * PREMETTO CHE È SOLO UN ESEMPIO. L'ho pensato come un metodo della classe Player che richiama un metodo privato del tipo
                  * move( const room r, int x, int y) {

@@ -1,6 +1,6 @@
 #include "Collectable.hpp"
-#include "Item.hpp"
-#include "Mob.hpp"
+#include "Core.hpp"
+#include "Entity.hpp"
 
 struct room;
 struct Porta;
@@ -20,22 +20,22 @@ struct Porta{
 
 
 struct item_node {
-    Item item;
-    Item *next;
+    Core item;
+    Core *next;
 };
 typedef item_node *ListItem;
 
-struct mob_node {
-    Mob mob;
-    Mob *next;
+struct entity_node {
+    Entity mob;
+    Entity *next;
 };
-typedef mob_node *ListMob;
+typedef entity_node *ListEntity;
 
 
 
 struct room{
     ListItem items; //array degli elementi non vivi della stanza
-    ListMob mobs;   //personaggi vivi
+    ListEntity entities;   //personaggi vivi
     Porta *porte[4]; // se la porta è NULL vuol dire che lì c'è un muro, se porta->next_room è NULL vuol dire che non è ancora stata creata la stanza sucessiva
 };
 

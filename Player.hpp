@@ -1,6 +1,6 @@
-#include "Core.hpp"
+#include "Entity.hpp"
 
-class Player: public Core{
+class Player: public Entity{
 
     protected:
     int swaggometro;

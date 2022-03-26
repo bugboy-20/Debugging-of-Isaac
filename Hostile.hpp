@@ -1,6 +1,6 @@
-#include "Core.hpp"
+#include "Entity.hpp"
 
-class Hostile: public Core{
+class Hostile: public Entity{
 protected:
     int cattivometro;
     int trigger_radius;
