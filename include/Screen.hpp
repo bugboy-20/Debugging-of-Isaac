@@ -15,8 +15,10 @@ class Screen
 private:
     WINDOW *wroom;
     int room_height, room_width;
-
+    int test;
+    
     void printDoors(door *doors[]);
+
 
 public:
     Screen();
