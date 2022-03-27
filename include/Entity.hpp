@@ -1,5 +1,8 @@
+#pragma once
+
 #include "Core.hpp"
-#include "Map.h"
+
+struct room;
 
 class Entity: public Core{
 
