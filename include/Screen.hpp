@@ -1,5 +1,13 @@
 #pragma once
+
+#include <iostream>
+
+#ifdef _WIN32
 #include <ncursesw/ncurses.h>
+#else
+#include <ncurses.h>
+#endif
+
 #include "Room.h"
 
 class Screen

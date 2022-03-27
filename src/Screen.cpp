@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Screen.hpp"
 
 Screen::Screen()
@@ -24,16 +23,31 @@ void Screen::renderRoom(room r)
     box(wroom, 0, 0);
     printDoors(r.doors);
 
-    // render dei muri interni
+    // render dei muri interni (forse sono tra gli item?)
 
     // chiamo la funzione update che si occupa del resto
     updateRoom(r);
+
+    refresh();
+    wrefresh(wroom);
 }
 
 void Screen::updateRoom(room r)
 {
     // render degli item
+    while (r.items != NULL)
+    {
+        mvwaddch(wroom, r.items->item.getY(), r.items->item.getX(), r.items->item.getDisplay());
+        r.items = r.items->next;
+    }
+
     // render entità
+    while (r.entities != NULL)
+    {
+        mvwaddch(wroom, r.entities->mob.getY(), r.entities->mob.getX(), r.entities->mob.getDisplay());
+        r.entities = r.entities->next;
+    }
+    wrefresh(wroom);
 }
 
 void Screen::printDoors(door *doors[])
