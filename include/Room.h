@@ -24,14 +24,14 @@ struct door
 struct item_node
 {
     Core item;
-    Core *next;
+    item_node *next;
 };
 typedef item_node *ListItem;
 
 struct entity_node
 {
     Entity mob;
-    Entity *next;
+    entity_node *next;
 };
 typedef entity_node *ListEntity;
 

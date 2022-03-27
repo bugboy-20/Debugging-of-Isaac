@@ -4,6 +4,7 @@
 #include <ctime>
 #include "Map.h"
 #include "Player.hpp"
+#include "Room.h"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -37,11 +38,11 @@ room a{ //stanza finta
     NULL, //nessun mob
     { //2 porte (una sopra e una a destra
         new door {
-            RIGHT_ROOM,
+            RIGHT_DOOR,
             NULL
         },
         new door {
-            UPPER_ROOM,
+            UPPER_DOOR,
             NULL
         },
         NULL,
@@ -81,14 +82,15 @@ void controller(Player player) {
         switch (key) {
             case 'w':
                 player.move_up(*dummy_map->current_room);
-                /*
-                 * PREMETTO CHE È SOLO UN ESEMPIO. L'ho pensato come un metodo della classe Player che richiama un metodo privato del tipo
-                 * move( const room r, int x, int y) {
-                 *      if(!collision(this->x,this->y,r)) // collision è un metodo fatto da Saad che ritorna True quando nella posizione c'è già un oggetto incompenetrabile della stanza
-                 *          this->x += x
-                 *          this->y += y
-                 * }
-                 */
+                break;
+            case 'a':
+                player.move_left(*dummy_map->current_room);
+                break;
+            case 'd':
+                player.move_right(*dummy_map->current_room);
+                break;
+            case 's':
+                player.move_down(*dummy_map->current_room);
                 break;
             default: break;
             // ...

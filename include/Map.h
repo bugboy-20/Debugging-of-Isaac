@@ -1,5 +1,4 @@
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
 #include "Room.h"
 
@@ -17,5 +16,3 @@ map *init_map(room starting_room);
 
 // cambia la stanza in cui il personaggio si trova in quella passata per indirizzo dalla funzione
 void change_room(room *new_room);
-
-#endif
