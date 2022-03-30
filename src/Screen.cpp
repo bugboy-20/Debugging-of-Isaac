@@ -5,6 +5,7 @@ Screen::Screen()
     initscr();
     cbreak(); // ctrl+c behaviour
     noecho(); // avoids user input from being printed
+    keypad(wroom, true);
     refresh();
 
     int start_y, start_x; // variabili inutili, solo per sapere ogni valore cosa significa
@@ -25,15 +26,6 @@ void Screen::renderRoom(room r)
 
     // render dei muri interni (forse sono tra gli item?)
 
-    // chiamo la funzione update che si occupa del resto
-    updateRoom(r);
-
-    refresh();
-    wrefresh(wroom);
-}
-
-void Screen::updateRoom(room r)
-{
     // render degli item
     while (r.items != NULL)
     {
@@ -47,6 +39,8 @@ void Screen::updateRoom(room r)
         mvwaddch(wroom, r.entities->mob.getY(), r.entities->mob.getX(), r.entities->mob.getDisplay());
         r.entities = r.entities->next;
     }
+
+    refresh();
     wrefresh(wroom);
 }
 
