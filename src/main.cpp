@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <iostream>
 #include <ctime>
+#include "Screen.hpp"
 #include "Map.h"
 #include "Player.hpp"
 #include "Room.h"
@@ -22,11 +23,6 @@ void controller(Player); // è solamente dimostrativa ma sicuramente ci sarà qu
 
 //dummy class and funtions
 //  [andranno poi implementate]
-class Screen {
-    public:
-        void print(room r);
-};
-
 void do_room(room *r); //fa cose sulla stanza
 
 bool game_over();
@@ -66,10 +62,14 @@ int main() {
 
         controller(player);
         do_room(dummy_map->current_room);
-        schermo.print(*dummy_map->current_room);
+        schermo.renderRoom(*dummy_map->current_room);
 
         fine_frame=time(0);
+#ifdef _WIN32
+        Sleep(FRAMETIME-(fine_frame-inizio_frame));
+#else
         usleep(1000*(FRAMETIME-(fine_frame-inizio_frame))); //usleep specifica quanti micro secondi sospendere l'esecuzione
+#endif
     }
 
 }
