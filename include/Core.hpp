@@ -5,7 +5,7 @@ class Core{
 protected:
     coords pos;
     char display;
-//public:
+public:
     int getX();
     int getY();
     char getDisplay();
