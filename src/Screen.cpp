@@ -18,11 +18,16 @@ Screen::Screen()
     refresh();
 }
 
-void Screen::renderRoom(room r)
+void Screen::render_room(room r)
 {
+    // pulisco lo schermo da rappresentazioni precedenti
+    wclear(wroom);
+    refresh();
+    wrefresh(wroom);
+
     // render muri esterni
     box(wroom, 0, 0);
-    printDoors(r.doors);
+    print_doors(r.doors);
 
     // render dei muri interni (forse sono tra gli item?)
 
@@ -44,7 +49,7 @@ void Screen::renderRoom(room r)
     wrefresh(wroom);
 }
 
-void Screen::printDoors(door *doors[])
+void Screen::print_doors(door *doors[])
 {
     char door = 254;
 
@@ -86,7 +91,7 @@ void Screen::printDoors(door *doors[])
     wrefresh(wroom);
 }
 
-void Screen::stopScreen()
+void Screen::stop_screen()
 {
     endwin();
 }

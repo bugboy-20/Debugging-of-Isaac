@@ -16,13 +16,13 @@ private:
     WINDOW *wroom;
     int room_height, room_width;
 
-    void printDoors(door *doors[]);
+    void print_doors(door *doors[]);
 
 public:
     Screen();
-    // stampa sullo schermo l'intera stanza
-    void renderRoom(room r);
 
+    // stampa sullo schermo l'intera stanza
+    void render_room(room r);
     // spegne lo schermo
-    void stopScreen();
+    void stop_screen();
 };
