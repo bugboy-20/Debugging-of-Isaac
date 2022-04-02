@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "ios": "cpp",
-        "type_traits": "cpp",
-        "xstring": "cpp",
-        "xutility": "cpp"
-    }
-}
