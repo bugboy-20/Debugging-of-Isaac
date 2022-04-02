@@ -6,4 +6,8 @@ protected:
     coords pos;
     char display;
 //public:
+    int getX();
+    int getY();
+    char getDisplay();
 };
+ 
