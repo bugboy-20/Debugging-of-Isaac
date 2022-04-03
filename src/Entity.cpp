@@ -1,6 +1,7 @@
 #include "Entity.hpp"
+#include "Room.h"
 
-Entity::Entity(){
+Entity::Entity(int health,int damage){
   health = 0;
   damage = 0;
 };

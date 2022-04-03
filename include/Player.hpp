@@ -3,7 +3,12 @@
 
 class Player: public Entity{
     protected:
-    Sword*= NULL;
-    Armor*= NULL;
+    Sword*;
+    Armor*;
+    public:
+    player(this->Sword,this->Armor){
+        Sword=NULL;
+        Armor=NULL;
 
+    }
 };
