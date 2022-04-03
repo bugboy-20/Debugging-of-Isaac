@@ -6,9 +6,9 @@ class Player: public Entity{
     Sword* spada;
     Armor* armatura;
     public:
-    player(this->spada,this->armatura){
-        spada=NULL;
-        armatura=NULL;
+    player(Sword s,Armor a){
+        s=NULL;
+        a=NULL;
 
     }
 };
