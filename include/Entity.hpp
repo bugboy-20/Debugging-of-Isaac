@@ -12,9 +12,7 @@ class Entity: public Core {
       int damage;
 
     public:
-      Entity(int health, int damage){
-        health=0;
-        damage=0;};
+      Entity(int health, int damage);
       bool move_up(room room);
       bool move_down(room room);
       bool move_left(room room);

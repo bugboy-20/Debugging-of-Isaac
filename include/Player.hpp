@@ -1,14 +1,12 @@
 #pragma once
 #include "Entity.hpp"
+#include "Armor.hpp"
+#include "Spada.hpp"
 
 class Player: public Entity{
     protected:
     Sword* spada;
     Armor* armatura;
     public:
-    player(Sword s,Armor a){
-        s=NULL;
-        a=NULL;
-
-    }
+        Player(Sword s, Armor a);
 };
