@@ -5,6 +5,6 @@ Core::Core(coords pos, char display){
 	pos.y = 0;
 	display = '\0';
 };
-int Core::getX(){};
-int Core::getY(){};
-char Core::getDisplay(){};
+int Core::getX(){return pos.x;};
+int Core::getY(){return pos.y;};
+char Core::getDisplay(){return display;};
