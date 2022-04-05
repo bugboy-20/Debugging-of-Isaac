@@ -11,3 +11,4 @@ public:
     int getY();
     char getDisplay();
 };
+ 

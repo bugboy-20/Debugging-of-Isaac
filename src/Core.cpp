@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-Core(coords pos, char display){
+Core::Core(coords pos, char display){
 	pos.x = 0;
 	pos.y = 0;
 	display = '\0';
