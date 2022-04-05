@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-Core(int pos.x, int pos.y, char display) {
+Core(coords pos, char display){
 	pos.x = 0;
 	pos.y = 0;
 	display = '\0';

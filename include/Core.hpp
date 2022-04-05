@@ -6,9 +6,8 @@ protected:
     coords pos;
     char display;
 public:
-    Core(int pos.x,int pos.y, char display);
+    Core(coords pos, char display);
     int getX();
     int getY();
     char getDisplay();
 };
- 
