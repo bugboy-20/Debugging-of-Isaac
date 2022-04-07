@@ -5,7 +5,7 @@ Screen::Screen()
     initscr();
     cbreak(); // ctrl+c behaviour
     noecho(); // avoids user input from being printed
-    keypad(wroom, true);
+    // keypad(wroom, true);
     refresh();
 
     int start_y, start_x; // variabili inutili, solo per sapere ogni valore cosa significa
