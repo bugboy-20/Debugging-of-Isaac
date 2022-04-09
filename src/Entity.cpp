@@ -2,6 +2,7 @@
 #include "Room.h"
 #include "physics.h"
 #include <cstring>
+#include <ncursesw/ncurses.h>
 
 Entity::Entity(char name[10], int health, int damage, coords pos, char display) : Core(pos, display)
 {
@@ -20,11 +21,11 @@ bool Entity::move_down(room room)
 };
 bool Entity::move_left(room room)
 {
-  return move(room, 1, 0);
+  return move(room, -1, 0);
 };
 bool Entity::move_right(room room)
 {
-  return move(room, -1, 0);
+  return move(room, 1, 0);
 };
 bool Entity::move(const room r, int x, int y)
 {

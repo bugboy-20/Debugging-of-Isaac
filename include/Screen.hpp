@@ -14,6 +14,7 @@ class Screen
 {
 private:
     WINDOW *wroom;
+    // *legend, *moblist, *playerstat, *invetory
     int room_height, room_width;
 
     void print_doors(door *doors[]);

@@ -19,14 +19,20 @@
 
 using namespace std;
 
-#define FRAMETIME 250    // durata di un frame ~~ velocità del gioco
-void controller(Player); // è solamente dimostrativa ma sicuramente ci sarà qualcosa del genere
+#define FRAMETIME 30       // durata di un frame ~~ velocità del gioco
+void controller(Player *); // è solamente dimostrativa ma sicuramente ci sarà qualcosa del genere
 
 map *dummy_map;
 
+char n[10] = "gino";
+Player player = Player(NULL, NULL, n, 10, 5, {20, 15}, '@');
+
+ListEntity f = new entity_node{
+    &player, NULL};
+
 room a{      // stanza finta
        NULL, // nessun oggetto
-       NULL, // nessun mob
+       f,    // nessun mob
        {     // 2 porte (una sopra e una a destra
         new door{
             RIGHT_DOOR,
@@ -45,16 +51,16 @@ int main()
     // init della mappa
     dummy_map = init_map(a);
     // init del player
-    char n[10] = "gino";
-    Player player = Player(NULL, NULL, n, 10, 5, {1, 1}, '@');
 
     // game loop
     while (!game_over())
     {
         inizio_frame = time(0);
 
-        controller(player);
-        do_room(dummy_map->current_room);
+        controller(&player);
+        // printw("(%d,%d)", player.getX(), player.getY());
+
+        // do_room(dummy_map->current_room);
         schermo.render_room(*dummy_map->current_room);
 
         fine_frame = time(0);
@@ -67,7 +73,7 @@ int main()
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
-void controller(Player player)
+void controller(Player *player)
 {
     int key;
     do
@@ -76,16 +82,16 @@ void controller(Player player)
         switch (key)
         {
         case 'w':
-            player.move_up(*dummy_map->current_room);
+            player->move_up(*dummy_map->current_room);
             break;
         case 'a':
-            player.move_left(*dummy_map->current_room);
+            player->move_left(*dummy_map->current_room);
             break;
         case 'd':
-            player.move_right(*dummy_map->current_room);
+            player->move_right(*dummy_map->current_room);
             break;
         case 's':
-            player.move_down(*dummy_map->current_room);
+            player->move_down(*dummy_map->current_room);
             break;
         default:
             break;

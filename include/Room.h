@@ -30,7 +30,7 @@ typedef item_node *ListItem;
 
 struct entity_node
 {
-    Entity mob;
+    Entity *mob;
     entity_node *next;
 };
 typedef entity_node *ListEntity;
@@ -41,7 +41,5 @@ struct room
     ListEntity entities; // personaggi vivi
     door *doors[4];      // se la porta è NULL vuol dire che lì c'è un muro, se porta->next_room è NULL vuol dire che non è ancora stata creata la stanza sucessiva
 };
-
-
 
 #endif
