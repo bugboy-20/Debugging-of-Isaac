@@ -14,7 +14,11 @@ main:
 	$(CC) $(SOURCES) $(CFLAGS) -o main
 
 run:
+ifeq ($(detected_OS), Windows)
+	.\main.exe
+else
 	./main
+endif
 
 clean:
 ifeq ($(detected_OS), Windows)
