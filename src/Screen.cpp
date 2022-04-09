@@ -22,8 +22,8 @@ void Screen::render_room(room r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
     wclear(wroom);
-    refresh();
-    wrefresh(wroom);
+    // refresh();
+    // wrefresh(wroom);
 
     // render muri esterni
     box(wroom, 0, 0);

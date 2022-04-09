@@ -1,8 +1,10 @@
 #pragma once
-#include "Item.hpp"
 
-class Sword : public Item
+class Sword
 {
 protected:
     int damage;
+
+public:
+    Sword(int damage);
 };

@@ -1,8 +1,10 @@
 #pragma once
-#include "Item.hpp"
 
-class Armor : public Item
+class Armor
 {
 protected:
     int health;
+
+public:
+    Armor(int health);
 };
