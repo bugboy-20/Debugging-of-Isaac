@@ -7,6 +7,8 @@
 struct room;
 struct door;
 
+#define ROOM_HEIGHT 20
+#define ROOM_WIDTH 100
 enum
 {
     UPPER_DOOR,

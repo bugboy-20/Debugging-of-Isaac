@@ -2,7 +2,6 @@
 #include "Room.h"
 #include "physics.h"
 #include <cstring>
-#include <ncursesw/ncurses.h>
 
 Entity::Entity(char name[10], int health, int damage, coords pos, char display) : Core(pos, display)
 {
