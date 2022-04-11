@@ -10,13 +10,33 @@ Screen::Screen()
     // keypad(wroom, true);
     refresh();
 
-    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, 1, 1);
-    playerstat = newwin(4, 17, 1, ROOM_WIDTH + 2);
+    int lateral_width = 20,
+        lower_height = 10,
+        playerstat_height = 4,
+        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
+        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
+        moblist_width = ROOM_WIDTH,
+        start_x = 1,
+        start_y = 0,
+        lateral_start_x = ROOM_WIDTH + 1 + start_x,
+        lower_start_y = ROOM_HEIGHT;
+
+    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
+    playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
+    legend = newwin(legend_height, lateral_width, playerstat_height + start_y, lateral_start_x);
+    inventory = newwin(inventory_height, lateral_width, playerstat_height + legend_height + start_y, lateral_start_x);
+    moblist = newwin(lower_height, moblist_width, lower_start_y + start_y, start_x);
     box(playerstat, 0, 0);
+    box(legend, 0, 0);
+    box(inventory, 0, 0);
+    box(moblist, 0, 0);
 
     refresh();
     wrefresh(wroom);
     wrefresh(playerstat);
+    wrefresh(legend);
+    wrefresh(inventory);
+    wrefresh(moblist);
 }
 
 void Screen::render_room(room r)
@@ -107,6 +127,9 @@ void Screen::render_playerstat(room r)
         else
             waddch(playerstat, 'o');
     }
+    wmove(playerstat, 2, 1);
+    wprintw(playerstat, "%s: ", "punti");
+
     refresh();
     wrefresh(playerstat);
 }

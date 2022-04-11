@@ -13,7 +13,7 @@
 class Screen
 {
 private:
-    WINDOW *wroom, *playerstat, *legend;
+    WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
     // *legend, *moblist, *playerstat, *inventory
 
     void print_doors(door *doors[]);
@@ -21,10 +21,20 @@ private:
 public:
     Screen();
 
-    // stampa sullo schermo l'intera stanza
+    // stampa sullo schermo la stanza
     void render_room(room r);
 
+    // stampa il riquadro in cui sono visualizzati punteggio e vita
     void render_playerstat(room r);
+
+    // stampa una legenda degli elementi presenti nella stanza
+    void render_legend(room r);
+
+    // stampa la sezione con la vita di tutti gli ostili nella stanza
+    void render_moblist(room r);
+
+    // stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore
+    void render_inventory(room r);
 
     // spegne lo schermo
     void stop_screen();
