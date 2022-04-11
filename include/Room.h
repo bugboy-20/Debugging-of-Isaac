@@ -4,6 +4,9 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 
+#define ROOM_HEIGHT 20
+#define ROOM_WIDTH 100
+
 struct room;
 struct door;
 
