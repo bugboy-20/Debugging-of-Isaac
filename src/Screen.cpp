@@ -115,8 +115,8 @@ void Screen::render_playerstat(room r)
 {
     // printw("entities: %s", typeid(Entity).name());
     wmove(playerstat, 1, 1);
-    wprintw(playerstat, "%s: ", r.entities->mob->name); // ho usato il campo name come se fosse pubblico
-    int nchars = r.entities->mob->health / 2;           // servono funzioni getter
+    wprintw(playerstat, "%s: ", "temp"); // da sostituire con
+    int nchars = 10 / 2;                 // funzioni getter
     for (int i = 0; i < 5; i++)
     {
         if (nchars > 0)
