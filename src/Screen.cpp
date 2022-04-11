@@ -23,7 +23,7 @@ Screen::Screen()
 void Screen::render_room(room r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
-    //wclear(wroom);
+    wclear(wroom);
     // refresh();
     // wrefresh(wroom);
 
@@ -49,7 +49,7 @@ void Screen::render_room(room r)
         r.entities = r.entities->next;
     }
 
-    //refresh();
+    refresh();
     wrefresh(wroom);
 }
 
