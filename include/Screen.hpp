@@ -13,9 +13,8 @@
 class Screen
 {
 private:
-    WINDOW *wroom;
-    // *legend, *moblist, *playerstat, *invetory
-    int room_height, room_width;
+    WINDOW *wroom, *playerstat, *legend;
+    // *legend, *moblist, *playerstat, *inventory
 
     void print_doors(door *doors[]);
 
@@ -24,6 +23,9 @@ public:
 
     // stampa sullo schermo l'intera stanza
     void render_room(room r);
+
+    void render_playerstat(room r);
+
     // spegne lo schermo
     void stop_screen();
 };

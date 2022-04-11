@@ -10,22 +10,19 @@ Screen::Screen()
     // keypad(wroom, true);
     refresh();
 
-    int start_y, start_x; // variabili inutili, solo per sapere ogni valore cosa significa
-    room_height = 20;
-    room_width = 100;
-    // start_y = (room_height / 2) - 1;
-    // start_x = (room_width / 2) - 1;
+    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, 1, 1);
+    playerstat = newwin(4, 17, 1, ROOM_WIDTH + 2);
+    box(playerstat, 0, 0);
 
-    wroom = newwin(room_height, room_width, 1, 1);
     refresh();
+    wrefresh(wroom);
+    wrefresh(playerstat);
 }
 
 void Screen::render_room(room r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
     wclear(wroom);
-    // refresh();
-    // wrefresh(wroom);
 
     // render muri esterni
     box(wroom, 0, 0);
@@ -43,8 +40,6 @@ void Screen::render_room(room r)
     // render entità
     while (r.entities != NULL)
     {
-        // printw("(%d,%d)", r.entities->mob.getX(), r.entities->mob.getY());
-
         mvwaddch(wroom, r.entities->mob->getY(), r.entities->mob->getX(), r.entities->mob->getDisplay());
         r.entities = r.entities->next;
     }
@@ -55,44 +50,65 @@ void Screen::render_room(room r)
 
 void Screen::print_doors(door *doors[])
 {
-    char door = 254;
+    char door = ' ';
 
     for (int i = 0; i < 4; i++)
     {
-        if ((doors + i) != NULL)
+        if (doors[i] != NULL)
         {
             int yLoc1, xLoc1, yLoc2, xLoc2;
-            switch ((*doors)[i].position)
+
+            switch ((*doors[i]).position)
             {
             case UPPER_DOOR:
                 yLoc1 = yLoc2 = 0;
-                xLoc1 = (room_width / 2) - 1;
-                xLoc2 = (room_width / 2);
+                xLoc1 = (ROOM_WIDTH / 2) - 1;
+                xLoc2 = (ROOM_WIDTH / 2);
                 break;
             case LOWER_DOOR:
-                yLoc1 = yLoc2 = room_height - 1;
-                xLoc1 = (room_width / 2) - 1;
-                xLoc2 = (room_width / 2);
+                yLoc1 = yLoc2 = ROOM_HEIGHT - 1;
+                xLoc1 = (ROOM_WIDTH / 2) - 1;
+                xLoc2 = (ROOM_WIDTH / 2);
                 break;
             case RIGHT_DOOR:
-                yLoc1 = (room_height / 2) - 1;
-                yLoc2 = (room_height / 2);
-                xLoc1 = xLoc2 = room_width - 1;
+                yLoc1 = (ROOM_HEIGHT / 2) - 1;
+                yLoc2 = (ROOM_HEIGHT / 2);
+                xLoc1 = xLoc2 = ROOM_WIDTH - 1;
                 break;
             case LEFT_DOOR:
-                yLoc1 = (room_height / 2) - 1;
-                yLoc2 = (room_height / 2);
+                yLoc1 = (ROOM_HEIGHT / 2) - 1;
+                yLoc2 = (ROOM_HEIGHT / 2);
                 xLoc1 = xLoc2 = 0;
                 break;
 
             default:
+                // printw("%s", "sus");
                 break;
             }
             mvwaddch(wroom, yLoc1, xLoc1, door);
             mvwaddch(wroom, yLoc2, xLoc2, door);
         }
     }
-    wrefresh(wroom);
+}
+
+void Screen::render_playerstat(room r)
+{
+    // printw("entities: %s", typeid(Entity).name());
+    wmove(playerstat, 1, 1);
+    wprintw(playerstat, "%s: ", r.entities->mob->name); // ho usato il campo name come se fosse pubblico
+    int nchars = r.entities->mob->health / 2;           // servono funzioni getter
+    for (int i = 0; i < 5; i++)
+    {
+        if (nchars > 0)
+        {
+            waddch(playerstat, 'O');
+            nchars--;
+        }
+        else
+            waddch(playerstat, 'o');
+    }
+    refresh();
+    wrefresh(playerstat);
 }
 
 void Screen::stop_screen()
