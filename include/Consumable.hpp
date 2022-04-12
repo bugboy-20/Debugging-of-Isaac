@@ -1,10 +1,8 @@
 #pragma once
 #include "Inventoryable.hpp"
-class Armor
+
+class Consumable
 {
 protected:
-    int health;
-
 public:
-    Armor(int health);
 };

@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(
+    int ammo =0;
     class Sword *s,
     class Armor *a,
     char name[10],

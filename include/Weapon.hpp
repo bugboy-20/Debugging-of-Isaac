@@ -1,10 +1,11 @@
 #pragma once
 #include "Inventoryable.hpp"
-class Armor
+
+class Weapon
 {
 protected:
-    int health;
+    int damage;
 
 public:
-    Armor(int health);
+    Weapon(int damage);
 };
