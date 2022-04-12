@@ -1,16 +1,16 @@
 #pragma once
 #include "Entity.hpp"
 #include "Armor.hpp"
-#include "Sword.hpp"
+#include "Weapon.hpp"
 
 class Player : public Entity
 {
 protected:
     int ammo;
     int max_health;
-    class Sword *spada;
+    class Weapon *arma;
     class Armor *armatura;
 
 public:
-    Player(int ammo,int max_health,class Sword *s, class Armor *a, char name[10], int health, int damage, coords pos, char display);
+    Player(int ammo,int max_health,class Weapon *w, class Armor *a, char name[10], int health, int damage, coords pos, char display);
 };

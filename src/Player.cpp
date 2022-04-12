@@ -11,6 +11,6 @@ Player::Player(
     coords pos,
     char display) : Entity(name, health, damage, pos, display)
 {
-    this->spada = s;
+    this->weapon = w;
     this->armatura = a;
 };
