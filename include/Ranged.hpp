@@ -4,7 +4,7 @@
 class Ranged
 {
 protected:
-int damage;
+int damage, cooldown;
 public:
-    Ranged(int id,int damage);
+    Ranged(int id,int damage,int cooldown);
 };

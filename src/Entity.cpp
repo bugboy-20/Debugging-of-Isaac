@@ -4,11 +4,12 @@
 #include <cstring>
 #include <ncursesw/ncurses.h>
 
-Entity::Entity(char name[10], int health, int damage, coords pos, char display) : Core(pos, display)
+Entity::Entity(char name[10], int health, int damage, coords pos, char display,bool is_player) : Core(pos, display)
 {
   strcpy(this->name, name);
   this->health = health;
   this->damage = damage;
+  this->is_player = is_player;
 };
 
 bool Entity::move_up(room room)
@@ -40,3 +41,6 @@ bool Entity::move(const room r, int x, int y)
 };
 
 void Entity::action(){};
+int Entity::get_damage() { return damage; };
+int Entity::get_health() { return health; };
+char[10] Entity::get_name() { return name; };
