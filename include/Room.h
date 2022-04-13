@@ -1,8 +1,8 @@
-#ifndef ROOM_H
-#define ROOM_H
+#pragma once
 
 #include "Core.hpp"
 #include "Entity.hpp"
+#include "Player.hpp"
 
 #define ROOM_HEIGHT 20
 #define ROOM_WIDTH 100
@@ -40,9 +40,9 @@ typedef entity_node *ListEntity;
 
 struct room
 {
+    int id;
+    Player *player;
     ListItem items;      // array degli elementi non vivi della stanza
     ListEntity entities; // personaggi vivi
     door *doors[4];      // se la porta è NULL vuol dire che lì c'è un muro, se porta->next_room è NULL vuol dire che non è ancora stata creata la stanza sucessiva
 };
-
-#endif
