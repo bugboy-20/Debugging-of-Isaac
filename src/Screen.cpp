@@ -10,41 +10,15 @@ Screen::Screen()
     // keypad(wroom, true);
     refresh();
 
-    int lateral_width = 20,
-        lower_height = 10,
-        playerstat_height = 4,
-        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
-        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
-        moblist_width = ROOM_WIDTH,
-        start_x = 1,
-        start_y = 0,
-        lateral_start_x = ROOM_WIDTH + 1 + start_x,
-        lower_start_y = ROOM_HEIGHT;
-
-    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
-    playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
-    legend = newwin(legend_height, lateral_width, playerstat_height + start_y, lateral_start_x);
-    inventory = newwin(inventory_height, lateral_width, playerstat_height + legend_height + start_y, lateral_start_x);
-    moblist = newwin(lower_height, moblist_width, lower_start_y + start_y, start_x);
-    box(playerstat, 0, 0);
-    box(legend, 0, 0);
-    box(inventory, 0, 0);
-    box(moblist, 0, 0);
-
-    refresh();
-    wrefresh(wroom);
-    wrefresh(playerstat);
-    wrefresh(legend);
-    wrefresh(inventory);
-    wrefresh(moblist);
+    this->windows_init();
 }
 
 void Screen::render_room(room r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
-    wclear(wroom);
+    werase(wroom);
 
-    // render muri esterni
+    // render muri esterni e delle porte
     box(wroom, 0, 0);
     print_doors(r.doors);
 
@@ -64,7 +38,7 @@ void Screen::render_room(room r)
         r.entities = r.entities->next;
     }
 
-    refresh();
+    // refresh();
     wrefresh(wroom);
 }
 
@@ -115,8 +89,8 @@ void Screen::render_playerstat(room r)
 {
     // printw("entities: %s", typeid(Entity).name());
     wmove(playerstat, 1, 1);
-    wprintw(playerstat, "%s: ", "temp"); // da sostituire con
-    int nchars = 10 / 2;                 // funzioni getter
+    wprintw(playerstat, "%s: ", r.entities->mob->get_name()); // da sostituire con
+    int nchars = r.entities->mob->get_health() / 2;           // funzioni getter
     for (int i = 0; i < 5; i++)
     {
         if (nchars > 0)
@@ -132,6 +106,55 @@ void Screen::render_playerstat(room r)
 
     refresh();
     wrefresh(playerstat);
+}
+
+void Screen::windows_init()
+{
+    int lateral_width = 20,
+        lower_height = 10,
+        playerstat_height = 4,
+        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
+        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
+        moblist_width = ROOM_WIDTH,
+        start_x = 1,
+        start_y = 0,
+        lateral_start_x = ROOM_WIDTH + 1 + start_x,
+        lower_start_y = ROOM_HEIGHT;
+
+    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
+    playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
+    legend = newwin(legend_height, lateral_width, playerstat_height + start_y, lateral_start_x);
+    inventory = newwin(inventory_height, lateral_width, playerstat_height + legend_height + start_y, lateral_start_x);
+    moblist = newwin(lower_height, moblist_width, lower_start_y + start_y, start_x);
+    box(wroom, 0, 0);
+    box(playerstat, 0, 0);
+    box(legend, 0, 0);
+    box(inventory, 0, 0);
+    box(moblist, 0, 0);
+
+    // refresh();
+    wnoutrefresh(wroom);
+    wnoutrefresh(playerstat);
+    wnoutrefresh(legend);
+    wnoutrefresh(inventory);
+    wnoutrefresh(moblist);
+    doupdate();
+}
+
+void Screen::render_legend(room r)
+{
+    wmove(legend, 1, 1);
+    while (r.items != NULL)
+    {
+
+        r.items = r.items->next;
+    }
+
+    // render entità
+    while (r.entities != NULL)
+    {
+        r.entities = r.entities->next;
+    }
 }
 
 void Screen::stop_screen()

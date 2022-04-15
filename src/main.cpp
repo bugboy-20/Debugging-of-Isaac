@@ -50,7 +50,6 @@ int main()
     // init della mappa
     dummy_map = init_map(a);
     // init del player
-    schermo.render_playerstat(*dummy_map->current_room);
 
     // game loop
     while (!game_over())
