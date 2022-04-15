@@ -25,20 +25,19 @@ void controller(Player *); // è solamente dimostrativa ma sicuramente ci sarà 
 map *dummy_map;
 
 char n[10] = "gino";
-Player player = Player(NULL, NULL, n, 10, 5, {20, 15}, '@');
+Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@');
 
-ListEntity f = new entity_node{
-    &player, NULL};
-
-room a{      // stanza finta
+room a{// stanza finta
+       0,
+       player,
        NULL, // nessun oggetto
-       f,    // nessun mob
+       NULL, // nessun mob
        {     // 2 porte (una sopra e una a destra
         new door{
             RIGHT_DOOR,
             NULL},
         new door{
-            UPPER_DOOR,
+            LOWER_DOOR,
             NULL},
         NULL,
         NULL}};
@@ -51,13 +50,14 @@ int main()
     // init della mappa
     dummy_map = init_map(a);
     // init del player
+    schermo.render_playerstat(*dummy_map->current_room);
 
     // game loop
     while (!game_over())
     {
         inizio_frame = time(0);
 
-        controller(&player);
+        controller(player);
         // printw("(%d,%d)", player.getX(), player.getY());
 
         // do_room(dummy_map->current_room);
@@ -92,6 +92,9 @@ void controller(Player *player)
             break;
         case 's':
             player->move_down(*dummy_map->current_room);
+            break;
+        case 'q':
+            exit(EXIT_SUCCESS);
             break;
         default:
             break;
