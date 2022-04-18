@@ -19,13 +19,16 @@
 
 using namespace std;
 
-#define FRAMETIME 30       // durata di un frame ~~ velocità del gioco
-void controller(Player *); // è solamente dimostrativa ma sicuramente ci sarà qualcosa del genere
+#define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
+void controller(Player *); // gestisce la tastiera
+
+void exit_game(); //permette di uscire
 
 map *dummy_map;
 
 char n[10] = "gino";
 Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@');
+Screen schermo = Screen();
 
 room a{// stanza finta
        0,
@@ -46,7 +49,6 @@ int main()
 {
     // init schermo
     time_t inizio_frame, fine_frame;
-    Screen schermo = Screen();
     // init della mappa
     dummy_map = init_map(a);
     // init del player
@@ -93,11 +95,18 @@ void controller(Player *player)
             player->move_down(*dummy_map->current_room);
             break;
         case 'q':
-            exit(EXIT_SUCCESS);
+            exit_game();
             break;
         default:
             break;
             // ...
         }
     } while (key != ERR); // finché ci sono tasti da leggere
+}
+
+
+void exit_game() {
+    schermo.stop_screen();
+    //destroy_map(*dummy_map);
+    exit(EXIT_SUCCESS);
 }
