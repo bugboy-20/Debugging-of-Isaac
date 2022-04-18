@@ -38,6 +38,9 @@ void Screen::render_room(room r)
         r.entities = r.entities->next;
     }
 
+    // stampo il player
+    mvwaddch(wroom, r.player->getY(), r.player->getX(), r.player->getDisplay());
+
     // refresh();
     wrefresh(wroom);
 }
