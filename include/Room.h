@@ -10,7 +10,7 @@
 struct room;
 struct door;
 
-enum
+enum door_pos
 {
     UPPER_DOOR,
     RIGHT_DOOR,
