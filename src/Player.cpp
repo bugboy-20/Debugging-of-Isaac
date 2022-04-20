@@ -1,9 +1,9 @@
 #include "Player.hpp"
 
 Player::Player(
-    int max_health=50;
-    int ammo =0;
-    class Sword *s,
+    int max_health,
+    int ammo,
+    class Weapon *w,
     class Armor *a,
     char name[10],
     int health,
@@ -11,6 +11,8 @@ Player::Player(
     coords pos,
     char display) : Entity(name, health, damage, pos, display)
 {
-    this->weapon = w;
+    this->arma = w;
     this->armatura = a;
+    this->max_health=max_health;
+    this->ammo =ammo;
 };

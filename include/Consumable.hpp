@@ -5,4 +5,5 @@ class Consumable
 {
 protected:
 public:
+Consumable();
 };
