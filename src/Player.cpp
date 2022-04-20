@@ -13,4 +13,6 @@ Player::Player(
 {
     this->arma = w;
     this->armatura = a;
+    this->max_health=max_health;
+    this->ammo =ammo;
 };

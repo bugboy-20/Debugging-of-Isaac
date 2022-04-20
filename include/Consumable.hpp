@@ -5,5 +5,5 @@ class Consumable
 {
 protected:
 public:
-    Consumable();
+Consumable();
 };
