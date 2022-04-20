@@ -9,9 +9,22 @@ struct node {
 class List {
     public:
         List();
+        // inizializza la lista con una sequenza di nodi già esistente
+        List(node *head);
+        ~List();
         node *head;
         void push(void *);
         void *pop();
 
-        void destroy(); //dealloca la lista
+//concatena in coda un'altra lista
+        void append(node *);
+        void append(List);
+// elimina un membro della stanza (comparando l'indirizzo)
+// qual'ora non venga trovato restituisce false                   
+// ATTENZIONE: viene eliminato dalla lista, NON deallocato                                     
+        bool delete_element(void *); 
+                                     
+
+//dealloca la lista, ma non i suoi elementi
+        void destroy(); 
 };

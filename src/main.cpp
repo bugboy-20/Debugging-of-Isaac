@@ -19,26 +19,28 @@
 
 using namespace std;
 
-#define FRAMETIME 30       // durata di un frame ~~ velocità del gioco
-void controller(Player *); // è solamente dimostrativa ma sicuramente ci sarà qualcosa del genere
+#define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
+void controller(Player *); // gestisce la tastiera
+
+void exit_game(); //permette di uscire
 
 map *dummy_map;
 
 char n[10] = "gino";
-Player player = Player(NULL, NULL, n, 10, 5, {20, 15}, '@');
+Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@');
+Screen schermo = Screen();
 
-ListEntity f = new entity_node{
-    &player, NULL};
-
-room a{      // stanza finta
+room a{// stanza finta
+       0,
+       player,
        NULL, // nessun oggetto
-       f,    // nessun mob
+       NULL, // nessun mob
        {     // 2 porte (una sopra e una a destra
         new door{
             RIGHT_DOOR,
             NULL},
         new door{
-            UPPER_DOOR,
+            LOWER_DOOR,
             NULL},
         NULL,
         NULL}};
@@ -47,7 +49,6 @@ int main()
 {
     // init schermo
     time_t inizio_frame, fine_frame;
-    Screen schermo = Screen();
     // init della mappa
     dummy_map = init_map(a);
     // init del player
@@ -57,7 +58,7 @@ int main()
     {
         inizio_frame = time(0);
 
-        controller(&player);
+        controller(player);
         // printw("(%d,%d)", player.getX(), player.getY());
 
         // do_room(dummy_map->current_room);
@@ -93,9 +94,19 @@ void controller(Player *player)
         case 's':
             player->move_down(*dummy_map->current_room);
             break;
+        case 'q':
+            exit_game();
+            break;
         default:
             break;
             // ...
         }
     } while (key != ERR); // finché ci sono tasti da leggere
+}
+
+
+void exit_game() {
+    schermo.stop_screen();
+    //destroy_map(*dummy_map);
+    exit(EXIT_SUCCESS);
 }

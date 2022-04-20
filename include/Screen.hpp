@@ -15,8 +15,10 @@ class Screen
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
     // *legend, *moblist, *playerstat, *inventory
+    int current_room_id;
 
     void print_doors(door *doors[]);
+    void windows_init();
 
 public:
     Screen();
