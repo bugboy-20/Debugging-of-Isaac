@@ -9,18 +9,22 @@ struct node {
 class List {
     public:
         List();
-        List(node *head); // inizializza la lista con una sequenza di nodi già esistente
+        // inizializza la lista con una sequenza di nodi già esistente
+        List(node *head);
         ~List();
         node *head;
         void push(void *);
         void *pop();
 
-        void append(node *); //concatena in coda un'altra lista
+//concatena in coda un'altra lista
+        void append(node *);
         void append(List);
+// elimina un membro della stanza (comparando l'indirizzo)
+// qual'ora non venga trovato restituisce false                   
+// ATTENZIONE: viene eliminato dalla lista, NON deallocato                                     
+        bool delete_element(void *); 
+                                     
 
-        bool delete_element(void *); // elimina un membro della stanza (comparando l'indirizzo)
-                                     // qual'ora non venga trovato restituisce false
-                                     // ATTENZIONE: viene eliminato dalla lista, NON deallocato
-
-        void destroy(); //dealloca la lista, ma non i suoi elementi
+//dealloca la lista, ma non i suoi elementi
+        void destroy(); 
 };

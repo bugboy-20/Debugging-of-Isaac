@@ -63,9 +63,9 @@ List Room::get_room_member() {
 }
 
 List Room::get_entities(bool player_too) {
-    List l = List();
-    l.push(p);
-    l.append(entities);
+    List l = List(entities.head);
+    if (player_too)
+        l.push(p);
     return l;
 }
     
