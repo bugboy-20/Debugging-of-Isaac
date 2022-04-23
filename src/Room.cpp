@@ -57,8 +57,10 @@ void Room::delete_room_menber(Core *m) {
 
 List Room::get_room_member() {
     List l = get_entities(true);
-    l.append(core);
-    l.append(walls);
+    List c = List(core.head);
+    List w = List(walls.head);
+    l.append(c);
+    l.append(w);
     return l;
 }
 

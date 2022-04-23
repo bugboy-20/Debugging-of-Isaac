@@ -27,7 +27,7 @@ class Room {
         List get_room_member();
 // restituisce una lista con tutte le entità se il booleano è `true` essa comprende anche il player
         List get_entities(bool player_too);
-        door *door[4];
+        struct door *door[4];
 
 // restituisce la stanza nella direzione selezionata
 // NULL se vi è un muro

@@ -1,10 +1,20 @@
 #include "List.hpp"
 #include <cstddef>
 
-List::List(){};
+List::List(){
+    this->head=NULL;
+}
 
 List::List(node *head) {
-    this->head=head;
+    node *tlcn= new node;
+    this->head=tlcn;
+
+    for(node *cn=head; cn!=NULL; cn=cn->next) {
+        tlcn->element=cn->element;
+        tlcn->next=new node;
+        tlcn=tlcn->next;
+    }
+    tlcn->next=NULL;
 }
 
 List::~List() {
@@ -51,7 +61,7 @@ bool List::delete_element(void *e) {
 
 void List::append(node *n) {
     node *last;
-    
+
     for (last=head; last->next!=NULL; last=last->next);
 
     last->next=n;
