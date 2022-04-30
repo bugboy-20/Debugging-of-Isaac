@@ -1,6 +1,6 @@
 #include "physics.h"
 
-bool collision(int x, int y, room r)
+bool collision(int x, int y, Room r)
 {
 
     if(y < 1) return true;
@@ -11,7 +11,7 @@ bool collision(int x, int y, room r)
 
 }
 
-void do_room(room *r){}; // fa cose sulla stanza
+void do_room(Room *r){}; // fa cose sulla stanza
 
 bool game_over()
 {
