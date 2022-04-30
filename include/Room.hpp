@@ -28,6 +28,7 @@ class Room {
 // restituisce una lista con tutte le entità se il booleano è `true` essa comprende anche il player
         List get_entities(bool player_too);
         struct door *door[4];
+        Player *p;
 
 // restituisce la stanza nella direzione selezionata
 // NULL se vi è un muro
@@ -36,7 +37,6 @@ class Room {
 
     private:
         int id;
-        Player *p;
         List entities;
         List core;
         List walls;

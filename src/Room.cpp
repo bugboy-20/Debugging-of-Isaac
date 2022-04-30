@@ -25,7 +25,7 @@ Core* Room::get_element_in_this_position(coords p) {
         core_elm = ((Core*) currentNode->element);
         if (core_elm->getX() == p.x && core_elm->getY() == p.y) return (Core*) currentNode->element;
     }
-    
+
     for( currentNode=this->core.head; currentNode!=NULL; currentNode=currentNode->next) {
         core_elm = ((Core*) currentNode->element);
         if (core_elm->getX() == p.x && core_elm->getY() == p.y) return (Core*) currentNode->element;
@@ -70,4 +70,3 @@ List Room::get_entities(bool player_too) {
         l.push(p);
     return l;
 }
-    

@@ -1,4 +1,3 @@
-#include <time.h>
 #include <cstddef>
 #include <iostream>
 #include <ctime>
@@ -50,7 +49,7 @@ int main()
     // init schermo
     time_t inizio_frame, fine_frame;
     // init della mappa
-    dummy_map = init_map(a);
+    dummy_map = init_map(player);
     // init del player
 
     // game loop

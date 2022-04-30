@@ -1,18 +1,20 @@
 #pragma once
 
-#include "Room.h"
+#include "Player.hpp"
+#include "Room.hpp"
 
 struct map
 {
-    room *current_room;
-    room *rooms; /* puntatore alla prima stanza, tutte le altre sono collegate dalle porte
+    Room *current_room;
+     /* puntatore alla prima stanza, tutte le altre sono collegate dalle porte
                   * Porta linka a doppia direzione le stanze
                   */
+    Room *rooms;
 };
 
 // inizializza la mappa, restituisce un puntatore alla mappa il cui uso è facoltativo.
-// quando la mappa viene inizializzata crea una stanza come quella in input.
-map *init_map(room starting_room);
+// inizializza la mappa inserendo il player in una stanza vuota
+map *init_map(Player *p);
 
 // cambia la stanza in cui il personaggio si trova in quella passata per indirizzo dalla funzione
-void change_room(room *new_room);
+void change_room(Room *new_room);
