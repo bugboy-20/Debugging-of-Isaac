@@ -1,7 +1,6 @@
 #pragma once
 #include "Core.hpp"
-
-struct room;
+#include "Room.hpp"
 
 class Entity : public Core
 {
@@ -13,10 +12,10 @@ protected:
 
 public:
   Entity(char name[10], int health, int damage, coords pos, char display);
-  bool move_up(room room);
-  bool move_down(room room);
-  bool move_left(room room);
-  bool move_right(room room);
+  bool move_up(Room Room);
+  bool move_down(Room Room);
+  bool move_left(Room Room);
+  bool move_right(Room Room);
   void action();
 
   char* get_name();
