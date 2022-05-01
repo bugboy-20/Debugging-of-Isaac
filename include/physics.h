@@ -1,5 +1,6 @@
 #pragma once
 #include "Room.h"
+#include "Room.hpp"
 
 bool collision(int x, int y, Room r);
 
