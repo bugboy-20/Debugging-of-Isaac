@@ -9,6 +9,7 @@
 #endif
 
 #include "Room.h"
+#include "Room.hpp"
 
 class Screen
 {
@@ -25,6 +26,7 @@ public:
 
     // stampa sullo schermo la stanza
     void render_room(room r);
+    void render_room(Room r);
 
     // stampa il riquadro in cui sono visualizzati punteggio e vita
     void render_playerstat(room r);

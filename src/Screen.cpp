@@ -1,4 +1,5 @@
 #include "Screen.hpp"
+#include "List.hpp"
 
 Screen::Screen()
 {
@@ -11,6 +12,28 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
+}
+
+void Screen::render_room(Room r)
+{
+    room temp{
+        r.get_id(),
+        (Player *)r.get_entities(true).head,
+        NULL,
+        NULL,
+        {
+
+            r.door[0],
+            r.door[1],
+            r.door[2],
+            r.door[3]
+
+        }
+
+    };
+
+    render_room(temp); // richiamo la funzione già scritta,
+                       // aspetto che decidiamo cosa fare con gli eventi prima di scrivere questa per bene
 }
 
 void Screen::render_room(room r)
