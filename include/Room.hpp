@@ -27,6 +27,9 @@ class Room {
         List get_room_member();
 // restituisce una lista con tutte le entità se il booleano è `true` essa comprende anche il player
         List get_entities(bool player_too);
+// restituisce una lista contenete i muri della stanza
+        List get_walls();
+
         struct door *door[4];
         Player *p;
 

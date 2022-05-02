@@ -70,3 +70,8 @@ List Room::get_entities(bool player_too) {
         l.push(p);
     return l;
 }
+
+
+List Room::get_walls() {
+    return List(walls.head);
+}
