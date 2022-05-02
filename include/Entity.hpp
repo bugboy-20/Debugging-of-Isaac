@@ -1,6 +1,6 @@
 #pragma once
 #include "Core.hpp"
-#include "Room.hpp"
+class Room;
 
 class Entity : public Core
 {
