@@ -1,11 +1,18 @@
 #include <cstddef>
 #include "Core.hpp"
 #include "Entity.hpp"
+#include "Player.hpp"
 #include "Room.hpp"
 #include "List.hpp"
 #include "geometry.h"
 Room::Room(int id, List entities, List cores) {
+
     this->id=id;
+
+    this->p=NULL;
+
+    for (int i=0; i<4; i++)
+        this->door[i]=NULL;
 
     this->entities=List(entities);
     this->core=List(cores);
@@ -14,6 +21,11 @@ Room::Room(int id, List entities, List cores) {
 
 Room::Room(int id) {
     this->id=id;
+
+    this->p=NULL;
+
+    for (int i=0; i<4; i++)
+        this->door[i]=NULL;
 }
 
 

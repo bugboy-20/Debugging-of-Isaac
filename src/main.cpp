@@ -29,21 +29,6 @@ char n[10] = "gino";
 Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@');
 Screen schermo = Screen();
 
-room a{// stanza finta
-       0,
-       player,
-       NULL, // nessun oggetto
-       NULL, // nessun mob
-       {     // 2 porte (una sopra e una a destra
-        new door{
-            RIGHT_DOOR,
-            NULL},
-        new door{
-            LOWER_DOOR,
-            NULL},
-        NULL,
-        NULL}};
-
 int main()
 {
     // init schermo

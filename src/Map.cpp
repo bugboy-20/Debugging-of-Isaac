@@ -15,6 +15,7 @@ struct map *init_map(Player *p)
     Room *ptr_start_room = new Room(new_id());
     
     for (int i=0; i<4; i++) {
+        ptr_start_room->door[i]=new door;
         ptr_start_room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         ptr_start_room->door[i]->next_room=NULL;
     }
