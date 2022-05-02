@@ -18,7 +18,7 @@ void Screen::render_room(Room r)
 {
     room temp{
         r.get_id(),
-        (Player *)r.get_entities(true).head,
+        (Player *)r.get_entities(true).head->element,
         NULL,
         NULL,
         {
