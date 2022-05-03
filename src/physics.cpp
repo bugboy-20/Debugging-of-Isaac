@@ -3,7 +3,7 @@
 bool collision(int x, int y, Room r)
 {
 
-    door_collision(x, y, r);
+    return door_collision(x, y, r);
 
 }
 
