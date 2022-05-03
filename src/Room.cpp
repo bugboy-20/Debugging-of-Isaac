@@ -5,14 +5,7 @@
 #include "Room.hpp"
 #include "List.hpp"
 #include "geometry.h"
-Room::Room(int id, List entities, List cores) {
-
-    this->id=id;
-
-    this->p=NULL;
-
-    for (int i=0; i<4; i++)
-        this->door[i]=NULL;
+Room::Room(int id, List entities, List cores) : Room(id) {
 
     this->entities=List(entities);
     this->core=List(cores);
@@ -26,6 +19,11 @@ Room::Room(int id) {
 
     for (int i=0; i<4; i++)
         this->door[i]=NULL;
+    
+    this->entities=List();
+    this->core=List();
+    this->walls=List();
+
 }
 
 
