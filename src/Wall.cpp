@@ -2,7 +2,7 @@
 #include "Core.hpp"
 #include "geometry.h"
 Wall::Wall(line l, char display) : Core(l.p_iniziale, display) {
-    this->line_lenght=l.lengh;
+    this->line_lenght=l.length;
     this->vertical=l.vertical;
 }
 

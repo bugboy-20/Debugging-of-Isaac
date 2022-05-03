@@ -14,5 +14,5 @@ struct rectangle
 struct line {
     coords p_iniziale;
     bool vertical;
-    int lengh;
+    int length;
 };
