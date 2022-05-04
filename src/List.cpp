@@ -6,15 +6,19 @@ List::List(){
 }
 
 List::List(node *head) {
-    node *tlcn= new node;
-    this->head=tlcn;
+    if (head==NULL)
+        this->head=NULL;
+    else {
+        node *tlcn= new node;
+        this->head=tlcn;
 
-    for(node *cn=head; cn!=NULL; cn=cn->next) {
-        tlcn->element=cn->element;
-        tlcn->next=new node;
-        tlcn=tlcn->next;
+        for(node *cn=head; cn!=NULL; cn=cn->next) {
+            tlcn->element=cn->element;
+            tlcn->next=new node;
+            tlcn=tlcn->next;
+        }
+        tlcn->next=NULL;
     }
-    tlcn->next=NULL;
 }
 
 List::~List() {
@@ -62,9 +66,11 @@ bool List::delete_element(void *e) {
 void List::append(node *n) {
     node *last;
 
-    for (last=head; last->next!=NULL; last=last->next);
+    if (n!=NULL) {
+        for (last=head; last->next!=NULL; last=last->next);
 
-    last->next=n;
+        last->next=n;
+    }
 }
 void List::append(List l) {
     append(l.head);
