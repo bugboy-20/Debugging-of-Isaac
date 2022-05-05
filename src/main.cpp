@@ -43,7 +43,6 @@ int main()
         inizio_frame = time(0);
 
         controller(player);
-        // printw("(%d,%d)", player.getX(), player.getY());
 
         // do_room(dummy_map->current_room);
         schermo.render_room(*dummy_map->current_room);

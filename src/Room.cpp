@@ -2,6 +2,7 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "Player.hpp"
+#include "Room.h"
 #include "Room.hpp"
 #include "List.hpp"
 #include "geometry.h"
@@ -19,10 +20,12 @@ Room::Room(int id) {
 
     for (int i=0; i<4; i++)
         this->door[i]=NULL;
-    
+
     this->entities=List();
     this->core=List();
     this->walls=List();
+
+    //this->events=Queue();
 
 }
 
@@ -85,3 +88,5 @@ List Room::get_entities(bool player_too) {
 List Room::get_walls() {
     return List(walls.head);
 }
+
+//Room *Room::next_room(enum door_pos) {} problemi da risolvere con Room.h

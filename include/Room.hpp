@@ -6,6 +6,8 @@
 #include "Player.hpp"
 #include "Room.h"
 #include "geometry.h"
+#include "RoomEvent.hpp"
+#include "Queue.hpp"
 
 class Room {
     public:
@@ -14,19 +16,27 @@ class Room {
          */
         Room(int id, List entities, List cores);
         Room(int id);
+
  //data una posizione restituisce l'elemento che si trova in essa, NULL se non vi è nulla.
         Core *get_element_in_this_position(coords);
         int get_id();
+
 //aggiunge un elemento alla stanza (non vivo)
         void add_Core(Core *);
+
 // aggiunge una entità alla stanza
         void add_entity(Entity *);
-// elimina un elemento della stanza (funziona anche con le entità
+
+// elimina un elemento della stanza (funziona anche con le entità)
+// NB. non viene deallocato l'elemento in se
         void delete_room_menber(Core *);
+
 // restituisce una lista con tutti i membri della stanza, player è in testa
         List get_room_member();
+
 // restituisce una lista con tutte le entità se il booleano è `true` essa comprende anche il player
         List get_entities(bool player_too);
+
 // restituisce una lista contenete i muri della stanza
         List get_walls();
 
@@ -37,11 +47,18 @@ class Room {
 // NULL se vi è un muro
         Room *next_room(enum door_pos); 
                                         
+// aggiungi un evento alla coda degli eventi
+        void add_event(RoomEvent *e);
+
+// toglie dalla coda un evento
+        RoomEvent *get_event();
 
     private:
         int id;
         List entities;
         List core;
         List walls;
+    
+        //Queue events;
 
 };
