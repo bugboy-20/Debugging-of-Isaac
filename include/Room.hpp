@@ -59,6 +59,6 @@ class Room {
         List core;
         List walls;
     
-        //Queue events;
+        Queue events;
 
 };

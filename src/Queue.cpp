@@ -38,6 +38,7 @@ void Queue::enqueue(void *e) {
 }
 
 void* Queue::dequeue() {
+    if(first==NULL) return NULL;
     void *ret_e;
     node *f_n;
 
