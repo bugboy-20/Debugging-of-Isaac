@@ -22,5 +22,5 @@ public:
   int get_health();
   int get_damage();
 private:
-  bool move(Room r, int x, int y);
+  bool move(const Room r, int x, int y);
 };
