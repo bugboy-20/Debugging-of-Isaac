@@ -1,6 +1,8 @@
 #include "Entity.hpp"
+#include "EntityMoveE.hpp"
 #include "Room.h"
 #include "Room.hpp"
+#include "RoomEvent.hpp"
 #include "physics.h"
 #include <cstring>
 
@@ -27,10 +29,11 @@ bool Entity::move_right(Room Room)
 {
   return move(Room, 1, 0);
 };
-bool Entity::move(const Room r, int x, int y)
+bool Entity::move(Room r, int x, int y)
 {
   if (!collision(this->pos.x + x, this->pos.y + y, r))
   {
+    r.add_event((RoomEvent *) new EntityMoveE(this->pos,{this->pos.x+x,this->pos.y+y}));
     this->pos.x += x;
     this->pos.y += y;
     return true;
