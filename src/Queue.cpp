@@ -31,23 +31,32 @@ void Queue::enqueue(void *e) {
     n->element=e;
     n->next=NULL;
 
-    this->last->next=n;
-    this->last=n;
+    if (last==NULL) {
+        last=n;
+        first=n;
+    }
+    else {
+        this->last->next=n;
+        this->last=n;
+    }
 
     if(this->first==NULL) this->first=n;
 }
 
 void* Queue::dequeue() {
-    if(first==NULL) return NULL;
     void *ret_e;
     node *f_n;
 
+    if(first==NULL) return NULL;
     f_n=this->first;
     ret_e=f_n->element;
 
     this->first=this->first->next;
 
     delete f_n;
+
+    if(first==NULL) last=NULL;
+
     return ret_e;
 }
 

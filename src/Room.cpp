@@ -2,8 +2,10 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "Player.hpp"
+#include "Room.h"
 #include "Room.hpp"
 #include "List.hpp"
+#include "RoomEvent.hpp"
 #include "geometry.h"
 Room::Room(int id, List entities, List cores) : Room(id) {
 
@@ -88,4 +90,11 @@ List Room::get_walls() {
     return List(walls.head);
 }
 
+void Room::add_event(RoomEvent *e) {
+    this->events.enqueue((void *) e);
+}
+
+RoomEvent* Room::get_event() {
+    return (RoomEvent*) this->events.dequeue();
+}
 //Room *Room::next_room(enum door_pos) {} problemi da risolvere con Room.h
