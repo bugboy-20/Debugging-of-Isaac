@@ -53,6 +53,9 @@ class Room {
 // toglie dalla coda un evento
         RoomEvent *get_event();
 
+        //debug
+        void prinmt_room_menmb();
+
     private:
         int id;
         List entities;

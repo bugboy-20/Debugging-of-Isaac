@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <iostream>
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "Player.hpp"
@@ -98,3 +99,11 @@ RoomEvent* Room::get_event() {
     return (RoomEvent*) this->events.dequeue();
 }
 //Room *Room::next_room(enum door_pos) {} problemi da risolvere con Room.h
+//
+
+
+void Room::prinmt_room_menmb() {
+    for (node* member=entities.head; member!=NULL; member=member->next) {
+        std::cout << ((Entity*) member->element)->getDisplay() << std::endl;
+    }
+}
