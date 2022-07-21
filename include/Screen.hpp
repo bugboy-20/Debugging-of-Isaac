@@ -8,7 +8,6 @@
 #include <ncurses.h>
 #endif
 
-#include "Room.h"
 #include "Room.hpp"
 
 class Screen
@@ -40,16 +39,16 @@ public:
     void render_room(Room r);
 
     // stampa il riquadro in cui sono visualizzati punteggio e vita
-    void render_playerstat(room r);
+    void render_playerstat(Room r);
 
     // stampa una legenda degli elementi presenti nella stanza
-    void render_legend(room r);
+    void render_legend(Room r);
 
     // stampa la sezione con la vita di tutti gli ostili nella stanza
-    void render_moblist(room r);
+    void render_moblist(Room r);
 
     // stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore
-    void render_inventory(room r);
+    void render_inventory(Room r);
 
     // spegne lo schermo
     void stop_screen();

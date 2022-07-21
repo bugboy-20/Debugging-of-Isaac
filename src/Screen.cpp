@@ -120,27 +120,27 @@ void Screen::print_doors(door *doors[])
     }
 }
 
-void Screen::render_playerstat(room r)
+void Screen::render_playerstat(Room r)
 {
     // printw("entities: %s", typeid(Entity).name());
-    wmove(playerstat, 1, 1);
-    wprintw(playerstat, "%s: ", r.entities->mob->get_name()); // da sostituire con
-    int nchars = r.entities->mob->get_health() / 2;           // funzioni getter
-    for (int i = 0; i < 5; i++)
-    {
-        if (nchars > 0)
-        {
-            waddch(playerstat, 'O');
-            nchars--;
-        }
-        else
-            waddch(playerstat, 'o');
-    }
-    wmove(playerstat, 2, 1);
-    wprintw(playerstat, "%s: ", "punti");
+    // wmove(playerstat, 1, 1);
+    // wprintw(playerstat, "%s: ", r.entities->mob->get_name()); // da sostituire con
+    // int nchars = r.entities->mob->get_health() / 2;           // funzioni getter
+    // for (int i = 0; i < 5; i++)
+    // {
+    //     if (nchars > 0)
+    //     {
+    //         waddch(playerstat, 'O');
+    //         nchars--;
+    //     }
+    //     else
+    //         waddch(playerstat, 'o');
+    // }
+    // wmove(playerstat, 2, 1);
+    // wprintw(playerstat, "%s: ", "punti");
 
-    refresh();
-    wrefresh(playerstat);
+    // refresh();
+    // wrefresh(playerstat);
 }
 
 void Screen::windows_init()
@@ -176,20 +176,20 @@ void Screen::windows_init()
     doupdate();
 }
 
-void Screen::render_legend(room r)
+void Screen::render_legend(Room r)
 {
-    wmove(legend, 1, 1);
-    while (r.items != NULL)
-    {
+    // wmove(legend, 1, 1);
+    // while (r.items != NULL)
+    // {
 
-        r.items = r.items->next;
-    }
+    //     r.items = r.items->next;
+    // }
 
-    // render entità
-    while (r.entities != NULL)
-    {
-        r.entities = r.entities->next;
-    }
+    // // render entità
+    // while (r.entities != NULL)
+    // {
+    //     r.entities = r.entities->next;
+    // }
 }
 
 void Screen::stop_screen()
