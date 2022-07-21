@@ -1,10 +1,15 @@
 #include "physics.h"
+#include <RoomEvent.hpp>
+#include <EntityMoveE.hpp>
+#include <Player.hpp>
 
 bool collision(int x, int y, Room r)
 {
+    bool flag;
+    
+    flag = door_collision(x, y, r);
 
-    return door_collision(x, y, r);
-
+    return flag;
 }
 
 bool door_collision(int x, int y, Room r){
@@ -17,7 +22,9 @@ bool door_collision(int x, int y, Room r){
 
 void do_room(Room *r){}; // fa cose sulla stanza
 
-bool game_over()
+bool game_over(Player p)
 {
-    return false;
+    //il gioco termina quando finisce la vita 
+    if(p.get_health()<=0) return true;
+    else return false;
 }
