@@ -1,7 +1,6 @@
 #include <cstddef>
 #include "Map.h"
 #include "Player.hpp"
-#include "Room.h"
 #include "Room.hpp"
 
 struct map game_map;
@@ -13,7 +12,7 @@ int new_id() {
 struct map *init_map(Player *p)
 {
     Room *ptr_start_room = new Room(new_id());
-    
+
     for (int i=0; i<4; i++) {
         ptr_start_room->door[i]=new door;
         ptr_start_room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
@@ -36,5 +35,35 @@ void change_room(Room *new_room)
 
     //cambio stanza attuale
     game_map.current_room=new_room;
+
+}
+//TODO: far si che le stanze non siano sempre vuote
+//TODO: aggiungere consistenza e non violare le leggi di Euclide e del buon senso
+Room *add_room(Room *r, enum door_pos p) {
+    int i;
+    door *d = r->door[p];
+    Room *new_room = new Room(new_id());
+
+    d->next_room=new_room;
+
+    switch (d->position) {
+UPPER_DOOR:
+        i=LOWER_DOOR;
+        break;
+RIGHT_DOOR:
+        i=LEFT_DOOR;
+        break;
+LOWER_DOOR:
+        i=UPPER_DOOR;
+        break;
+LEFT_DOOR:
+        i=RIGHT_DOOR;
+    }
+
+    new_room->door[i]=new door;
+    new_room->door[i]->position=i;
+    new_room->door[i]->next_room=r;
+
+    return new_room;
 
 }

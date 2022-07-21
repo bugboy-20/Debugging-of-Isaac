@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Entity.hpp"
 #include "Player.hpp"
 #include "Room.hpp"
 
@@ -18,3 +19,8 @@ map *init_map(Player *p);
 
 // cambia la stanza in cui il personaggio si trova in quella passata per indirizzo dalla funzione
 void change_room(Room *new_room);
+
+// aggiunge una stanza dopo la porta
+// in input vuole la stanza e la posizione della porta dove va aggiunta la stanza
+//      questa so che ha una forma strana ma mi sembrava più difficile da usare male
+Room *add_room(Room *r, enum door_pos p);
