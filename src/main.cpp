@@ -1,12 +1,12 @@
 #include <cstddef>
 #include <iostream>
 #include <ctime>
-#include "Screen.hpp"
 #include "Map.h"
 #include "Player.hpp"
-#include "Room.h"
+#include "Room.hpp"
 #include "geometry.h"
 #include "physics.h"
+#include "Screen.hpp"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
