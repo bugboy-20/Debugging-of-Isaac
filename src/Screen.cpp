@@ -1,5 +1,6 @@
 #include "Screen.hpp"
 #include "List.hpp"
+#include "EntityMoveE.hpp"
 
 Screen::Screen()
 {
@@ -12,60 +13,68 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
+    x = true;
 }
 
 void Screen::render_room(Room r)
 {
-    room temp{
-        r.get_id(),
-        (Player *)r.get_entities(true).head->element,
-        NULL,
-        NULL,
+
+    if (this->x)
+    {
+        this->room_init(r);
+        x = false;
+    }
+
+    RoomEvent *e;
+    while ((e = r.get_event()) != NULL)
+    {
+        printw("%s", "ziocaca");
+        switch (e->id)
         {
-
-            r.door[0],
-            r.door[1],
-            r.door[2],
-            r.door[3]
-
+        case ENTITY_MOVE:
+        {
+            EntityMoveE *t = (EntityMoveE *)e;
+            coords oldC = t->data[0];
+            coords newC = t->data[1];
+            mvwaddch(wroom, oldC.y, newC.x, 'O');
+            // mi manca il carattere dell'entità
+            mvwaddch(wroom, oldC.y, newC.x, 'T');
+            delete t;
+            break;
         }
-
-    };
-
-    render_room(temp); // richiamo la funzione già scritta,
-                       // aspetto che decidiamo cosa fare con gli eventi prima di scrivere questa per bene
+        // case ROOM_INIT:
+        // {
+        //     room_init(r); // demando la logica ad una funzione esterna
+        //     break;
+        // }
+        default:
+            break;
+        }
+    }
+    wrefresh(wroom);
 }
 
-void Screen::render_room(room r)
+void Screen::room_init(Room r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
     werase(wroom);
 
     // render muri esterni e delle porte
     box(wroom, 0, 0);
-    print_doors(r.doors);
+    print_doors(r.door);
 
-    // render dei muri interni (forse sono tra gli item?)
+    List everything = r.get_room_member();
+    if (everything.head == NULL)
+        return;
 
-    // render degli item
-    while (r.items != NULL)
+    node *list = everything.head;
+
+    while (list != NULL)
     {
-        mvwaddch(wroom, r.items->item.getY(), r.items->item.getX(), r.items->item.getDisplay());
-        r.items = r.items->next;
+        Core *c = (Core *)list->element;
+        mvwaddch(wroom, c->getY(), c->getX(), c->getDisplay());
+        list = list->next;
     }
-
-    // render entità
-    while (r.entities != NULL)
-    {
-        mvwaddch(wroom, r.entities->mob->getY(), r.entities->mob->getX(), r.entities->mob->getDisplay());
-        r.entities = r.entities->next;
-    }
-
-    // stampo il player
-    mvwaddch(wroom, r.player->getY(), r.player->getX(), r.player->getDisplay());
-
-    // refresh();
-    wrefresh(wroom);
 }
 
 void Screen::print_doors(door *doors[])
