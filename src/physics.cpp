@@ -6,9 +6,14 @@
 bool collision(int x, int y, Room r)
 {
     bool flag;
-    
-    flag = door_collision(x, y, r);
+    coords pos;
 
+    pos.x = x;
+    pos.y = y;
+
+    flag = door_collision(x, y, r);
+    flag = general_collision(pos, r);
+    
     return flag;
 }
 
@@ -20,11 +25,16 @@ bool door_collision(int x, int y, Room r){
     else return false;
 }
 
+bool general_collision(coords pos, Room r){
+    if(r.get_element_in_this_position(pos) == NULL){
+        return false;
+    }else return true;
+}
+
 void do_room(Room *r){}; // fa cose sulla stanza
 
 bool game_over(Player p)
 {
-    //il gioco termina quando finisce la vita 
-    if(p.get_health()<=0) return true;
+    if(p.get_health()<=0) return true;     //il gioco termina quando finisce la vita 
     else return false;
 }
