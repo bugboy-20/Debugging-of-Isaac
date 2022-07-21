@@ -38,7 +38,7 @@ int main()
     // init del player
 
     // game loop
-    while (!game_over())
+    while (!game_over(*player))
     {
         inizio_frame = time(0);
 
