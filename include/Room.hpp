@@ -4,10 +4,27 @@
 #include "Entity.hpp"
 #include "List.hpp"
 #include "Player.hpp"
-#include "Room.h"
+//#include "Room.h"
 #include "geometry.h"
 #include "RoomEvent.hpp"
 #include "Queue.hpp"
+
+#define ROOM_HEIGHT 20
+#define ROOM_WIDTH 100
+
+enum door_pos
+{
+    UPPER_DOOR,
+    RIGHT_DOOR,
+    LOWER_DOOR,
+    LEFT_DOOR
+};
+
+struct door
+{
+    int position; // es LEFT_DOOR o RIGHT_DOOR
+    Room *next_room;
+};
 
 class Room {
     public:
