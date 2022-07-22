@@ -3,12 +3,13 @@
 
 enum event_type {
     ENTITY_MOVE,
-    ENTITY_KILLED
+    ENTITY_KILLED,
+    ROOM_CHANGED
 };
 
 // Classe per gestire gli eventi. 
 // è pensata per tenere gli eventi nella stessa struttura, non per creare oggetti in se
-// ogni figlio di RoomEvent deve avere un campo di tipo data
+// ogni figlio di RoomEvent (che contiene dati aggiuntivi) deve avere un campo di tipo data
 class RoomEvent {
     public:
         RoomEvent(event_type);
