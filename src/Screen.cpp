@@ -1,6 +1,6 @@
 #include "Screen.hpp"
 #include "List.hpp"
-#include "EntityMoveE.hpp"
+#include "Events.hpp"
 
 Screen::Screen()
 {
@@ -21,6 +21,7 @@ void Screen::render_room(Room r)
 
     if (this->x)
     {
+        this->render_playerstat(r);
         this->room_init(r);
         x = false;
     }
@@ -36,17 +37,26 @@ void Screen::render_room(Room r)
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0];
             coords newC = t->data[1];
-            mvwaddch(wroom, oldC.y, newC.x, 'O');
-            // mi manca il carattere dell'entità
-            mvwaddch(wroom, oldC.y, newC.x, 'T');
+            Core *e = r.get_element_in_this_position(oldC);
+            mvwaddch(wroom, oldC.y, newC.x, ' ');
+            mvwaddch(wroom, oldC.y, newC.x, e->getDisplay());
             delete t;
             break;
         }
-        // case ROOM_INIT:
-        // {
-        //     room_init(r); // demando la logica ad una funzione esterna
-        //     break;
-        // }
+        case ROOM_CHANGED:
+        {
+            RoomChangedE *t = (RoomChangedE *)e;
+            room_init(r); // demando la logica ad una funzione esterna
+            delete t;
+            break;
+        }
+        case ENTITY_KILLED:
+        {
+            EntityKilledE *t = (EntityKilledE *)e;
+            mvwaddch(wroom, t->data->getY(), t->data->getX(), ' ');
+            delete t;
+            break;
+        }
         default:
             break;
         }
@@ -122,10 +132,14 @@ void Screen::print_doors(door *doors[])
 
 void Screen::render_playerstat(Room r)
 {
-    // printw("entities: %s", typeid(Entity).name());
-    // wmove(playerstat, 1, 1);
-    // wprintw(playerstat, "%s: ", r.entities->mob->get_name()); // da sostituire con
-    // int nchars = r.entities->mob->get_health() / 2;           // funzioni getter
+    wmove(playerstat, 1, 1);
+    node *t = r.get_entities(true).head;
+    Core *player;
+    if (t != NULL)
+        player = (Core *)t->element;
+    printw("entities: %c", player->getDisplay());
+    // wprintw(playerstat, "%c: ", player->getDisplay());
+    // int nchars = player->getX() / 2;
     // for (int i = 0; i < 5; i++)
     // {
     //     if (nchars > 0)
@@ -140,7 +154,7 @@ void Screen::render_playerstat(Room r)
     // wprintw(playerstat, "%s: ", "punti");
 
     // refresh();
-    // wrefresh(playerstat);
+    wrefresh(playerstat);
 }
 
 void Screen::windows_init()
