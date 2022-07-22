@@ -22,7 +22,7 @@ void Screen::render_room(Room r)
     if (this->x)
     {
         this->render_playerstat(r);
-        this->room_init(r);
+        // this->room_init(r);
         x = false;
     }
 
@@ -132,28 +132,35 @@ void Screen::print_doors(door *doors[])
 
 void Screen::render_playerstat(Room r)
 {
-    wmove(playerstat, 1, 1);
-    node *t = r.get_entities(true).head;
-    Core *player;
-    if (t != NULL)
-        player = (Core *)t->element;
-    printw("entities: %c", player->getDisplay());
-    // wprintw(playerstat, "%c: ", player->getDisplay());
-    // int nchars = player->getX() / 2;
-    // for (int i = 0; i < 5; i++)
-    // {
-    //     if (nchars > 0)
-    //     {
-    //         waddch(playerstat, 'O');
-    //         nchars--;
-    //     }
-    //     else
-    //         waddch(playerstat, 'o');
-    // }
-    // wmove(playerstat, 2, 1);
-    // wprintw(playerstat, "%s: ", "punti");
 
-    // refresh();
+    // estraggo il player
+    List entities = r.get_entities(true);
+    if (entities.head == NULL)
+        return;
+    Player *player = (Player *)entities.head->element;
+
+    // printw("entities: %d", player->get_health());
+
+    wmove(playerstat, 0, 1);
+    wprintw(playerstat, "%s", player->get_name());
+    wmove(playerstat, 1, 1);
+    int nchars = player->get_health() / 2;
+    // serve il getter per la maxHealth
+    // int maxHealth = player->get_max_health()/2;
+    int maxHealth = 5; // questo è temporaneo
+    for (int i = 0; i < maxHealth; i++)
+    {
+        if (nchars > 0)
+        {
+            waddch(playerstat, 'O');
+            nchars--;
+        }
+        else
+            waddch(playerstat, 'o');
+    }
+    wmove(playerstat, 2, 1);
+    wprintw(playerstat, "%s: ", "punti"); // cosa sono i punti?
+
     wrefresh(playerstat);
 }
 
