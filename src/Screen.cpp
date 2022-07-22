@@ -19,17 +19,17 @@ Screen::Screen()
 void Screen::render_room(Room r)
 {
 
-    if (this->x)
-    {
-        this->render_playerstat(r);
-        // this->room_init(r);
-        x = false;
-    }
+    // if (this->x)
+    // {
+    //     this->render_playerstat(r);
+    //     // this->room_init(r);
+    //     x = false;
+    // }
 
     RoomEvent *e;
     while ((e = r.get_event()) != NULL)
     {
-        printw("%s", "ziocaca");
+        printw("id evento: %d ", e->id);
         switch (e->id)
         {
         case ENTITY_MOVE:
