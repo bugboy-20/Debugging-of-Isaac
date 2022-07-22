@@ -31,7 +31,8 @@ class Room {
          /* inizializzazione con lista di elementi
             ATTENZIONE! le liste vengono consumate
          */
-        Room(int id, List entities, List cores);
+        Room(int id, List walls, List entities, List cores);
+        Room(int id, List walls);
         Room(int id);
 
  //data una posizione restituisce l'elemento che si trova in essa, NULL se non vi è nulla.

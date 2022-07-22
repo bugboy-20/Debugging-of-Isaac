@@ -7,10 +7,26 @@
 #include "List.hpp"
 #include "RoomEvent.hpp"
 #include "geometry.h"
-Room::Room(int id, List entities, List cores) : Room(id) {
+Room::Room(int id, List walls, List entities, List cores) : Room(id, walls) {
 
     this->entities=List(entities);
     this->core=List(cores);
+
+}
+
+Room::Room(int id, List walls) {
+    this->id=id;
+
+    this->p=NULL;
+
+    for (int i=0; i<4; i++)
+        this->door[i]=NULL;
+
+    this->entities=List();
+    this->core=List();
+    this->walls=List();
+
+    //this->events=Queue();
 
 }
 
@@ -29,7 +45,6 @@ Room::Room(int id) {
     //this->events=Queue();
 
 }
-
 
 Core* Room::get_element_in_this_position(coords p) {
     node *currentNode;
