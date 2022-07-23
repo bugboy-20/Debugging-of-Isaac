@@ -16,7 +16,7 @@ Screen::Screen()
     x = true;
 }
 
-void Screen::render_room(Room r)
+void Screen::render_room(Room *r)
 {
 
     // if (this->x)
@@ -27,7 +27,7 @@ void Screen::render_room(Room r)
     // }
 
     RoomEvent *e;
-    while ((e = r.get_event()) != NULL)
+    while ((e = r->get_event()) != NULL)
     {
         printw("id evento: %d ", e->id);
         switch (e->id)
@@ -37,7 +37,7 @@ void Screen::render_room(Room r)
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0];
             coords newC = t->data[1];
-            Core *e = r.get_element_in_this_position(oldC);
+            Core *e = r->get_element_in_this_position(oldC);
             mvwaddch(wroom, oldC.y, newC.x, ' ');
             mvwaddch(wroom, oldC.y, newC.x, e->getDisplay());
             delete t;
@@ -46,7 +46,7 @@ void Screen::render_room(Room r)
         case ROOM_CHANGED:
         {
             RoomChangedE *t = (RoomChangedE *)e;
-            room_init(r); // demando la logica ad una funzione esterna
+            room_init(*r); // demando la logica ad una funzione esterna
             delete t;
             break;
         }

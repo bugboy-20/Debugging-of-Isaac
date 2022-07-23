@@ -21,7 +21,7 @@ using namespace std;
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
 void controller(Player *); // gestisce la tastiera
 
-void exit_game(); //permette di uscire
+void exit_game(); // permette di uscire
 
 map *dummy_map;
 
@@ -45,7 +45,7 @@ int main()
         controller(player);
 
         // do_room(dummy_map->current_room);
-        schermo.render_room(*dummy_map->current_room);
+        schermo.render_room(dummy_map->current_room);
 
         fine_frame = time(0);
 #ifdef _WIN32
@@ -87,9 +87,9 @@ void controller(Player *player)
     } while (key != ERR); // finché ci sono tasti da leggere
 }
 
-
-void exit_game() {
+void exit_game()
+{
     schermo.stop_screen();
-    //destroy_map(*dummy_map);
+    // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
 }
