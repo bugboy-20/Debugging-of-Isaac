@@ -66,16 +66,16 @@ void controller(Player *player)
         switch (key)
         {
         case 'w':
-            player->move_up(*dummy_map->current_room);
+            player->move_up(dummy_map->current_room);
             break;
         case 'a':
-            player->move_left(*dummy_map->current_room);
+            player->move_left(dummy_map->current_room);
             break;
         case 'd':
-            player->move_right(*dummy_map->current_room);
+            player->move_right(dummy_map->current_room);
             break;
         case 's':
-            player->move_down(*dummy_map->current_room);
+            player->move_down(dummy_map->current_room);
             break;
         case 'q':
             exit_game();
