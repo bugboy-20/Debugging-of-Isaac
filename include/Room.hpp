@@ -4,17 +4,35 @@
 #include "Entity.hpp"
 #include "List.hpp"
 #include "Player.hpp"
-#include "Room.h"
+//#include "Room.h"
 #include "geometry.h"
 #include "RoomEvent.hpp"
 #include "Queue.hpp"
+
+#define ROOM_HEIGHT 20
+#define ROOM_WIDTH 100
+
+enum door_pos
+{
+    UPPER_DOOR,
+    RIGHT_DOOR,
+    LOWER_DOOR,
+    LEFT_DOOR
+};
+
+struct door
+{
+    int position; // es LEFT_DOOR o RIGHT_DOOR
+    Room *next_room;
+};
 
 class Room {
     public:
          /* inizializzazione con lista di elementi
             ATTENZIONE! le liste vengono consumate
          */
-        Room(int id, List entities, List cores);
+        Room(int id, List walls, List entities, List cores);
+        Room(int id, List walls);
         Room(int id);
 
  //data una posizione restituisce l'elemento che si trova in essa, NULL se non vi è nulla.
@@ -52,6 +70,9 @@ class Room {
 
 // toglie dalla coda un evento
         RoomEvent *get_event();
+
+        //debug
+        void prinmt_room_menmb();
 
     private:
         int id;

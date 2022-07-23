@@ -1,12 +1,12 @@
 #include <cstddef>
 #include <iostream>
 #include <ctime>
-#include "Screen.hpp"
 #include "Map.h"
 #include "Player.hpp"
-#include "Room.h"
+#include "Room.hpp"
 #include "geometry.h"
 #include "physics.h"
+#include "Screen.hpp"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -21,7 +21,7 @@ using namespace std;
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
 void controller(Player *); // gestisce la tastiera
 
-void exit_game(); //permette di uscire
+void exit_game(); // permette di uscire
 
 map *dummy_map;
 
@@ -38,14 +38,14 @@ int main()
     // init del player
 
     // game loop
-    while (!game_over())
+    while (!game_over(*player))
     {
         inizio_frame = time(0);
 
         controller(player);
 
         // do_room(dummy_map->current_room);
-        schermo.render_room(*dummy_map->current_room);
+        schermo.render_room(dummy_map->current_room);
 
         fine_frame = time(0);
 #ifdef _WIN32
@@ -66,16 +66,16 @@ void controller(Player *player)
         switch (key)
         {
         case 'w':
-            player->move_up(*dummy_map->current_room);
+            player->move_up(dummy_map->current_room);
             break;
         case 'a':
-            player->move_left(*dummy_map->current_room);
+            player->move_left(dummy_map->current_room);
             break;
         case 'd':
-            player->move_right(*dummy_map->current_room);
+            player->move_right(dummy_map->current_room);
             break;
         case 's':
-            player->move_down(*dummy_map->current_room);
+            player->move_down(dummy_map->current_room);
             break;
         case 'q':
             exit_game();
@@ -87,9 +87,9 @@ void controller(Player *player)
     } while (key != ERR); // finché ci sono tasti da leggere
 }
 
-
-void exit_game() {
+void exit_game()
+{
     schermo.stop_screen();
-    //destroy_map(*dummy_map);
+    // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
 }

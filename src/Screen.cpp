@@ -1,5 +1,6 @@
 #include "Screen.hpp"
 #include "List.hpp"
+#include "Events.hpp"
 
 Screen::Screen()
 {
@@ -12,60 +13,84 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
+    x = true;
 }
 
-void Screen::render_room(Room r)
+void Screen::render_room(Room *r)
 {
-    room temp{
-        r.get_id(),
-        (Player *)r.get_entities(true).head->element,
-        NULL,
-        NULL,
+
+    // if (this->x)
+    // {
+    //     this->render_playerstat(r);
+    //     // this->room_init(r);
+    //     x = false;
+    // }
+
+    RoomEvent *e;
+    while ((e = r->get_event()) != NULL)
+    {
+        printw("id evento: %d ", e->id);
+        switch (e->id)
         {
-
-            r.door[0],
-            r.door[1],
-            r.door[2],
-            r.door[3]
-
+        case ENTITY_MOVE:
+        {
+            EntityMoveE *t = (EntityMoveE *)e;
+            coords oldC = t->data[0];
+            coords newC = t->data[1];
+            //TODO conolli su NULL
+            /*
+            Core *clean = r->get_element_in_this_position(oldC);
+            Core *ogg = r->get_element_in_this_position(newC);
+            mvwaddch(wroom, oldC.y, oldC.x, clean->getDisplay()); //vecchia posizione
+            mvwaddch(wroom, newC.y, newC.x, ogg->getDisplay()); //nuova posizione
+                                                                */
+            mvwaddch(wroom, oldC.y, oldC.x, ' '); //vecchia posizione
+            mvwaddch(wroom, newC.y, newC.x, 'Z'); //nuova posizione
+            delete t;
+            break;
         }
-
-    };
-
-    render_room(temp); // richiamo la funzione già scritta,
-                       // aspetto che decidiamo cosa fare con gli eventi prima di scrivere questa per bene
+        case ROOM_CHANGED:
+        {
+            RoomChangedE *t = (RoomChangedE *)e;
+            room_init(*r); // demando la logica ad una funzione esterna
+            delete t;
+            break;
+        }
+        case ENTITY_KILLED:
+        {
+            EntityKilledE *t = (EntityKilledE *)e;
+            mvwaddch(wroom, t->data->getY(), t->data->getX(), ' ');
+            delete t;
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    wrefresh(wroom);
 }
 
-void Screen::render_room(room r)
+void Screen::room_init(Room r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
     werase(wroom);
 
     // render muri esterni e delle porte
     box(wroom, 0, 0);
-    print_doors(r.doors);
+    print_doors(r.door);
 
-    // render dei muri interni (forse sono tra gli item?)
+    List everything = r.get_room_member();
+    if (everything.head == NULL)
+        return;
 
-    // render degli item
-    while (r.items != NULL)
+    node *list = everything.head;
+
+    while (list != NULL)
     {
-        mvwaddch(wroom, r.items->item.getY(), r.items->item.getX(), r.items->item.getDisplay());
-        r.items = r.items->next;
+        Core *c = (Core *)list->element;
+        mvwaddch(wroom, c->getY(), c->getX(), c->getDisplay());
+        list = list->next;
     }
-
-    // render entità
-    while (r.entities != NULL)
-    {
-        mvwaddch(wroom, r.entities->mob->getY(), r.entities->mob->getX(), r.entities->mob->getDisplay());
-        r.entities = r.entities->next;
-    }
-
-    // stampo il player
-    mvwaddch(wroom, r.player->getY(), r.player->getX(), r.player->getDisplay());
-
-    // refresh();
-    wrefresh(wroom);
 }
 
 void Screen::print_doors(door *doors[])
@@ -111,13 +136,25 @@ void Screen::print_doors(door *doors[])
     }
 }
 
-void Screen::render_playerstat(room r)
+void Screen::render_playerstat(Room r)
 {
-    // printw("entities: %s", typeid(Entity).name());
+
+    // estraggo il player
+    List entities = r.get_entities(true);
+    if (entities.head == NULL)
+        return;
+    Player *player = (Player *)entities.head->element;
+
+    // printw("entities: %d", player->get_health());
+
+    wmove(playerstat, 0, 1);
+    wprintw(playerstat, "%s", player->get_name());
     wmove(playerstat, 1, 1);
-    wprintw(playerstat, "%s: ", r.entities->mob->get_name()); // da sostituire con
-    int nchars = r.entities->mob->get_health() / 2;           // funzioni getter
-    for (int i = 0; i < 5; i++)
+    int nchars = player->get_health() / 2;
+    // serve il getter per la maxHealth
+    // int maxHealth = player->get_max_health()/2;
+    int maxHealth = 5; // questo è temporaneo
+    for (int i = 0; i < maxHealth; i++)
     {
         if (nchars > 0)
         {
@@ -128,9 +165,8 @@ void Screen::render_playerstat(room r)
             waddch(playerstat, 'o');
     }
     wmove(playerstat, 2, 1);
-    wprintw(playerstat, "%s: ", "punti");
+    wprintw(playerstat, "%s: ", "punti"); // cosa sono i punti?
 
-    refresh();
     wrefresh(playerstat);
 }
 
@@ -167,20 +203,20 @@ void Screen::windows_init()
     doupdate();
 }
 
-void Screen::render_legend(room r)
+void Screen::render_legend(Room r)
 {
-    wmove(legend, 1, 1);
-    while (r.items != NULL)
-    {
+    // wmove(legend, 1, 1);
+    // while (r.items != NULL)
+    // {
 
-        r.items = r.items->next;
-    }
+    //     r.items = r.items->next;
+    // }
 
-    // render entità
-    while (r.entities != NULL)
-    {
-        r.entities = r.entities->next;
-    }
+    // // render entità
+    // while (r.entities != NULL)
+    // {
+    //     r.entities = r.entities->next;
+    // }
 }
 
 void Screen::stop_screen()
