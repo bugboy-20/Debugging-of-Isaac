@@ -37,9 +37,15 @@ void Screen::render_room(Room *r)
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0];
             coords newC = t->data[1];
-            Core *e = r->get_element_in_this_position(oldC);
-            mvwaddch(wroom, oldC.y, newC.x, ' ');
-            mvwaddch(wroom, oldC.y, newC.x, e->getDisplay());
+            //TODO conolli su NULL
+            /*
+            Core *clean = r->get_element_in_this_position(oldC);
+            Core *ogg = r->get_element_in_this_position(newC);
+            mvwaddch(wroom, oldC.y, oldC.x, clean->getDisplay()); //vecchia posizione
+            mvwaddch(wroom, newC.y, newC.x, ogg->getDisplay()); //nuova posizione
+                                                                */
+            mvwaddch(wroom, oldC.y, oldC.x, ' '); //vecchia posizione
+            mvwaddch(wroom, newC.y, newC.x, 'Z'); //nuova posizione
             delete t;
             break;
         }
