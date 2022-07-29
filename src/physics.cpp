@@ -11,7 +11,9 @@ bool collision(int x, int y, Room r)
     pos.x = x;
     pos.y = y;
 
+    
     flag = door_collision(x, y, r);
+    if(flag) return flag;
     flag = general_collision(pos, r);
     
     return flag;
