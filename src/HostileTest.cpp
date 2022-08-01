@@ -1,2 +1,4 @@
 #include "Hostile.hpp"
-Hostile barese(4,"salvatore",50,190,{4,5},'a');
+char alallala[15] = "salvatore";
+
+Hostile barese(4, alallala, 50, 190, {4, 5}, 'a');
