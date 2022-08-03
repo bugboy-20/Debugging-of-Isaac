@@ -18,6 +18,7 @@ Screen::Screen()
 
 void Screen::render_room(Room *r)
 {
+    move(0, 0);
 
     // if (this->x)
     // {
@@ -86,13 +87,16 @@ void Screen::room_init(Room r)
         return;
 
     node *list = everything.head;
+    // wmove(moblist, 1, 1);
 
     while (list != NULL)
     {
         Core *c = (Core *)list->element;
+        // wprintw(moblist, "carattere:%c ", c->getDisplay());
         mvwaddch(wroom, c->getY(), c->getX(), c->getDisplay());
         list = list->next;
     }
+    // wrefresh(moblist);
 }
 
 void Screen::print_doors(door *doors[])
