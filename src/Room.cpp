@@ -10,8 +10,8 @@
 Room::Room(int id, List walls, List entities, List cores) : Room(id, walls)
 {
 
-    this->entities = List(entities);
-    this->core = List(cores);
+    this->entities = List(entities.head);
+    this->core = List(cores.head);
 }
 
 Room::Room(int id, List walls)
@@ -25,7 +25,7 @@ Room::Room(int id, List walls)
 
     this->entities = List();
     this->core = List();
-    this->walls = List();
+    this->walls = List(walls.head);
 
     // this->events=Queue();
 }
