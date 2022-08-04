@@ -58,6 +58,8 @@ void Screen::render_room(Room *r)
         {
             RoomChangedE *t = (RoomChangedE *)e;
             room_init(*r); // demando la logica ad una funzione esterna
+            this->render_playerstat(*r);
+            this->render_legend(*r);
             delete t;
             break;
         }
@@ -85,44 +87,44 @@ void Screen::room_init(Room r)
     print_doors(r.door);
 
     List everything = r.get_room_member();
-    if (everything.head == NULL)
-        return;
-
-    node *list = everything.head;
-    // wmove(moblist, 1, 1);
-
-    while (list != NULL)
+    if (everything.head != NULL)
     {
-        Core *c = (Core *)list->element;
-        // wprintw(moblist, "carattere:%c ", c->getDisplay());
-        mvwaddch(wroom, c->getY(), c->getX(), c->getDisplay());
-        list = list->next;
+
+        node *list = everything.head;
+        // wmove(moblist, 1, 1);
+
+        while (list != NULL)
+        {
+            Core *c = (Core *)list->element;
+            // wprintw(moblist, "carattere:%c ", c->getDisplay());
+            mvwaddch(wroom, c->getY(), c->getX(), c->getDisplay());
+            list = list->next;
+        }
+        // wrefresh(moblist);
     }
-    // wrefresh(moblist);
 
     List walls = r.get_walls();
-    if (walls.head == NULL)
-        return;
-
-    list = walls.head;
-    // wmove(moblist, 1, 1);
-
-    while (list != NULL)
+    if (walls.head != NULL)
     {
-        Wall *c = (Wall *)list->element;
-        coords start = {c->getX(), c->getY()};
-        mvwaddch(wroom, start.y, start.x, c->getDisplay());
-        if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
+        node *list = walls.head;
+
+        while (list != NULL)
         {
-            wmove(wroom, start.x + 1, start.y);
-            wvline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+            Wall *c = (Wall *)list->element;
+            coords start = {c->getX(), c->getY()};
+            mvwaddch(wroom, start.y, start.x, c->getDisplay());
+            if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
+            {
+                wmove(wroom, start.x + 1, start.y);
+                wvline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+            }
+            else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
+            {
+                wmove(wroom, start.x, start.y + 1);
+                whline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+            }
+            list = list->next;
         }
-        else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
-        {
-            wmove(wroom, start.x, start.y + 1);
-            whline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
-        }
-        list = list->next;
     }
 }
 
@@ -169,14 +171,17 @@ void Screen::print_doors(door *doors[])
     }
 }
 
+// funzione che dovrebbe essere chiamata quando:
+// inizia il gioco, il player prende danno, il player guadagna punti
 void Screen::render_playerstat(Room r)
 {
-
     // estraggo il player
     List entities = r.get_entities(true);
     if (entities.head == NULL)
         return;
     Player *player = (Player *)entities.head->element;
+    if (player == NULL)
+        return;
 
     // printw("entities: %d", player->get_health());
 
@@ -185,8 +190,8 @@ void Screen::render_playerstat(Room r)
     wmove(playerstat, 1, 1);
     int nchars = player->get_health() / 2;
     // serve il getter per la maxHealth
-    // int maxHealth = player->get_max_health()/2;
-    int maxHealth = 5; // questo è temporaneo
+    int maxHealth = player->get_max_health() / 2;
+    // int maxHealth = 5; // questo è temporaneo
     for (int i = 0; i < maxHealth; i++)
     {
         if (nchars > 0)
@@ -238,18 +243,49 @@ void Screen::windows_init()
 
 void Screen::render_legend(Room r)
 {
-    // wmove(legend, 1, 1);
-    // while (r.items != NULL)
-    // {
+    int start_x = 2;
+    wmove(legend, 1, start_x);
+    List entities = r.get_entities(true);
+    if (entities.head != NULL)
+    {
+        Player *player = (Player *)entities.head->element;
+        if (player != NULL)
+            wprintw(legend, "%c : %s", player->getDisplay(), "player");
 
-    //     r.items = r.items->next;
-    // }
+        node *list = entities.head->next;
 
-    // // render entità
-    // while (r.entities != NULL)
-    // {
-    //     r.entities = r.entities->next;
-    // }
+        while (list != NULL)
+        {
+            Entity *c = (Entity *)list->element;
+            int x, y;
+            getyx(legend, y, x);
+            wmove(legend, y + 1, start_x);
+
+            wprintw(legend, "%c : %s", c->getDisplay(), "entity");
+
+            list = list->next;
+        }
+    }
+
+    List walls = r.get_walls();
+    if (walls.head != NULL)
+    {
+        node *list = walls.head;
+
+        while (list != NULL)
+        {
+            Wall *c = (Wall *)list->element;
+            int x, y;
+            getyx(legend, y, x);
+            wmove(legend, y + 1, start_x);
+
+            wprintw(legend, "%c : %s", c->getDisplay(), "wall");
+
+            list = list->next;
+        }
+    }
+
+    wrefresh(legend);
 }
 
 void Screen::stop_screen()
