@@ -16,3 +16,7 @@ Player::Player(
     this->max_health=max_health;
     this->ammo =ammo;
 };
+
+int Player::get_max_health() {
+    return this->max_health;
+}
