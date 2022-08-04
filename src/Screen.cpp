@@ -1,6 +1,7 @@
 #include "Screen.hpp"
 #include "List.hpp"
 #include "Events.hpp"
+#include "Wall.hpp"
 
 Screen::Screen()
 {
@@ -9,6 +10,7 @@ Screen::Screen()
     noecho(); // avoids user input from being printed
     nodelay(stdscr, TRUE);
     curs_set(0);
+    // setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
     // keypad(wroom, true);
     refresh();
 
@@ -97,6 +99,31 @@ void Screen::room_init(Room r)
         list = list->next;
     }
     // wrefresh(moblist);
+
+    List walls = r.get_walls();
+    if (walls.head == NULL)
+        return;
+
+    list = walls.head;
+    // wmove(moblist, 1, 1);
+
+    while (list != NULL)
+    {
+        Wall *c = (Wall *)list->element;
+        coords start = {c->getX(), c->getY()};
+        mvwaddch(wroom, start.y, start.x, c->getDisplay());
+        if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
+        {
+            wmove(wroom, start.x + 1, start.y);
+            wvline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+        }
+        else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
+        {
+            wmove(wroom, start.x, start.y + 1);
+            whline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+        }
+        list = list->next;
+    }
 }
 
 void Screen::print_doors(door *doors[])
