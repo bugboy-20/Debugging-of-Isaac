@@ -19,3 +19,11 @@ bool Wall::is_wall(coords p) {
             ) return true;
     else return false;
 }
+
+int Wall::get_line_lenght() {
+    return this->line_lenght;
+}
+
+bool Wall::get_alignment() {
+    return this->vertical;
+}

@@ -7,6 +7,10 @@ class Wall : public Core {
         Wall(line, char display);
  // restituisce true qual'ora la posizione appartierne al muro
         bool is_wall(coords);
+        int get_line_lenght();
+
+    // true se è verticale, false se è orizzontale
+        bool get_alignment();
     private:
         int line_lenght;
         bool vertical;
