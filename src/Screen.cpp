@@ -44,9 +44,9 @@ void Screen::render_room(Room *r)
             Core *oldE = r->get_element_in_this_position(oldC);
             Core *newE = r->get_element_in_this_position(newC);
             if (oldE != NULL)
-                oldCh = oldE->getDisplay();
+                oldCh = oldE->get_display();
             if (newE != NULL)
-                newCh = newE->getDisplay();
+                newCh = newE->get_display();
 
             mvwaddch(wroom, oldC.y, oldC.x, oldCh); // vecchia posizione
             mvwaddch(wroom, newC.y, newC.x, newCh); // nuova posizione
@@ -66,7 +66,7 @@ void Screen::render_room(Room *r)
         case ENTITY_KILLED:
         {
             EntityKilledE *t = (EntityKilledE *)e;
-            mvwaddch(wroom, t->data->getY(), t->data->getX(), ' ');
+            mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ' ');
             delete t;
             break;
         }
@@ -96,8 +96,8 @@ void Screen::room_init(Room r)
         while (list != NULL)
         {
             Core *c = (Core *)list->element;
-            // wprintw(moblist, "carattere:%c ", c->getDisplay());
-            mvwaddch(wroom, c->getY(), c->getX(), c->getDisplay());
+            // wprintw(moblist, "carattere:%c ", c->get_display());
+            mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
             list = list->next;
         }
         // wrefresh(moblist);
@@ -111,17 +111,17 @@ void Screen::room_init(Room r)
         while (list != NULL)
         {
             Wall *c = (Wall *)list->element;
-            coords start = {c->getX(), c->getY()};
-            mvwaddch(wroom, start.y, start.x, c->getDisplay());
+            coords start = {c->get_x(), c->get_y()};
+            mvwaddch(wroom, start.y, start.x, c->get_display());
             if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
             {
                 wmove(wroom, start.x + 1, start.y);
-                wvline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+                wvline(wroom, c->get_display(), c->get_line_lenght() - 1);
             }
             else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
             {
                 wmove(wroom, start.x, start.y + 1);
-                whline(wroom, c->getDisplay(), c->get_line_lenght() - 1);
+                whline(wroom, c->get_display(), c->get_line_lenght() - 1);
             }
             list = list->next;
         }
@@ -250,7 +250,7 @@ void Screen::render_legend(Room r)
     {
         Player *player = (Player *)entities.head->element;
         if (player != NULL)
-            wprintw(legend, "%c : %s", player->getDisplay(), "player");
+            wprintw(legend, "%c : %s", player->get_display(), "player");
 
         node *list = entities.head->next;
 
@@ -261,7 +261,7 @@ void Screen::render_legend(Room r)
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            wprintw(legend, "%c : %s", c->getDisplay(), "entity");
+            wprintw(legend, "%c : %s", c->get_display(), "entity");
 
             list = list->next;
         }
@@ -279,7 +279,7 @@ void Screen::render_legend(Room r)
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            wprintw(legend, "%c : %s", c->getDisplay(), "wall");
+            wprintw(legend, "%c : %s", c->get_display(), "wall");
 
             list = list->next;
         }

@@ -9,7 +9,7 @@ protected:
 
 public:
     Core(coords pos, char display);
-    int getX();
-    int getY();
-    char getDisplay();
+    int get_x();
+    int get_y();
+    char get_display();
 };

@@ -51,27 +51,27 @@ Core *Room::get_element_in_this_position(coords p)
     node *currentNode;
     Core *core_elm;
 
-    if (this->p->getX() == p.x && this->p->getY() == p.y)
+    if (this->p->get_x() == p.x && this->p->get_y() == p.y)
         return (Core *)this->p;
 
     for (currentNode = this->entities.head; currentNode != NULL; currentNode = currentNode->next)
     {
         core_elm = ((Core *)currentNode->element);
-        if (core_elm->getX() == p.x && core_elm->getY() == p.y)
+        if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
             return (Core *)currentNode->element;
     }
 
     for (currentNode = this->core.head; currentNode != NULL; currentNode = currentNode->next)
     {
         core_elm = ((Core *)currentNode->element);
-        if (core_elm->getX() == p.x && core_elm->getY() == p.y)
+        if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
             return (Core *)currentNode->element;
     }
 
     for (currentNode = this->walls.head; currentNode != NULL; currentNode = currentNode->next)
     {
         core_elm = ((Core *)currentNode->element);
-        if (core_elm->getX() == p.x && core_elm->getY() == p.y)
+        if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
             return (Core *)currentNode->element;
     }
     return NULL;
@@ -138,6 +138,6 @@ void Room::prinmt_room_menmb()
 {
     for (node *member = entities.head; member != NULL; member = member->next)
     {
-        std::cout << ((Entity *)member->element)->getDisplay() << std::endl;
+        std::cout << ((Entity *)member->element)->get_display() << std::endl;
     }
 }
