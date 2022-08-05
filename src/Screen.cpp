@@ -58,8 +58,10 @@ void Screen::render_room(Room *r)
         {
             RoomChangedE *t = (RoomChangedE *)e;
             room_init(*r); // demando la logica ad una funzione esterna
-            this->render_playerstat(*r);
+
+            this->render_playerstat(*r); // è qui solo temporaneamente per i test
             this->render_legend(*r);
+            this->render_moblist(*r);
             delete t;
             break;
         }
@@ -67,6 +69,8 @@ void Screen::render_room(Room *r)
         {
             EntityKilledE *t = (EntityKilledE *)e;
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ' ');
+            this->render_moblist(*r);
+
             delete t;
             break;
         }
@@ -241,8 +245,11 @@ void Screen::windows_init()
     doupdate();
 }
 
+// funzione che dovrebbe essere chiamata quando:
+// si cambia stanza
 void Screen::render_legend(Room r)
 {
+    mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
     wmove(legend, 1, start_x);
     List entities = r.get_entities(true);
@@ -250,7 +257,7 @@ void Screen::render_legend(Room r)
     {
         Player *player = (Player *)entities.head->element;
         if (player != NULL)
-            wprintw(legend, "%c : %s", player->get_display(), "player");
+            wprintw(legend, "%c : %s", player->get_display(), "giocatore");
 
         node *list = entities.head->next;
 
@@ -261,7 +268,7 @@ void Screen::render_legend(Room r)
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            wprintw(legend, "%c : %s", c->get_display(), "entity");
+            wprintw(legend, "%c : %s", c->get_display(), "entita`");
 
             list = list->next;
         }
@@ -279,13 +286,50 @@ void Screen::render_legend(Room r)
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            wprintw(legend, "%c : %s", c->get_display(), "wall");
+            wprintw(legend, "%c : %s", c->get_display(), "muro");
 
             list = list->next;
         }
     }
 
     wrefresh(legend);
+}
+
+// funzione che dovrebbe essere chiamata quando:
+// si cambia stanza, un hostile prende danno, un hostile muore
+void Screen::render_moblist(Room r) // TODO: fare in modo che se i mob non ci stanno in una riga finiscano in quella sotto
+{
+    mvwprintw(moblist, 0, 1, "Nemici");
+
+    wmove(moblist, 2, 2);
+    List entities = r.get_entities(false);
+    if (entities.head != NULL)
+    {
+        node *list = entities.head;
+
+        while (list != NULL)
+        {
+            Entity *c = (Entity *)list->element;
+
+            int initial_x, initial_y;
+            getyx(moblist, initial_y, initial_x); // salvo la posizione del cursore prima di scrivere la prima riga
+
+            wprintw(moblist, "%c : %s", c->get_display(), c->get_name()); // stampo la prima riga
+
+            int end_x, end_y;
+            getyx(moblist, end_y, end_x); // salvo la posizione del cursore dopo aver scritto la prima riga
+
+            wmove(moblist, initial_y + 1, initial_x); // mi muovo nella riga sotto
+
+            for (int i = 0; i < c->get_health(); i++) // stampo la barra della vita
+                waddch(moblist, 'O');
+
+            wmove(moblist, end_y, end_x + 4);
+
+            list = list->next;
+        }
+    }
+    wrefresh(moblist);
 }
 
 void Screen::stop_screen()
