@@ -6,7 +6,8 @@ Hostile::Hostile(
     int health,
     int damage,
     coords pos,
-    char display) : Entity(name, health, damage, pos, display)
+    char display,
+    char description[]) : Entity(name, health, damage, pos, display, description)
 {
     this->trigger_radius=trigger_radius;
     this->health=health;

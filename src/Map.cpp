@@ -79,8 +79,9 @@ LEFT_DOOR:
 Room *room0() {
 
     List wl = List();
-    
-    Wall *w1 = new Wall({{ROOM_HEIGHT/2,ROOM_WIDTH/4}, true,ROOM_WIDTH/4}, '#');
+
+    char desc[20] = "muro di pietra";
+    Wall *w1 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, true, ROOM_WIDTH / 4}, '#', desc);
 
     wl.push(w1);
 

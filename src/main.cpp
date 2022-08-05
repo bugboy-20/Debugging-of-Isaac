@@ -26,7 +26,8 @@ void exit_game(); // permette di uscire
 map *dummy_map;
 
 char n[10] = "gino";
-Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@');
+char desc[20] = "giocatore";
+Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
 Screen schermo = Screen();
 
 int main()

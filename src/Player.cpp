@@ -9,7 +9,8 @@ Player::Player(
     int health,
     int damage,
     coords pos,
-    char display) : Entity(name, health, damage, pos, display)
+    char display,
+    char description[]) : Entity(name, health, damage, pos, display, description)
 {
     this->arma = w;
     this->armatura = a;

@@ -5,7 +5,7 @@
 #include "physics.h"
 #include <cstring>
 
-Entity::Entity(char name[10], int health, int damage, coords pos, char display) : Core(pos, display)
+Entity::Entity(char name[10], int health, int damage, coords pos, char display, char description[]) : Core(pos, display, description)
 {
   strcpy(this->name, name);
   this->health = health;

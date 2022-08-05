@@ -252,45 +252,68 @@ void Screen::render_legend(Room r)
     mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
     wmove(legend, 1, start_x);
-    List entities = r.get_entities(true);
-    if (entities.head != NULL)
-    {
-        Player *player = (Player *)entities.head->element;
-        if (player != NULL)
-            wprintw(legend, "%c : %s", player->get_display(), "giocatore");
 
-        node *list = entities.head->next;
+
+List room_member = r.get_room_member();
+    if (room_member.head != NULL)
+    {
+        node *list = room_member.head;
 
         while (list != NULL)
         {
-            Entity *c = (Entity *)list->element;
+            Core *c = (Core *)list->element;
             int x, y;
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            wprintw(legend, "%c : %s", c->get_display(), "entita`");
+            char desc[20];
+            c->get_description(desc);
+
+            wprintw(legend, "%c : %s", c->get_display(), desc);
 
             list = list->next;
         }
     }
 
-    List walls = r.get_walls();
-    if (walls.head != NULL)
-    {
-        node *list = walls.head;
+    // List entities = r.get_entities(true);
+    // if (entities.head != NULL)
+    // {
+    //     Player *player = (Player *)entities.head->element;
+    //     if (player != NULL)
+    //         wprintw(legend, "%c : %s", player->get_display(), "giocatore");
 
-        while (list != NULL)
-        {
-            Wall *c = (Wall *)list->element;
-            int x, y;
-            getyx(legend, y, x);
-            wmove(legend, y + 1, start_x);
+    //     node *list = entities.head->next;
 
-            wprintw(legend, "%c : %s", c->get_display(), "muro");
+    //     while (list != NULL)
+    //     {
+    //         Entity *c = (Entity *)list->element;
+    //         int x, y;
+    //         getyx(legend, y, x);
+    //         wmove(legend, y + 1, start_x);
 
-            list = list->next;
-        }
-    }
+    //         wprintw(legend, "%c : %s", c->get_display(), "entita`");
+
+    //         list = list->next;
+    //     }
+    // }
+
+    // List walls = r.get_walls();
+    // if (walls.head != NULL)
+    // {
+    //     node *list = walls.head;
+
+    //     while (list != NULL)
+    //     {
+    //         Wall *c = (Wall *)list->element;
+    //         int x, y;
+    //         getyx(legend, y, x);
+    //         wmove(legend, y + 1, start_x);
+
+    //         wprintw(legend, "%c : %s", c->get_display(), "muro");
+
+    //         list = list->next;
+    //     }
+    // }
 
     wrefresh(legend);
 }
