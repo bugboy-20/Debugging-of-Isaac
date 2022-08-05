@@ -6,10 +6,12 @@ class Core
 protected:
     coords pos;
     char display;
+    char description[20];
 
 public:
-    Core(coords pos, char display);
+    Core(coords pos, char display, char description[]);
     int get_x();
     int get_y();
     char get_display();
+    void get_description(char[20]);
 };
