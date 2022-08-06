@@ -74,6 +74,15 @@ void Screen::render_room(Room *r)
             delete t;
             break;
         }
+        case PLAYER_DAMAGED:
+        {
+            PlayerDamagedE *t = (PlayerDamagedE *)e;
+
+            this->render_playerstat(*r);
+
+            delete t;
+            break;
+        }
         default:
             break;
         }
