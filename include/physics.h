@@ -1,8 +1,6 @@
 #pragma once
 #include "Player.hpp"
 #include "Room.hpp"
-#include <iostream>
-using namespace std;
 
 bool collision(int x, int y, Room r);
 

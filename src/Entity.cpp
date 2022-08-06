@@ -53,4 +53,3 @@ char *Entity::get_name()
   return nome;
 };
 
-char *get_name();

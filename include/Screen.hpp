@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
 #else
@@ -15,8 +13,6 @@ class Screen
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
     // *legend, *moblist, *playerstat, *inventory
-    int current_room_id;
-    bool x;
 
     void print_doors(door *doors[]);
     /**

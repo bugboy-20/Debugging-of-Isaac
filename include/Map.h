@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Entity.hpp"
-#include "Player.hpp"
 #include "Room.hpp"
 
 struct map

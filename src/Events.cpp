@@ -1,8 +1,5 @@
 #include "Events.hpp"
 
-#include "Entity.hpp"
-#include "RoomEvent.hpp"
-#include "geometry.h"
 
 // ENTITY_MOVE
 EntityMoveE::EntityMoveE(coords old_pos, coords new_pos) : RoomEvent(ENTITY_MOVE) {

@@ -1,5 +1,4 @@
 #include "Screen.hpp"
-#include "List.hpp"
 #include "Events.hpp"
 #include "Wall.hpp"
 
@@ -15,19 +14,11 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
-    x = true;
 }
 
 void Screen::render_room(Room *r)
 {
     move(0, 0);
-
-    // if (this->x)
-    // {
-    //     this->render_playerstat(r);
-    //     // this->room_init(r);
-    //     x = false;
-    // }
 
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)

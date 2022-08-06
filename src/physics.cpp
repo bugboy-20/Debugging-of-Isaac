@@ -1,7 +1,6 @@
+#include <cstddef>
 #include "physics.h"
-#include <RoomEvent.hpp>
-#include <Events.hpp>
-#include <Player.hpp>
+#include "Events.hpp"
 
 bool collision(int x, int y, Room r)
 {
