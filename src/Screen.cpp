@@ -274,10 +274,7 @@ void Screen::render_legend(Room r)
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            char desc[20];
-            c->get_description(desc);
-
-            wprintw(legend, "%c : %s", c->get_display(), desc);
+            wprintw(legend, "%c : %s", c->get_display(), c->get_description());
 
             list = list->next;
         }
