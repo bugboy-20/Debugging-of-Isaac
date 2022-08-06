@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "Player.hpp"
 #include "RoomEvent.hpp"
 #include "geometry.h"
 
@@ -27,4 +28,12 @@ class EntityKilledE : public RoomEvent {
 class RoomChangedE : public RoomEvent {
     public:
         RoomChangedE();
+};
+
+// evento player perde vita
+class PlayerDamagedE : public RoomEvent {
+    public:
+        PlayerDamagedE(Player *p);
+        ~PlayerDamagedE();
+        Player *data;
 };
