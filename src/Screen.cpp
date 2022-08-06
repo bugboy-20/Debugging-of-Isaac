@@ -175,8 +175,41 @@ void Screen::print_doors(door *doors[])
     }
 }
 
+void Screen::windows_init()
+{
+    int lateral_width = 20,
+        lower_height = 10,
+        playerstat_height = 4,
+        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
+        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
+        moblist_width = ROOM_WIDTH,
+        start_x = 1,
+        start_y = 0,
+        lateral_start_x = ROOM_WIDTH + 1 + start_x,
+        lower_start_y = ROOM_HEIGHT;
+
+    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
+    playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
+    legend = newwin(legend_height, lateral_width, playerstat_height + start_y, lateral_start_x);
+    inventory = newwin(inventory_height, lateral_width, playerstat_height + legend_height + start_y, lateral_start_x);
+    moblist = newwin(lower_height, moblist_width, lower_start_y + start_y, start_x);
+    box(wroom, 0, 0);
+    box(playerstat, 0, 0);
+    box(legend, 0, 0);
+    box(inventory, 0, 0);
+    box(moblist, 0, 0);
+
+    // refresh();
+    wnoutrefresh(wroom);
+    wnoutrefresh(playerstat);
+    wnoutrefresh(legend);
+    wnoutrefresh(inventory);
+    wnoutrefresh(moblist);
+    doupdate();
+}
+
 // funzione che dovrebbe essere chiamata quando:
-// inizia il gioco, il player prende danno, il player guadagna punti
+// inizia il gioco, la vita del player aumenta o diminuisce, il player guadagna punti
 void Screen::render_playerstat(Room r)
 {
     // estraggo il player
@@ -212,39 +245,6 @@ void Screen::render_playerstat(Room r)
     wrefresh(playerstat);
 }
 
-void Screen::windows_init()
-{
-    int lateral_width = 20,
-        lower_height = 10,
-        playerstat_height = 4,
-        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
-        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
-        moblist_width = ROOM_WIDTH,
-        start_x = 1,
-        start_y = 0,
-        lateral_start_x = ROOM_WIDTH + 1 + start_x,
-        lower_start_y = ROOM_HEIGHT;
-
-    wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
-    playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
-    legend = newwin(legend_height, lateral_width, playerstat_height + start_y, lateral_start_x);
-    inventory = newwin(inventory_height, lateral_width, playerstat_height + legend_height + start_y, lateral_start_x);
-    moblist = newwin(lower_height, moblist_width, lower_start_y + start_y, start_x);
-    box(wroom, 0, 0);
-    box(playerstat, 0, 0);
-    box(legend, 0, 0);
-    box(inventory, 0, 0);
-    box(moblist, 0, 0);
-
-    // refresh();
-    wnoutrefresh(wroom);
-    wnoutrefresh(playerstat);
-    wnoutrefresh(legend);
-    wnoutrefresh(inventory);
-    wnoutrefresh(moblist);
-    doupdate();
-}
-
 // funzione che dovrebbe essere chiamata quando:
 // si cambia stanza
 void Screen::render_legend(Room r)
@@ -253,8 +253,7 @@ void Screen::render_legend(Room r)
     int start_x = 2;
     wmove(legend, 1, start_x);
 
-
-List room_member = r.get_room_member();
+    List room_member = r.get_room_member();
     if (room_member.head != NULL)
     {
         node *list = room_member.head;
