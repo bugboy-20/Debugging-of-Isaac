@@ -27,7 +27,7 @@ List::List(node *head)
 }
 
 List::~List() {
-    // destroy();
+    destroy();
 }
 
 void List::push(void *e) {

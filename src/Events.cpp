@@ -30,5 +30,5 @@ PlayerDamagedE::PlayerDamagedE(Player *p) : RoomEvent(PLAYER_DAMAGED) {
 }
 
 PlayerDamagedE::~PlayerDamagedE() {
-    delete this->data;
+    //delete this->data;
 }
