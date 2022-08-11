@@ -225,7 +225,9 @@ void Screen::render_playerstat(Room r)
     // printw("entities: %d", player->get_health());
 
     wmove(playerstat, 0, 1);
-    wprintw(playerstat, "%s", player->get_name());
+    char name[10];
+    player->get_name(name);
+    wprintw(playerstat, "%s", name);
     wmove(playerstat, 1, 1);
     int nchars = player->get_health() / 2;
     // serve il getter per la maxHealth
@@ -267,51 +269,13 @@ void Screen::render_legend(Room r)
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            wprintw(legend, "%c : %s", c->get_display(), c->get_description());
+            char desc[20];
+            c->get_description(desc);
+            wprintw(legend, "%c : %s", c->get_display(), desc);
 
             list = list->next;
         }
     }
-
-    // List entities = r.get_entities(true);
-    // if (entities.head != NULL)
-    // {
-    //     Player *player = (Player *)entities.head->element;
-    //     if (player != NULL)
-    //         wprintw(legend, "%c : %s", player->get_display(), "giocatore");
-
-    //     node *list = entities.head->next;
-
-    //     while (list != NULL)
-    //     {
-    //         Entity *c = (Entity *)list->element;
-    //         int x, y;
-    //         getyx(legend, y, x);
-    //         wmove(legend, y + 1, start_x);
-
-    //         wprintw(legend, "%c : %s", c->get_display(), "entita`");
-
-    //         list = list->next;
-    //     }
-    // }
-
-    // List walls = r.get_walls();
-    // if (walls.head != NULL)
-    // {
-    //     node *list = walls.head;
-
-    //     while (list != NULL)
-    //     {
-    //         Wall *c = (Wall *)list->element;
-    //         int x, y;
-    //         getyx(legend, y, x);
-    //         wmove(legend, y + 1, start_x);
-
-    //         wprintw(legend, "%c : %s", c->get_display(), "muro");
-
-    //         list = list->next;
-    //     }
-    // }
 
     wrefresh(legend);
 }
@@ -338,7 +302,8 @@ void Screen::render_moblist(Room r)
 
             getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
 
-            char *name = c->get_name();
+            char name[10];
+            c->get_name(name);
             if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + c->get_health() >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
             {                                                                                        // se il nome o la barra della vita non ci sta
 
@@ -348,8 +313,8 @@ void Screen::render_moblist(Room r)
             else
             {
                 wprintw(moblist, "%c : %s", c->get_display(), name); // stampo la prima riga
-                getyx(moblist, end_y, end_x); // salvo la posizione del cursore dopo aver scritto la prima riga
-                wmove(moblist, start_y + 1, start_x); // mi muovo nella riga sotto
+                getyx(moblist, end_y, end_x);                        // salvo la posizione del cursore dopo aver scritto la prima riga
+                wmove(moblist, start_y + 1, start_x);                // mi muovo nella riga sotto
 
                 for (int i = 0; i < c->get_health(); i++) // stampo la barra della vita
                     waddch(moblist, 'O');
@@ -371,8 +336,6 @@ void Screen::render_moblist(Room r)
 
                 list = list->next;
             }
-
-            delete name;
         }
     }
     mvwprintw(moblist, 0, 1, "Nemici");
