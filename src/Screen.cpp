@@ -2,6 +2,8 @@
 #include "Events.hpp"
 #include "Wall.hpp"
 
+#include <cstring>
+
 Screen::Screen()
 {
     initscr();
@@ -316,12 +318,11 @@ void Screen::render_legend(Room r)
 
 // funzione che dovrebbe essere chiamata quando:
 // si cambia stanza, un hostile prende danno, un hostile muore
-// TODO: problema con la pulizia quando la riga che sfora sovrascrive la vita del primo elemento
-void Screen::render_moblist(Room r) // TODO: fare in modo che se i mob non ci stanno in una riga finiscano in quella sotto
+void Screen::render_moblist(Room r)
 {
-    int line = 2, col = 2;
+    int line = 2, col = 2, gap = 4;
 
-    wmove(moblist, 2, 2);
+    wmove(moblist, line, col);
     List entities = r.get_entities(false);
     if (entities.head != NULL)
     {
@@ -331,49 +332,31 @@ void Screen::render_moblist(Room r) // TODO: fare in modo che se i mob non ci st
         {
             Entity *c = (Entity *)list->element;
 
-            bool sforato = false;
-
             int start_x, start_y,
                 end_x, end_y,
                 end_h_x, end_h_y;
 
             getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
 
-            wprintw(moblist, "%c : %s", c->get_display(), c->get_name()); // stampo la prima riga
-
-            getyx(moblist, end_y, end_x); // salvo la posizione del cursore dopo aver scritto la prima riga
-
-            if (start_y != end_y) // controllo che la riga non sia uscita dal bordo
-            {
-                sforato = true;
-            }
-
-            wmove(moblist, start_y + 1, start_x); // mi muovo nella riga sotto
-
-            for (int i = 0; i < c->get_health(); i++) // stampo la barra della vita
-                waddch(moblist, 'O');
-
-            getyx(moblist, end_h_y, end_h_x);
-
-            if (end_h_y != start_y + 1) // controllo che la barra della vita non sia uscita dal bordo
-            {
-                sforato = true;
-            }
-
-            if (sforato)
-            {
-                wmove(moblist, start_y, start_x); // cancello l'elemento che ho scritto
-                wclrtoeol(moblist);
-                wmove(moblist, start_y + 1, start_x); // cancello la barra della vita
-                wclrtobot(moblist);
+            char *name = c->get_name();
+            if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + c->get_health() >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
+            {                                                                                        // se il nome o la barra della vita non ci sta
 
                 line += 3; // mi sposto sotto
                 wmove(moblist, line, col);
             }
             else
             {
+                wprintw(moblist, "%c : %s", c->get_display(), name); // stampo la prima riga
+                getyx(moblist, end_y, end_x); // salvo la posizione del cursore dopo aver scritto la prima riga
+                wmove(moblist, start_y + 1, start_x); // mi muovo nella riga sotto
 
-                if (end_h_x + 4 >= ROOM_WIDTH || end_x + 4 >= ROOM_WIDTH) // se una delle due coordinate sfora si cambia riga
+                for (int i = 0; i < c->get_health(); i++) // stampo la barra della vita
+                    waddch(moblist, 'O');
+
+                getyx(moblist, end_h_y, end_h_x);
+
+                if (end_h_x + gap >= ROOM_WIDTH || end_x + gap >= ROOM_WIDTH) // se una delle due coordinate sfora si cambia riga
                 {
                     line += 3;
                     wmove(moblist, line, col);
@@ -381,22 +364,18 @@ void Screen::render_moblist(Room r) // TODO: fare in modo che se i mob non ci st
                 else // altrimenti la nuova posizione sarà la più grande delle due
                 {
                     if (end_x > end_h_x)
-                        wmove(moblist, end_y, end_x + 4);
+                        wmove(moblist, end_y, end_x + gap);
                     else
-                        wmove(moblist, end_y, end_h_x + 4);
+                        wmove(moblist, end_y, end_h_x + gap);
                 }
-
-                // int tempx, tempy;
-                // getyx(moblist, tempy, tempx);
-                // wprintw(inventory, "%d - %d\n", tempy, tempx);
 
                 list = list->next;
             }
+
+            delete name;
         }
     }
-    box(moblist, 0, 0);
     mvwprintw(moblist, 0, 1, "Nemici");
-    // wrefresh(inventory);
     wrefresh(moblist);
 }
 
