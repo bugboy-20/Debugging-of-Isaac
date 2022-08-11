@@ -46,7 +46,7 @@ int main()
         controller(player);
 
         // do_room(dummy_map->current_room);
-        schermo.render_room(dummy_map->current_room);
+        schermo.do_screen(dummy_map->current_room);
 
         fine_frame = time(0);
 #ifdef _WIN32
