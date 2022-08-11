@@ -67,10 +67,18 @@ void Screen::render_room(Room *r)
             delete t;
             break;
         }
-        case PLAYER_DAMAGED:
+        case ENTITY_DAMAGED:
         {
-            PlayerDamagedE *t = (PlayerDamagedE *)e;
+            EntityDamagedE *t = (EntityDamagedE *)e;
+            this->render_moblist(*r);
 
+            delete t;
+            break;
+        }
+        case PLAYER_HEALTH_CHANGED:
+        {
+            PlayerHealthChangedE *t = (PlayerHealthChangedE *)e;
+            
             this->render_playerstat(*r);
 
             delete t;
