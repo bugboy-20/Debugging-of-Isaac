@@ -52,4 +52,4 @@ char *Entity::get_name()
   strcpy(nome, name);
   return nome;
 };
-
+void Entity::get_name(char n[10]) { strcpy(n, this->name); }

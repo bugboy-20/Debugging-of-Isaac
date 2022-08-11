@@ -19,6 +19,7 @@ public:
   void action();
 
   char* get_name();
+  void get_name(char[10]);
   int get_health();
   int get_damage();
 private:

@@ -22,3 +22,4 @@ char *Core::get_description()
 	strcpy(desc, this->description);
 	return desc;
 }
+void Core::get_description(char d[20]) { strcpy(d, this->description); }

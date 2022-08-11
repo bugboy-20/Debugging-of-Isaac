@@ -14,4 +14,5 @@ public:
     int get_y();
     char get_display();
     char *get_description();
+    void get_description(char[20]);
 };
