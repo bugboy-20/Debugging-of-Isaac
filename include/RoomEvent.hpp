@@ -4,8 +4,9 @@
 enum event_type {
     ENTITY_MOVE,
     ENTITY_KILLED,
+    ENTITY_DAMAGED,
     ROOM_CHANGED,
-    PLAYER_DAMAGED
+    PLAYER_HEALTH_CHANGED
 };
 
 // Classe per gestire gli eventi. 

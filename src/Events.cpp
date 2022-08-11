@@ -24,11 +24,12 @@ EntityKilledE::~EntityKilledE() {
 RoomChangedE::RoomChangedE() : RoomEvent(ROOM_CHANGED) {}
 
 
-// PLAYER_DAMAGED
-PlayerDamagedE::PlayerDamagedE(Player *p) : RoomEvent(PLAYER_DAMAGED) {
+// PLAYER_HEALTH_CHANGED
+PlayerHealthChangedE::PlayerHealthChangedE(Player *p) : RoomEvent(PLAYER_HEALTH_CHANGED) {
     this->data = p;
 }
 
-PlayerDamagedE::~PlayerDamagedE() {
-    //delete this->data;
+// ENTITY_DAMAGED
+EntityDamagedE::EntityDamagedE(Entity *e) : RoomEvent(ENTITY_DAMAGED) {
+    this->data = e;
 }
