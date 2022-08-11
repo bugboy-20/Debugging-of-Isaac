@@ -12,40 +12,86 @@ class Screen
 {
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
-    // *legend, *moblist, *playerstat, *inventory
 
-    void print_doors(door *doors[]);
     /**
-     * It creates a bunch of windows and draws boxes around them
+     * Inizializza le window e disegna i bordi per ognuna
      */
     void windows_init();
+
     /**
-     * It takes a Room object as a parameter, clears the screen, draws the walls and doors, and then draws
-     * the characters in the room
+     * Stampa le porte
      *
-     * @param r the room to be drawn
+     * @param doors array di porte da stampare
      */
-    void room_init(Room r);
+    void print_doors(door *doors[]);
 
-public:
-    Screen();
+    /**
+     * Prende come parametro una Room, pulisce lo schermo, stampa le porte,
+     * e poi stampa gli elementi della stanza.
+     *
+     * Funzione che dovrebbe essere chiamata quando:
+     * si cambia stanza
+     *
+     * @param r la stanza che viene stampata
+     */
+    void render_room(Room r);
 
-    // stampa sullo schermo la stanza
-    // void render_room(room r);
-    void render_room(Room *r);
-
-    // stampa il riquadro in cui sono visualizzati punteggio e vita
+    /**
+     * Stampa il riquadro in cui sono visualizzati punteggio e vita.
+     *
+     * Funzione che dovrebbe essere chiamata quando:
+     * inizia il gioco, la vita del player aumenta o diminuisce, il player guadagna punti
+     *
+     * @param r la stanza da cui prende le informazioni
+     */
     void render_playerstat(Room r);
 
-    // stampa una legenda degli elementi presenti nella stanza
+    /**
+     * Stampa una legenda con elementi presenti nella stanza.
+     *
+     * Funzione che dovrebbe essere chiamata quando:
+     * si cambia stanza
+     *
+     * @param r la stanza da cui prende le informazioni
+     */
     void render_legend(Room r);
 
-    // stampa la sezione con la vita di tutti gli ostili nella stanza
+    /**
+     * Stampa la sezione con la vita e il nome di tutti gli ostili nella stanza.
+     *
+     * Funzione che dovrebbe essere chiamata quando:
+     * si cambia stanza, un hostile prende danno, un hostile muore
+     *
+     * @param r la stanza da cui prende le informazioni
+     */
     void render_moblist(Room r);
 
-    // stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore
+    /**
+     * Stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore.
+     *
+     * Funzione che dovrebbe essere chiamata quando:
+     * ancora non lo so
+     *
+     * @param r la stanza da cui prende le informazioni
+     */
     void render_inventory(Room r);
 
-    // spegne lo schermo
+public:
+    /**
+     * Costruttore della classe schermo
+     * Inizializza ncurses e le tutte le finestre
+     */
+    Screen();
+
+    /**
+     * Aggiorna lo schermo in base agli eventi che avvenuti
+     *
+     * @param r l'oggetto room da cui prende le informazioni
+     */
+    void do_screen(Room *r);
+
+    /**
+     * Termina lo schermo
+     */
     void stop_screen();
 };
