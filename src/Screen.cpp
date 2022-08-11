@@ -316,9 +316,10 @@ void Screen::render_legend(Room r)
 
 // funzione che dovrebbe essere chiamata quando:
 // si cambia stanza, un hostile prende danno, un hostile muore
+// TODO: problema con la pulizia quando la riga che sfora sovrascrive la vita del primo elemento
 void Screen::render_moblist(Room r) // TODO: fare in modo che se i mob non ci stanno in una riga finiscano in quella sotto
 {
-    mvwprintw(moblist, 0, 1, "Nemici");
+    int line = 2, col = 2;
 
     wmove(moblist, 2, 2);
     List entities = r.get_entities(false);
@@ -330,24 +331,72 @@ void Screen::render_moblist(Room r) // TODO: fare in modo che se i mob non ci st
         {
             Entity *c = (Entity *)list->element;
 
-            int initial_x, initial_y;
-            getyx(moblist, initial_y, initial_x); // salvo la posizione del cursore prima di scrivere la prima riga
+            bool sforato = false;
+
+            int start_x, start_y,
+                end_x, end_y,
+                end_h_x, end_h_y;
+
+            getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
 
             wprintw(moblist, "%c : %s", c->get_display(), c->get_name()); // stampo la prima riga
 
-            int end_x, end_y;
             getyx(moblist, end_y, end_x); // salvo la posizione del cursore dopo aver scritto la prima riga
 
-            wmove(moblist, initial_y + 1, initial_x); // mi muovo nella riga sotto
+            if (start_y != end_y) // controllo che la riga non sia uscita dal bordo
+            {
+                sforato = true;
+            }
+
+            wmove(moblist, start_y + 1, start_x); // mi muovo nella riga sotto
 
             for (int i = 0; i < c->get_health(); i++) // stampo la barra della vita
                 waddch(moblist, 'O');
 
-            wmove(moblist, end_y, end_x + 4);
+            getyx(moblist, end_h_y, end_h_x);
 
-            list = list->next;
+            if (end_h_y != start_y + 1) // controllo che la barra della vita non sia uscita dal bordo
+            {
+                sforato = true;
+            }
+
+            if (sforato)
+            {
+                wmove(moblist, start_y, start_x); // cancello l'elemento che ho scritto
+                wclrtoeol(moblist);
+                wmove(moblist, start_y + 1, start_x); // cancello la barra della vita
+                wclrtobot(moblist);
+
+                line += 3; // mi sposto sotto
+                wmove(moblist, line, col);
+            }
+            else
+            {
+
+                if (end_h_x + 4 >= ROOM_WIDTH || end_x + 4 >= ROOM_WIDTH) // se una delle due coordinate sfora si cambia riga
+                {
+                    line += 3;
+                    wmove(moblist, line, col);
+                }
+                else // altrimenti la nuova posizione sarà la più grande delle due
+                {
+                    if (end_x > end_h_x)
+                        wmove(moblist, end_y, end_x + 4);
+                    else
+                        wmove(moblist, end_y, end_h_x + 4);
+                }
+
+                // int tempx, tempy;
+                // getyx(moblist, tempy, tempx);
+                // wprintw(inventory, "%d - %d\n", tempy, tempx);
+
+                list = list->next;
+            }
         }
     }
+    box(moblist, 0, 0);
+    mvwprintw(moblist, 0, 1, "Nemici");
+    // wrefresh(inventory);
     wrefresh(moblist);
 }
 
