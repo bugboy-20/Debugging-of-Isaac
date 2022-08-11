@@ -261,17 +261,35 @@ void Screen::render_legend(Room r)
     if (room_member.head != NULL)
     {
         node *list = room_member.head;
+        char seenDisplay[20];
+        int p = 0;
 
         while (list != NULL)
         {
             Core *c = (Core *)list->element;
-            int x, y;
-            getyx(legend, y, x);
-            wmove(legend, y + 1, start_x);
+            bool nw = true;
+            char display = c->get_display();
 
-            char desc[20];
-            c->get_description(desc);
-            wprintw(legend, "%c : %s", c->get_display(), desc);
+            for (int i = 0; i < p; i++)
+            {
+                if (display == seenDisplay[i])
+                {
+                    nw = false;
+                    break;
+                }
+            }
+
+            if (nw)
+            {
+                seenDisplay[p++] = display;
+                int x, y;
+                getyx(legend, y, x);
+                wmove(legend, y + 1, start_x);
+
+                char desc[20];
+                c->get_description(desc);
+                wprintw(legend, "%c : %s", display, desc);
+            }
 
             list = list->next;
         }
