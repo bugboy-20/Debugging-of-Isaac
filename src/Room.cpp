@@ -6,6 +6,7 @@
 #include "Room.hpp"
 #include "List.hpp"
 #include "RoomEvent.hpp"
+#include "Wall.hpp"
 #include "geometry.h"
 Room::Room(int id, List walls, List entities, List cores) : Room(id, walls)
 {
@@ -56,22 +57,22 @@ Core *Room::get_element_in_this_position(coords p)
 
     for (currentNode = this->entities.head; currentNode != NULL; currentNode = currentNode->next)
     {
-        core_elm = ((Core *)currentNode->element);
+        core_elm = (Core *) currentNode->element;
         if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
-            return (Core *)currentNode->element;
+            return (Core *) currentNode->element;
     }
 
     for (currentNode = this->core.head; currentNode != NULL; currentNode = currentNode->next)
     {
         core_elm = ((Core *)currentNode->element);
         if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
-            return (Core *)currentNode->element;
+            return (Core *) currentNode->element;
     }
 
     for (currentNode = this->walls.head; currentNode != NULL; currentNode = currentNode->next)
     {
-        core_elm = ((Core *)currentNode->element);
-        if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
+        Wall* w = (Wall*) currentNode->element;
+        if (w->is_wall(p))
             return (Core *)currentNode->element;
     }
     return NULL;
