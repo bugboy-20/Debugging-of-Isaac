@@ -50,17 +50,19 @@ void Screen::do_screen(Room *r)
         case ROOM_CHANGED:
         {
             RoomChangedE *t = (RoomChangedE *)e;
-            render_room(*r); // demando la logica ad una funzione esterna
 
+            this->render_room(*r);       // stampo la stanza per la prima volta
             this->render_playerstat(*r); // è qui solo temporaneamente per i test
             this->render_legend(*r);
             this->render_moblist(*r);
+
             delete t;
             break;
         }
         case ENTITY_KILLED:
         {
             EntityKilledE *t = (EntityKilledE *)e;
+
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ' ');
             this->render_moblist(*r);
 
@@ -70,6 +72,7 @@ void Screen::do_screen(Room *r)
         case ENTITY_DAMAGED:
         {
             EntityDamagedE *t = (EntityDamagedE *)e;
+
             this->render_moblist(*r);
 
             delete t;
@@ -163,7 +166,6 @@ void Screen::print_doors(door *doors[])
                 break;
 
             default:
-                // printw("%s", "sus");
                 break;
             }
             mvwaddch(wroom, yLoc1, xLoc1, door);
@@ -181,23 +183,21 @@ void Screen::render_room(Room r)
     box(wroom, 0, 0);
     print_doors(r.door);
 
+    // render degli elementi (dei muri solo la "testa")
     List everything = r.get_room_member();
     if (everything.head != NULL)
     {
-
         node *list = everything.head;
-        // wmove(moblist, 1, 1);
 
         while (list != NULL)
         {
             Core *c = (Core *)list->element;
-            // wprintw(moblist, "carattere:%c ", c->get_display());
             mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
             list = list->next;
         }
-        // wrefresh(moblist);
     }
 
+    // stampo i muri per intero, procedimento diverso dagli altri elementi perchè sono più caratteri
     List walls = r.get_walls();
     if (walls.head != NULL)
     {
@@ -223,7 +223,7 @@ void Screen::render_room(Room r)
     }
 }
 
-void Screen::render_playerstat(Room r)
+void Screen::render_playerstat(Room r) // TODO: rivedere la stampa della vita, dove sono i mezzi cuori?
 {
     // estraggo il player
     List entities = r.get_entities(true);
@@ -241,7 +241,6 @@ void Screen::render_playerstat(Room r)
     wprintw(playerstat, "%s", name);
     wmove(playerstat, 1, 1);
     int nchars = player->get_health() / 2;
-    // serve il getter per la maxHealth
     int maxHealth = player->get_max_health() / 2;
     // int maxHealth = 5; // questo è temporaneo
     for (int i = 0; i < maxHealth; i++)
@@ -279,16 +278,16 @@ void Screen::render_legend(Room r)
             bool nw = true;
             char display = c->get_display();
 
-            for (int i = 0; i < p; i++)
+            for (int i = 0; i < p; i++) // controllo se questo carattere è già stato inserito nella legenda
             {
                 if (display == seenDisplay[i])
                 {
                     nw = false;
-                    break;
+                    break; // appena ne trovo uno uguale non lo devo stampare e posso smettere di cercare
                 }
             }
 
-            if (nw)
+            if (nw) // se non è stato inserito lo faccio qui
             {
                 seenDisplay[p++] = display;
                 int x, y;
