@@ -7,6 +7,8 @@
 #include "geometry.h"
 #include "physics.h"
 #include "Screen.hpp"
+#include "Wall.hpp"
+#include "Hostile.hpp"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -26,7 +28,27 @@ void exit_game(); // permette di uscire
 map *dummy_map;
 
 char n[10] = "gino";
+char n1[10] = "perino";
+char n2[10] = "rubedo";
+char n3[10] = "albedo";
+char n4[10] = "jasmine";
+
 char desc[20] = "giocatore";
+char desc1[20] = "goblin";
+char desc2[20] = "mago";
+char desc3[20] = "ladro";
+char desc4[20] = "napoletano";
+char desc5[20] = "sasso";
+char desc6[20] = "muro di pietra";
+
+Hostile *villan = new Hostile(3, n1, 8, 5, {40, 15}, '*', desc1);
+Hostile *villan1 = new Hostile(3, n2, 3, 5, {60, 7}, '=', desc2);
+Hostile *villan2 = new Hostile(3, n3, 7, 5, {20, 10}, '$', desc3);
+Hostile *villan3 = new Hostile(3, n4, 10, 5, {22, 4}, ')', desc4);
+Core *rock = new Core({35, 7}, 'O', desc5);
+Wall *w1 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, false, ROOM_WIDTH / 4}, '#', desc6);
+
+
 Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
 Screen schermo = Screen();
 
@@ -36,7 +58,16 @@ int main()
     time_t inizio_frame, fine_frame;
     // init della mappa
     dummy_map = init_map(player);
-    // init del player
+
+    // aggiungo elementi alla stanza
+    dummy_map->current_room->add_entity(villan);
+    dummy_map->current_room->add_entity(villan1);
+    dummy_map->current_room->add_entity(villan2);
+    dummy_map->current_room->add_entity(villan3);
+    // dummy_map->current_room->add_Core(rock);
+    // dummy_map->current_room->add_wall(w1);
+
+
 
     // game loop
     while (!game_over(*player))
