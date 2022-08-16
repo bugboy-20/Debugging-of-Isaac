@@ -174,7 +174,7 @@ void Screen::print_doors(door *doors[])
     }
 }
 
-void Screen::render_room(Room r)
+void Screen::render_room(Room& r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
     werase(wroom);
@@ -223,7 +223,7 @@ void Screen::render_room(Room r)
     }
 }
 
-void Screen::render_playerstat(Room r) // TODO: rivedere la stampa della vita, dove sono i mezzi cuori?
+void Screen::render_playerstat(Room& r) // TODO: rivedere la stampa della vita, dove sono i mezzi cuori?
 {
     // estraggo il player
     List entities = r.get_entities(true);
@@ -259,7 +259,7 @@ void Screen::render_playerstat(Room r) // TODO: rivedere la stampa della vita, d
     wrefresh(playerstat);
 }
 
-void Screen::render_legend(Room r)
+void Screen::render_legend(Room& r)
 {
     mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
@@ -306,7 +306,7 @@ void Screen::render_legend(Room r)
     wrefresh(legend);
 }
 
-void Screen::render_moblist(Room r)
+void Screen::render_moblist(Room& r)
 {
     int line = 2, col = 2, gap = 4;
 
