@@ -18,7 +18,7 @@ class List {
 
 //concatena in coda un'altra lista
         void append(node *);
-        void append(List);
+        void append(List&);
 // elimina un membro della stanza (comparando l'indirizzo)
 // qual'ora non venga trovato restituisce false
 // ATTENZIONE: viene eliminato dalla lista, NON deallocato

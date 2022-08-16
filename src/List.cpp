@@ -77,7 +77,7 @@ void List::append(node *n) {
         last->next=n;
     }
 }
-void List::append(List l) {
+void List::append(List& l) {
     append(l.head);
 }
 
