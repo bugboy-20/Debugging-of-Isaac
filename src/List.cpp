@@ -73,8 +73,12 @@ void List::append(node *n) {
 
     if (n!=NULL) {
         for (last=head; last->next!=NULL; last=last->next);
+        node *nuovo = new node;
+        nuovo->element = n->element;
+        nuovo->next = n->next;
 
-        last->next=n;
+        n = n->next;
+        last->next=nuovo;
     }
 }
 void List::append(List& l) {
