@@ -185,41 +185,35 @@ void Screen::render_room(Room &r)
 
     // render degli elementi (dei muri solo la "testa")
     List everything = r.get_room_member(false);
-    if (everything.head != NULL)
-    {
-        node *list = everything.head;
+    node *list = everything.head;
 
-        while (list != NULL)
-        {
-            Core *c = (Core *)list->element;
-            mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
-            list = list->next;
-        }
+    while (list != NULL)
+    {
+        Core *c = (Core *)list->element;
+        mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
+        list = list->next;
     }
 
     // stampo i muri per intero, procedimento diverso dagli altri elementi perchè sono più caratteri
     List walls = r.get_walls();
-    if (walls.head != NULL)
-    {
-        node *list = walls.head;
+    list = walls.head;
 
-        while (list != NULL)
+    while (list != NULL)
+    {
+        Wall *c = (Wall *)list->element;
+        coords start = {c->get_x(), c->get_y()};
+        mvwaddch(wroom, start.y, start.x, c->get_display());
+        if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
         {
-            Wall *c = (Wall *)list->element;
-            coords start = {c->get_x(), c->get_y()};
-            mvwaddch(wroom, start.y, start.x, c->get_display());
-            if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
-            {
-                wmove(wroom, start.x + 1, start.y);
-                wvline(wroom, c->get_display(), c->get_line_lenght() - 1);
-            }
-            else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
-            {
-                wmove(wroom, start.x, start.y + 1);
-                whline(wroom, c->get_display(), c->get_line_lenght() - 1);
-            }
-            list = list->next;
+            wmove(wroom, start.x + 1, start.y);
+            wvline(wroom, c->get_display(), c->get_line_lenght() - 1);
         }
+        else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
+        {
+            wmove(wroom, start.x, start.y + 1);
+            whline(wroom, c->get_display(), c->get_line_lenght() - 1);
+        }
+        list = list->next;
     }
 }
 
@@ -269,41 +263,39 @@ void Screen::render_legend(Room &r)
     wmove(legend, 1, start_x);
 
     List room_member = r.get_room_member(true);
-    if (room_member.head != NULL)
+    node *list = room_member.head;
+
+    char seenDisplay[20];
+    int p = 0;
+
+    while (list != NULL)
     {
-        node *list = room_member.head;
-        char seenDisplay[20];
-        int p = 0;
+        Core *c = (Core *)list->element;
+        bool nw = true;
+        char display = c->get_display();
 
-        while (list != NULL)
+        for (int i = 0; i < p; i++) // controllo se questo carattere è già stato inserito nella legenda
         {
-            Core *c = (Core *)list->element;
-            bool nw = true;
-            char display = c->get_display();
-
-            for (int i = 0; i < p; i++) // controllo se questo carattere è già stato inserito nella legenda
+            if (display == seenDisplay[i])
             {
-                if (display == seenDisplay[i])
-                {
-                    nw = false;
-                    break; // appena ne trovo uno uguale non lo devo stampare e posso smettere di cercare
-                }
+                nw = false;
+                break; // appena ne trovo uno uguale non lo devo stampare e posso smettere di cercare
             }
-
-            if (nw) // se non è stato inserito lo faccio qui
-            {
-                seenDisplay[p++] = display;
-                int x, y;
-                getyx(legend, y, x);
-                wmove(legend, y + 1, start_x);
-
-                char desc[20];
-                c->get_description(desc);
-                wprintw(legend, "%c : %s", display, desc);
-            }
-
-            list = list->next;
         }
+
+        if (nw) // se non è stato inserito lo faccio qui
+        {
+            seenDisplay[p++] = display;
+            int x, y;
+            getyx(legend, y, x);
+            wmove(legend, y + 1, start_x);
+
+            char desc[20];
+            c->get_description(desc);
+            wprintw(legend, "%c : %s", display, desc);
+        }
+
+        list = list->next;
     }
 
     wrefresh(legend);
@@ -317,59 +309,56 @@ void Screen::render_moblist(Room &r)
 
     wmove(moblist, line, col);
     List entities = r.get_entities(false);
-    if (entities.head != NULL)
+    node *list = entities.head;
+
+    while (list != NULL)
     {
-        node *list = entities.head;
+        Entity *c = (Entity *)list->element;
 
-        while (list != NULL)
+        int start_x, start_y,
+            end_x, end_y,
+            end_h_x, end_h_y;
+
+        int nFullHeart = c->get_health() / 2,
+            nHalfHeart = c->get_health() - nFullHeart * 2; // get_health è dispari allora è 1 se è pari è 0
+
+        getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
+
+        char name[10];
+        c->get_name(name);
+        if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + c->get_health() >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
+        {                                                                                        // se il nome o la barra della vita non ci sta
+
+            line += 3; // mi sposto sotto
+            wmove(moblist, line, col);
+        }
+        else
         {
-            Entity *c = (Entity *)list->element;
+            wprintw(moblist, "%c : %s", c->get_display(), name); // stampo la prima riga
+            getyx(moblist, end_y, end_x);                        // salvo la posizione del cursore dopo aver scritto la prima riga
+            wmove(moblist, start_y + 1, start_x);                // mi muovo nella riga sotto
 
-            int start_x, start_y,
-                end_x, end_y,
-                end_h_x, end_h_y;
+            for (int i = 0; i < nFullHeart; i++) // stampo la barra della vita
+                waddch(moblist, fullHeart);
+            for (int i = 0; i < nHalfHeart; i++)
+                waddch(moblist, halfHeart);
 
-            int nFullHeart = c->get_health() / 2,
-                nHalfHeart = c->get_health() - nFullHeart * 2; // get_health è dispari allora è 1 se è pari è 0
+            getyx(moblist, end_h_y, end_h_x);
 
-            getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
-
-            char name[10];
-            c->get_name(name);
-            if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + c->get_health() >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
-            {                                                                                        // se il nome o la barra della vita non ci sta
-
-                line += 3; // mi sposto sotto
+            if (end_h_x + gap >= ROOM_WIDTH || end_x + gap >= ROOM_WIDTH) // se una delle due coordinate sfora si cambia riga
+            {
+                line += 3;
                 wmove(moblist, line, col);
             }
-            else
+            else // altrimenti la nuova posizione sarà la più grande delle due
             {
-                wprintw(moblist, "%c : %s", c->get_display(), name); // stampo la prima riga
-                getyx(moblist, end_y, end_x);                        // salvo la posizione del cursore dopo aver scritto la prima riga
-                wmove(moblist, start_y + 1, start_x);                // mi muovo nella riga sotto
-
-                for (int i = 0; i < nFullHeart; i++) // stampo la barra della vita
-                    waddch(moblist, fullHeart);
-                for (int i = 0; i < nHalfHeart; i++)
-                    waddch(moblist, halfHeart);
-
-                getyx(moblist, end_h_y, end_h_x);
-
-                if (end_h_x + gap >= ROOM_WIDTH || end_x + gap >= ROOM_WIDTH) // se una delle due coordinate sfora si cambia riga
-                {
-                    line += 3;
-                    wmove(moblist, line, col);
-                }
-                else // altrimenti la nuova posizione sarà la più grande delle due
-                {
-                    if (end_x > end_h_x)
-                        wmove(moblist, end_y, end_x + gap);
-                    else
-                        wmove(moblist, end_y, end_h_x + gap);
-                }
-
-                list = list->next;
+                if (end_x > end_h_x)
+                    wmove(moblist, end_y, end_x + gap);
+                else
+                    wmove(moblist, end_y, end_h_x + gap);
             }
+
+            list = list->next;
         }
     }
     mvwprintw(moblist, 0, 1, "Nemici");
