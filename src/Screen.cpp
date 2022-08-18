@@ -174,7 +174,7 @@ void Screen::print_doors(door *doors[])
     }
 }
 
-void Screen::render_room(Room& r)
+void Screen::render_room(Room &r)
 {
     // pulisco lo schermo da rappresentazioni precedenti
     werase(wroom);
@@ -184,7 +184,7 @@ void Screen::render_room(Room& r)
     print_doors(r.door);
 
     // render degli elementi (dei muri solo la "testa")
-    List everything = r.get_room_member();
+    List everything = r.get_room_member(false);
     if (everything.head != NULL)
     {
         node *list = everything.head;
@@ -223,7 +223,7 @@ void Screen::render_room(Room& r)
     }
 }
 
-void Screen::render_playerstat(Room& r) // TODO: rivedere la stampa della vita, dove sono i mezzi cuori?
+void Screen::render_playerstat(Room &r) // TODO: rivedere la stampa della vita, dove sono i mezzi cuori?
 {
     // estraggo il player
     List entities = r.get_entities(true);
@@ -259,13 +259,13 @@ void Screen::render_playerstat(Room& r) // TODO: rivedere la stampa della vita, 
     wrefresh(playerstat);
 }
 
-void Screen::render_legend(Room& r)
+void Screen::render_legend(Room &r)
 {
     mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
     wmove(legend, 1, start_x);
 
-    List room_member = r.get_room_member();
+    List room_member = r.get_room_member(true);
     if (room_member.head != NULL)
     {
         node *list = room_member.head;
@@ -306,7 +306,7 @@ void Screen::render_legend(Room& r)
     wrefresh(legend);
 }
 
-void Screen::render_moblist(Room& r)
+void Screen::render_moblist(Room &r)
 {
     int line = 2, col = 2, gap = 4;
 
