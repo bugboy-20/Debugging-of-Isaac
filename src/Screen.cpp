@@ -223,38 +223,41 @@ void Screen::render_room(Room &r)
     }
 }
 
-void Screen::render_playerstat(Room &r) // TODO: rivedere la stampa della vita, dove sono i mezzi cuori?
+void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punti
 {
     // estraggo il player
-    List entities = r.get_entities(true);
-    if (entities.head == NULL)
-        return;
-    Player *player = (Player *)entities.head->element;
+    Player *player = (Player *)r.p;
     if (player == NULL)
         return;
 
-    // printw("entities: %d", player->get_health());
+    int start_x = 1;
+    char fullHeart = '0', // cuore intero
+        halfHeart = 'O',  // mezzo cuore
+        emptyHeart = '-'; // cuore vuoto
 
-    wmove(playerstat, 0, 1);
+    int nFullHeart = player->get_health() / 2,
+        nHalfHeart = player->get_health() - nFullHeart * 2,                     // get_health è dispari allora è 1 se è pari è 0
+        nEmptyHeart = (player->get_max_health() / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
+
+    // stampo il nome
     char name[10];
     player->get_name(name);
-    wprintw(playerstat, "%s", name);
-    wmove(playerstat, 1, 1);
-    int nchars = player->get_health() / 2;
-    int maxHealth = player->get_max_health() / 2;
-    // int maxHealth = 5; // questo è temporaneo
-    for (int i = 0; i < maxHealth; i++)
-    {
-        if (nchars > 0)
-        {
-            waddch(playerstat, 'O');
-            nchars--;
-        }
-        else
-            waddch(playerstat, 'o');
-    }
-    wmove(playerstat, 2, 1);
-    wprintw(playerstat, "%s: ", "punti"); // cosa sono i punti?
+    mvwprintw(playerstat, 0, start_x, "%s", name);
+
+    // stampo la vita
+    wmove(playerstat, 1, start_x);
+
+    for (int i = 0; i < nFullHeart; i++)
+        waddch(playerstat, fullHeart);
+
+    for (int i = 0; i < nHalfHeart; i++)
+        waddch(playerstat, halfHeart);
+
+    for (int i = 0; i < nEmptyHeart; i++)
+        waddch(playerstat, emptyHeart);
+
+    // stampo i punti
+    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", 6); // cosa sono i punti?
 
     wrefresh(playerstat);
 }
@@ -309,6 +312,8 @@ void Screen::render_legend(Room &r)
 void Screen::render_moblist(Room &r)
 {
     int line = 2, col = 2, gap = 4;
+    char fullHeart = '0', // cuore intero
+        halfHeart = 'O';  // mezzo cuore
 
     wmove(moblist, line, col);
     List entities = r.get_entities(false);
@@ -323,6 +328,9 @@ void Screen::render_moblist(Room &r)
             int start_x, start_y,
                 end_x, end_y,
                 end_h_x, end_h_y;
+
+            int nFullHeart = c->get_health() / 2,
+                nHalfHeart = c->get_health() - nFullHeart * 2; // get_health è dispari allora è 1 se è pari è 0
 
             getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
 
@@ -340,8 +348,10 @@ void Screen::render_moblist(Room &r)
                 getyx(moblist, end_y, end_x);                        // salvo la posizione del cursore dopo aver scritto la prima riga
                 wmove(moblist, start_y + 1, start_x);                // mi muovo nella riga sotto
 
-                for (int i = 0; i < c->get_health(); i++) // stampo la barra della vita
-                    waddch(moblist, 'O');
+                for (int i = 0; i < nFullHeart; i++) // stampo la barra della vita
+                    waddch(moblist, fullHeart);
+                for (int i = 0; i < nHalfHeart; i++)
+                    waddch(moblist, halfHeart);
 
                 getyx(moblist, end_h_y, end_h_x);
 
