@@ -201,18 +201,13 @@ void Screen::render_room(Room &r)
     while (list != NULL)
     {
         Wall *c = (Wall *)list->element;
-        coords start = {c->get_x(), c->get_y()};
-        mvwaddch(wroom, start.y, start.x, c->get_display());
-        if (/*c->is_wall({start.x, start.y + 1})*/ c->get_alignment()) // linea orizzontale
-        {
-            wmove(wroom, start.x + 1, start.y);
-            wvline(wroom, c->get_display(), c->get_line_lenght() - 1);
-        }
-        else /*if (c->is_wall({start.x + 1, start.y}))*/ // linea verticale
-        {
-            wmove(wroom, start.x, start.y + 1);
-            whline(wroom, c->get_display(), c->get_line_lenght() - 1);
-        }
+        wmove(wroom, c->get_y(), c->get_x());
+
+        if (c->get_alignment())                                        // linea verticale
+            wvline(wroom, c->get_display(), c->get_line_lenght() + 1); // stampo la testa + il corpo
+        else                                                           // linea orizzontale
+            whline(wroom, c->get_display(), c->get_line_lenght() + 1);
+
         list = list->next;
     }
 }
