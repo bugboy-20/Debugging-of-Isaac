@@ -43,6 +43,7 @@ void Screen::do_screen(Room *r)
 
             mvwaddch(wroom, oldC.y, oldC.x, oldCh); // vecchia posizione
             mvwaddch(wroom, newC.y, newC.x, newCh); // nuova posizione
+            wrefresh(wroom);
 
             delete t;
             break;
@@ -64,6 +65,7 @@ void Screen::do_screen(Room *r)
             EntityKilledE *t = (EntityKilledE *)e;
 
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ' ');
+            wrefresh(wroom);
             this->render_moblist(*r);
 
             delete t;
@@ -91,7 +93,6 @@ void Screen::do_screen(Room *r)
             break;
         }
     }
-    wrefresh(wroom);
 }
 
 void Screen::stop_screen()
@@ -210,6 +211,7 @@ void Screen::render_room(Room &r)
 
         list = list->next;
     }
+    wrefresh(wroom);
 }
 
 void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punti
