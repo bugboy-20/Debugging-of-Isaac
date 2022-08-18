@@ -104,13 +104,15 @@ void Room::delete_room_menber(Core *m)
         walls.delete_element(m);
 }
 
-List Room::get_room_member()
+List Room::get_room_member(/*bool walls_too*/)
 {
     List l = get_entities(true);
     List c = List(core.head);
-    List w = List(walls.head);
     l.append(c);
-    l.append(w);
+    //if (walls_too) {
+        List w = List(walls.head);
+        l.append(w);
+   // }
     return l;
 }
 

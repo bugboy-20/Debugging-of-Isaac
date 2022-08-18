@@ -65,7 +65,7 @@ int main()
     dummy_map->current_room->add_entity(villan2);
     dummy_map->current_room->add_entity(villan3);
     dummy_map->current_room->add_Core(rock);
-    // dummy_map->current_room->add_wall(w1);
+    dummy_map->current_room->add_wall(w1);
 
 
 

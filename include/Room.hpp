@@ -54,7 +54,7 @@ class Room {
         void delete_room_menber(Core *);
 
 // restituisce una lista con tutti i membri della stanza, player è in testa
-        List get_room_member();
+        List get_room_member(bool walls_too);
 
 // restituisce una lista con tutte le entità se il booleano è `true` essa comprende anche il player
         List get_entities(bool player_too);
