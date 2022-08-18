@@ -5,6 +5,7 @@
 #include "List.hpp"
 #include "Player.hpp"
 //#include "Room.h"
+#include "Wall.hpp"
 #include "geometry.h"
 #include "RoomEvent.hpp"
 #include "Queue.hpp"
@@ -44,6 +45,9 @@ class Room {
 
 // aggiunge una entità alla stanza
         void add_entity(Entity *);
+
+// aggiunge una entità alla stanza
+        void add_wall(Wall *);
 
 // elimina un elemento della stanza (funziona anche con le entità)
 // NB. non viene deallocato l'elemento in se

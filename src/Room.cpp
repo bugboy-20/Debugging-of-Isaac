@@ -90,6 +90,10 @@ void Room::add_entity(Entity *e)
     this->entities.push(e);
 }
 
+void Room::add_wall(Wall *e) {
+    this->walls.push(e);
+}
+
 void Room::delete_room_menber(Core *m)
 {
     if (entities.delete_element(m))
