@@ -64,7 +64,13 @@ void Screen::do_screen(Room *r)
         {
             EntityKilledE *t = (EntityKilledE *)e;
 
-            mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ' ');
+            char ch = ' ';
+            Core *el = r->get_element_in_this_position({t->data->get_x(), t->data->get_y()});
+
+            if (el != NULL)
+                ch = el->get_display();
+
+            mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
             wrefresh(wroom);
             this->render_moblist(*r);
 
