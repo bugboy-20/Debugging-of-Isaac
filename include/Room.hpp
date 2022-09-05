@@ -5,6 +5,7 @@
 #include "List.hpp"
 #include "Player.hpp"
 //#include "Room.h"
+#include "Wall.hpp"
 #include "geometry.h"
 #include "RoomEvent.hpp"
 #include "Queue.hpp"
@@ -45,12 +46,15 @@ class Room {
 // aggiunge una entità alla stanza
         void add_entity(Entity *);
 
+// aggiunge una entità alla stanza
+        void add_wall(Wall *);
+
 // elimina un elemento della stanza (funziona anche con le entità)
 // NB. non viene deallocato l'elemento in se
         void delete_room_menber(Core *);
 
 // restituisce una lista con tutti i membri della stanza, player è in testa
-        List get_room_member();
+        List get_room_member(bool walls_too);
 
 // restituisce una lista con tutte le entità se il booleano è `true` essa comprende anche il player
         List get_entities(bool player_too);

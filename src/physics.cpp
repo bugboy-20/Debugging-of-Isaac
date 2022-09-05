@@ -1,9 +1,8 @@
+#include <cstddef>
 #include "physics.h"
-#include <RoomEvent.hpp>
-#include <EntityMoveE.hpp>
-#include <Player.hpp>
+#include "Events.hpp"
 
-bool collision(int x, int y, Room r)
+bool collision(int x, int y, Room& r)
 {
     bool flag;
     coords pos;
@@ -11,13 +10,15 @@ bool collision(int x, int y, Room r)
     pos.x = x;
     pos.y = y;
 
+    
     flag = door_collision(x, y, r);
+    if(flag) return flag;
     flag = general_collision(pos, r);
     
     return flag;
 }
 
-bool door_collision(int x, int y, Room r){
+bool door_collision(int x, int y, Room& r){
     if(y < 1) return true;
     else if(x < 1) return true;
     else if(y > ROOM_HEIGHT - 2) return true;
@@ -25,7 +26,7 @@ bool door_collision(int x, int y, Room r){
     else return false;
 }
 
-bool general_collision(coords pos, Room r){
+bool general_collision(coords pos, Room& r){
     if(r.get_element_in_this_position(pos) == NULL){
         return false;
     }else return true;

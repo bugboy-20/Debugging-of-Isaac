@@ -5,19 +5,24 @@ List::List(){
     this->head=NULL;
 }
 
-List::List(node *head) {
-    if (head==NULL)
-        this->head=NULL;
-    else {
-        node *tlcn= new node;
-        this->head=tlcn;
+List::List(node *head)
+{
+    if (head == NULL)
+        this->head = NULL;
+    else
+    {
+        this->head = new node;
+        this->head->element = head->element;
+        this->head->next = NULL;
+        node *tlcn = this->head;
 
-        for(node *cn=head; cn!=NULL; cn=cn->next) {
-            tlcn->element=cn->element;
-            tlcn->next=new node;
-            tlcn=tlcn->next;
+        for (node *cn = head->next; cn != NULL; cn = cn->next)
+        {
+            tlcn->next = new node;
+            tlcn = tlcn->next;
+            tlcn->element = cn->element;
+            tlcn->next = NULL;
         }
-        tlcn->next=NULL;
     }
 }
 
@@ -68,11 +73,15 @@ void List::append(node *n) {
 
     if (n!=NULL) {
         for (last=head; last->next!=NULL; last=last->next);
+        node *nuovo = new node;
+        nuovo->element = n->element;
+        nuovo->next = n->next;
 
-        last->next=n;
+        n = n->next;
+        last->next=nuovo;
     }
 }
-void List::append(List l) {
+void List::append(List& l) {
     append(l.head);
 }
 

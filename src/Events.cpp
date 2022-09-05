@@ -1,8 +1,5 @@
 #include "Events.hpp"
 
-#include "Entity.hpp"
-#include "RoomEvent.hpp"
-#include "geometry.h"
 
 // ENTITY_MOVE
 EntityMoveE::EntityMoveE(coords old_pos, coords new_pos) : RoomEvent(ENTITY_MOVE) {
@@ -27,3 +24,12 @@ EntityKilledE::~EntityKilledE() {
 RoomChangedE::RoomChangedE() : RoomEvent(ROOM_CHANGED) {}
 
 
+// PLAYER_HEALTH_CHANGED
+PlayerHealthChangedE::PlayerHealthChangedE(Player *p) : RoomEvent(PLAYER_HEALTH_CHANGED) {
+    this->data = p;
+}
+
+// ENTITY_DAMAGED
+EntityDamagedE::EntityDamagedE(Entity *e) : RoomEvent(ENTITY_DAMAGED) {
+    this->data = e;
+}

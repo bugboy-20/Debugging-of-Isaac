@@ -9,10 +9,15 @@ Player::Player(
     int health,
     int damage,
     coords pos,
-    char display) : Entity(name, health, damage, pos, display)
+    char display,
+    char description[]) : Entity(name, health, damage, pos, display, description)
 {
     this->arma = w;
     this->armatura = a;
     this->max_health=max_health;
     this->ammo =ammo;
 };
+
+int Player::get_max_health() {
+    return this->max_health;
+}

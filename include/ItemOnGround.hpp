@@ -7,5 +7,5 @@ protected:
     // odio messina
 public:
     // devo 215 milioni di riyal al governo iraniano
-    ItemOnGround(coords pos, char display /*puntatore al collezionabile*/);
+    ItemOnGround(coords pos, char display, char description[] /*puntatore al collezionabile*/);
 };

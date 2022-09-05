@@ -1,11 +1,11 @@
 #include "Entity.hpp"
 #include "Room.hpp"
-#include "EntityMoveE.hpp"
+#include "Events.hpp"
 #include "geometry.h"
 #include "physics.h"
 #include <cstring>
 
-Entity::Entity(char name[10], int health, int damage, coords pos, char display) : Core(pos, display)
+Entity::Entity(char name[10], int health, int damage, coords pos, char display, char description[]) : Core(pos, display, description)
 {
   strcpy(this->name, name);
   this->health = health;
@@ -52,5 +52,4 @@ char *Entity::get_name()
   strcpy(nome, name);
   return nome;
 };
-
-char *get_name();
+void Entity::get_name(char n[10]) { strcpy(n, this->name); }
