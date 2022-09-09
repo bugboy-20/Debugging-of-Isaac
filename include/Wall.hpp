@@ -4,7 +4,7 @@
 #include "geometry.h"
 class Wall : public Core {
     public:
-        Wall(line, char display, char description[]);
+        Wall(line);
  // restituisce true qual'ora la posizione appartierne al muro
         bool is_wall(coords);
         int get_line_lenght();
@@ -14,4 +14,7 @@ class Wall : public Core {
     private:
         int line_lenght;
         bool vertical;
+
+        // serve grafica più carina al muro
+        char char_chooser(line);
 };

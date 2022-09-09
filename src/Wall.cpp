@@ -1,7 +1,10 @@
 #include "Wall.hpp"
 #include "Core.hpp"
 #include "geometry.h"
-Wall::Wall(line l, char display, char description[]) : Core(l.p_iniziale, display, description) {
+
+char descr[] = "muro";
+
+Wall::Wall(line l) : Core(l.p_iniziale, char_chooser(l), descr){
     this->line_lenght=l.length;
     this->vertical=l.vertical;
 }
@@ -26,4 +29,10 @@ int Wall::get_line_lenght() {
 
 bool Wall::get_alignment() {
     return this->vertical;
+}
+
+
+char Wall::char_chooser(line l) {
+    if (l.vertical) return '|';
+    else return '-';
 }
