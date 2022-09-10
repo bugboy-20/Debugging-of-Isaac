@@ -80,8 +80,7 @@ Room *room0() {
 
     List wl = List();
 
-    char desc[20] = "muro di pietra";
-    Wall *w1 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, true, ROOM_WIDTH / 4}, '#', desc);
+    Wall *w1 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, true, ROOM_WIDTH / 4});
 
     wl.push(w1);
 
