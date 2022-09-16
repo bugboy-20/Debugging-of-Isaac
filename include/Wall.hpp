@@ -12,7 +12,7 @@ class Wall : public Core {
     // true se è verticale, false se è orizzontale
         bool get_alignment();
     private:
-        int line_lenght;
+        int line_lenght;  //length
         bool vertical;
 
         // serve grafica più carina al muro
