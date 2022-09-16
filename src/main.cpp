@@ -42,7 +42,7 @@ char desc4[20] = "napoletano";
 char desc5[20] = "sasso";
 char desc6[20] = "muro di pietra";
 
-Zombie *z = new Zombie({45, 15});
+//Zombie *z = new Zombie({45, 15}); <-------------------- NON FA MUOVERE GIOCATORE
 
 Hostile *villan = new Hostile(3, n1, 8, 5, {40, 15}, '*', desc1);
 Hostile *villan1 = new Hostile(3, n2, 3, 5, {60, 7}, '=', desc2);
@@ -68,7 +68,7 @@ int main()
     dummy_map->current_room->add_entity(villan1);
     dummy_map->current_room->add_entity(villan2);
     dummy_map->current_room->add_entity(villan3);
-    dummy_map->current_room->add_entity(z);
+    //dummy_map->current_room->add_entity(z); <-------------------- NON FA MUOVERE GIOCATORE
     dummy_map->current_room->add_Core(rock);
     dummy_map->current_room->add_wall(w2);
     //dummy_map->current_room->add_wall(w1);
