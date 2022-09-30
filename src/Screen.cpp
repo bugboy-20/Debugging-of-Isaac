@@ -329,8 +329,8 @@ void Screen::render_moblist(Room &r)
 
         char name[10];
         c->get_name(name);
-        if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + c->get_health() >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
-        {                                                                                        // se il nome o la barra della vita non ci sta
+        if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + nFullHeart + nHalfHeart >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
+        {                                                                                                // se il nome o la barra della vita non ci sta
 
             line += 3; // mi sposto sotto
             wmove(moblist, line, col);
