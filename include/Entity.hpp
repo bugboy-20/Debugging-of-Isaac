@@ -16,7 +16,7 @@ public:
   bool move_down(Room *room);
   bool move_left(Room *room);
   bool move_right(Room *room);
-  virtual void action();
+  /*virtual*/ void action();
 
   char* get_name();
   void get_name(char[10]);
