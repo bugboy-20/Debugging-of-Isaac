@@ -13,3 +13,9 @@ Hostile::Hostile(
     this->health=health;
     this->damage=damage;
 };
+
+
+
+int Hostile::get_trigger_radius() {
+    return this->trigger_radius;
+}

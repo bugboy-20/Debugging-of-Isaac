@@ -9,4 +9,6 @@ protected:
 
 public:
     Hostile(int trigger_radius, char name[10], int health, int damage, coords pos, char display, char description[]);
+
+    int get_trigger_radius();
 };
