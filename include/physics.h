@@ -4,11 +4,13 @@
 
 bool collision(int x, int y, Room& r);
 
-bool door_collision(coords pos, Room& r);
+bool wall_collision(coords pos, Room& r);
 
 bool general_collision(coords pos, Room& r);
 
-bool room_change(coords pos, Room& r);
+void door_collision(coords pos, Room& r);
+
+void next_room_position(Room& r, enum door_pos p);
 
 void do_room(Room *r); // fa cose sulla stanza
 
