@@ -14,7 +14,7 @@ bool collision(int x, int y, Room& r)
     flag1 = wall_collision(pos, r);
     flag2 = general_collision(pos, r);
     door_collision(pos, r);
-    if(flag2) return true;
+    if(flag1 || flag2) return true;
     else return false;
 }
 
