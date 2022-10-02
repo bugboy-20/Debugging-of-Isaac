@@ -1,4 +1,6 @@
 #include <cstddef>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include "Core.hpp"
 #include "Entity.hpp"
@@ -138,8 +140,15 @@ RoomEvent *Room::get_event()
 {
     return (RoomEvent *)this->events.dequeue();
 }
-// Room *Room::next_room(enum door_pos) {} problemi da risolvere con Room.h
-//
+Room *Room::next_room(enum door_pos p) {
+    if (this->door[p] != NULL)
+        return this->door[p]->next_room;
+    else {
+        fprintf(stderr, "Errore: si è tentato di entrare per una porta inesistente");
+        exit(EXIT_FAILURE);
+    }
+}
+
 
 void Room::prinmt_room_menmb()
 {
