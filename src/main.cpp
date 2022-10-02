@@ -10,6 +10,8 @@
 #include "Wall.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
+#include "GameMenu.hpp"
+#include <locale.h>
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -52,14 +54,31 @@ Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
 
-
 Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
-Screen schermo = Screen();
 
 int main()
 {
+    setlocale(LC_ALL, "");
+    GameMenu gm = GameMenu();
+
+    do
+    {
+        gm.draw();
+        int key = getch();
+        if (key == '\n')
+            break;
+        else if (key == KEY_UP)
+            gm.select_next_item();
+        else if (key == KEY_DOWN)
+            gm.select_prev_item();
+    } while (true);
+
+    gm.stop();
+
     // init schermo
     time_t inizio_frame, fine_frame;
+    Screen schermo = Screen();
+
     // init della mappa
     dummy_map = init_map(player);
 
@@ -71,9 +90,7 @@ int main()
     dummy_map->current_room->add_entity(z);
     dummy_map->current_room->add_Core(rock);
     dummy_map->current_room->add_wall(w2);
-    //dummy_map->current_room->add_wall(w1);
-
-
+    // dummy_map->current_room->add_wall(w1);
 
     // game loop
     while (!game_over(*player))
@@ -92,6 +109,7 @@ int main()
         usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
+    endwin();
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
@@ -117,6 +135,7 @@ void controller(Player *player)
             break;
         case 'q':
             exit_game();
+            endwin();
             break;
         default:
             break;
@@ -127,7 +146,7 @@ void controller(Player *player)
 
 void exit_game()
 {
-    schermo.stop_screen();
+    // schermo.stop_screen();
     // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
 }
