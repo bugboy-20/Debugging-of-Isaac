@@ -7,16 +7,14 @@
 #endif
 
 #include "Room.hpp"
+#include "GameMenu.hpp"
 
 class Screen
 {
 private:
-    WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
+    WINDOW *wroom, *playerstat, *legend, *moblist, *inventory, *game_menu;
 
-    /**
-     * Inizializza le window e disegna i bordi per ognuna
-     */
-    void windows_init();
+    int stdscr_width, stdscr_height;
 
     /**
      * Stampa le porte
@@ -34,7 +32,7 @@ private:
      *
      * @param r la stanza che viene stampata
      */
-    void render_room(Room& r);
+    void render_room(Room &r);
 
     /**
      * Stampa il riquadro in cui sono visualizzati punteggio e vita.
@@ -44,7 +42,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_playerstat(Room& r);
+    void render_playerstat(Room &r);
 
     /**
      * Stampa una legenda con elementi presenti nella stanza.
@@ -54,7 +52,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_legend(Room& r);
+    void render_legend(Room &r);
 
     /**
      * Stampa la sezione con la vita e il nome di tutti gli ostili nella stanza.
@@ -64,7 +62,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_moblist(Room& r);
+    void render_moblist(Room &r);
 
     /**
      * Stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore.
@@ -74,14 +72,22 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_inventory(Room& r);
+    void render_inventory(Room &r);
 
 public:
     /**
      * Costruttore della classe schermo
      * Inizializza ncurses e le tutte le finestre
      */
+    GameMenu gm;
+
     Screen();
+
+    void start_gamemenu();
+    /**
+     * Inizializza le window e disegna i bordi per ognuna
+     */
+    void start_gameinterface();
 
     /**
      * Aggiorna lo schermo in base agli eventi che avvenuti
