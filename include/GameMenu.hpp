@@ -1,6 +1,10 @@
 #pragma once
-#include <ncursesw/ncurses.h>
 
+#ifdef _WIN32
+#include <ncursesw/ncurses.h>
+#else
+#include <ncurses.h>
+#endif
 #define STRLEN 20
 enum menu_elem
 {
