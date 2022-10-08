@@ -28,6 +28,9 @@ void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
 
+void menu(Screen&); //apre il menu
+void game_loop();
+
 map *dummy_map;
 
 char n[10] = "gino";
@@ -59,15 +62,21 @@ Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
 Screen schermo;
 int main()
 {
-    setlocale(LC_ALL, "");
 
-    time_t inizio_frame, fine_frame;
+    setlocale(LC_ALL, "");
+    //^^^^^^^^^^^^^^^^^^^^^^^ piske che fa Ctrl+C Ctrl+V alla cieca
+
 
     // init schermo
     schermo = Screen();
 
+    // apro il menu
+    menu(schermo);
+
     // init della mappa
     dummy_map = init_map(player);
+
+    schermo.start_gameinterface();
 
     // aggiungo elementi alla stanza
     dummy_map->current_room->add_entity(villan);
@@ -79,10 +88,14 @@ int main()
     dummy_map->current_room->add_wall(w2);
     // dummy_map->current_room->add_wall(w1);
 
-    // loop di controllo del menù
+    game_loop();
+}
+
+void menu(Screen& schermo) {
     schermo.start_gamemenu();
     int selected_menu, key;
 
+    // loop di controllo del menù
     do
     {
         schermo.gm.draw();
@@ -92,42 +105,46 @@ int main()
             selected_menu = schermo.gm.get_selected_item();
             break;
         }
-        else if (key == KEY_UP)
+        else if (key == KEY_UP || key == 'w')
             schermo.gm.select_next_item();
-        else if (key == KEY_DOWN)
+        else if (key == KEY_DOWN || key == 's')
             schermo.gm.select_prev_item();
     } while (true);
     schermo.gm.clean();
 
     switch (selected_menu)
     {
-    case NEW_GAME:
-        // game loop
-        schermo.start_gameinterface();
-        while (!game_over(*player))
-        {
-            inizio_frame = time(0);
+        case NEW_GAME:
+            // game loop
+            break;
 
-            controller(player);
+        case EXIT_GAME:
+            exit_game();
+            break;
 
-            // do_room(dummy_map->current_room);
-            schermo.do_screen(dummy_map->current_room);
+        default:
+            exit_game(); // qualcosa è andato storto meglio uscire
+            break;
+    }
+}
 
-            fine_frame = time(0);
+void game_loop() {
+    time_t inizio_frame, fine_frame;
+    while (!game_over(*player))
+    {
+        inizio_frame = time(0);
+
+        controller(player);
+
+        //do_room(dummy_map->current_room);
+        schermo.do_screen(dummy_map->current_room);
+
+        fine_frame = time(0);
 #ifdef _WIN32
-            Sleep(FRAMETIME - (fine_frame - inizio_frame));
+        Sleep(FRAMETIME - (fine_frame - inizio_frame));
 #else
-            usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
+        usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
-        }
-        break;
-
-    case EXIT_GAME:
-        exit_game();
-        break;
-
-    default:
-        break;
     }
 }
 
