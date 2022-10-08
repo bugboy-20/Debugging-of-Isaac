@@ -56,28 +56,15 @@ Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
 
 Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
 
+Screen schermo;
 int main()
 {
     setlocale(LC_ALL, "");
-    GameMenu gm = GameMenu();
 
-    do
-    {
-        gm.draw();
-        int key = getch();
-        if (key == '\n')
-            break;
-        else if (key == KEY_UP)
-            gm.select_next_item();
-        else if (key == KEY_DOWN)
-            gm.select_prev_item();
-    } while (true);
-
-    gm.stop();
+    time_t inizio_frame, fine_frame;
 
     // init schermo
-    time_t inizio_frame, fine_frame;
-    Screen schermo = Screen();
+    schermo = Screen();
 
     // init della mappa
     dummy_map = init_map(player);
@@ -92,24 +79,56 @@ int main()
     dummy_map->current_room->add_wall(w2);
     // dummy_map->current_room->add_wall(w1);
 
-    // game loop
-    while (!game_over(*player))
+    // loop di controllo del menù
+    schermo.start_gamemenu();
+    int selected_menu, key;
+
+    do
     {
-        inizio_frame = time(0);
+        schermo.gm.draw();
+        key = getch();
+        if (key == '\n')
+        {
+            selected_menu = schermo.gm.get_selected_item();
+            break;
+        }
+        else if (key == KEY_UP)
+            schermo.gm.select_next_item();
+        else if (key == KEY_DOWN)
+            schermo.gm.select_prev_item();
+    } while (true);
+    schermo.gm.clean();
 
-        controller(player);
+    switch (selected_menu)
+    {
+    case NEW_GAME:
+        // game loop
+        schermo.start_gameinterface();
+        while (!game_over(*player))
+        {
+            inizio_frame = time(0);
 
-        // do_room(dummy_map->current_room);
-        schermo.do_screen(dummy_map->current_room);
+            controller(player);
 
-        fine_frame = time(0);
+            // do_room(dummy_map->current_room);
+            schermo.do_screen(dummy_map->current_room);
+
+            fine_frame = time(0);
 #ifdef _WIN32
-        Sleep(FRAMETIME - (fine_frame - inizio_frame));
+            Sleep(FRAMETIME - (fine_frame - inizio_frame));
 #else
-        usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
+            usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
+        }
+        break;
+
+    case EXIT_GAME:
+        exit_game();
+        break;
+
+    default:
+        break;
     }
-    endwin();
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
@@ -135,7 +154,6 @@ void controller(Player *player)
             break;
         case 'q':
             exit_game();
-            endwin();
             break;
         default:
             break;
@@ -146,7 +164,7 @@ void controller(Player *player)
 
 void exit_game()
 {
-    // schermo.stop_screen();
+    schermo.stop_screen();
     // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
 }
