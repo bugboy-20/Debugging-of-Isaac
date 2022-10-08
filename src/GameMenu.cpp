@@ -1,29 +1,17 @@
 #include "GameMenu.hpp"
 #include <cstring>
 
-GameMenu::GameMenu()
+GameMenu::GameMenu(WINDOW *w, int width, int height)
 {
-    initscr();
-    cbreak(); // ctrl+c behaviour
-    noecho(); // avoids user input from being printed
-    curs_set(0);
-    intrflush(stdscr, FALSE);
-    keypad(stdscr, TRUE);
-
-    // init windows
-    int yMax, xMax;
-    getmaxyx(stdscr, yMax, xMax);
-    this->width = xMax / 2;
-    this->height = yMax / 2;
-    win = newwin(height, width, yMax / 4, xMax / 4);
-    box(win, 0, 0);
-    wrefresh(win);
-
     // init variables
-    this->num_menu = 2;
-    this->selected_menu = 0;
-    this->menus[0] = "Nuova Partita";
-    this->menus[1] = "Esci dal Gioco";
+    this->win = w;
+    this->num_menu = EXIT_GAME + 1; // exit game e` l'ultimo elemento
+    this->selected_menu = NEW_GAME;
+    strcpy(menus[NEW_GAME], "Nuova Partita");
+    strcpy(menus[EXIT_GAME], "Esci dal Gioco");
+
+    this->width = width;
+    this->height = height;
 
     // print title
     char str[] = "Super Mario Galaxy";
@@ -35,16 +23,12 @@ GameMenu::GameMenu()
 
     mvwprintw(win, height * 0.2, pad, str);
 
-    refresh();
-    wrefresh(win);
-    // wgetch(win);
+    wrefresh(this->win);
 }
 
 void GameMenu::draw()
 {
     // print menu options
-    box(win, 0, 0);
-
     int start_y = this->height * 0.4;
     for (int i = 0; i < this->num_menu; i++)
     {
@@ -55,10 +39,8 @@ void GameMenu::draw()
             pad = (width - length) / 2;
 
         if (selected_menu == i)
-        {
-            // wprintw(win, "lul:%d ", this->selected_menu);
             wattron(win, A_STANDOUT);
-        }
+
         mvwprintw(win, start_y, pad, this->menus[i]);
         wattroff(win, A_STANDOUT);
         start_y += 2;
@@ -80,9 +62,13 @@ void GameMenu::select_prev_item()
         this->selected_menu = num_menu - 1;
 }
 
-void GameMenu::stop()
+int GameMenu::get_selected_item()
 {
-    clear();
+    return this->selected_menu;
+}
+
+void GameMenu::clean()
+{
     wclear(win);
-    // endwin();
+    wrefresh(win);
 }
