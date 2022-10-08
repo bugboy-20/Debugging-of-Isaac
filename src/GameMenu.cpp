@@ -21,7 +21,7 @@ GameMenu::GameMenu(WINDOW *w, int width, int height)
     else
         pad = (width - length) / 2;
 
-    mvwprintw(win, height * 0.2, pad, str);
+    mvwprintw(win, height * 0.2, pad, "%s", str);
 
     wrefresh(this->win);
 }
@@ -41,7 +41,7 @@ void GameMenu::draw()
         if (selected_menu == i)
             wattron(win, A_STANDOUT);
 
-        mvwprintw(win, start_y, pad, this->menus[i]);
+        mvwprintw(win, start_y, pad, "%s", this->menus[i]);
         wattroff(win, A_STANDOUT);
         start_y += 2;
     }
