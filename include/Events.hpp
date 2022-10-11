@@ -20,7 +20,7 @@ class EntityMoveE : public RoomEvent {
 class EntityKilledE : public RoomEvent {
     public:
         EntityKilledE(Entity *e);
-        ~EntityKilledE();
+        void destroy();
         Entity *data;
 };
 

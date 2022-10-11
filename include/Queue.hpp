@@ -5,7 +5,6 @@ class Queue {
     public:
         Queue();
         //Queue(node *head);
-        ~Queue();
         void destroy();
 
         void enqueue(void *);
