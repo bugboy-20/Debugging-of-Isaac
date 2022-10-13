@@ -19,3 +19,11 @@ Hostile::Hostile(
 int Hostile::get_trigger_radius() {
     return this->trigger_radius;
 }
+
+void Hostile::set_x(int x){
+    pos.x = x;
+}
+
+void Hostile::set_y(int y){
+    pos.y = y;
+}
