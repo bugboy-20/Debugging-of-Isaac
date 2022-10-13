@@ -254,7 +254,7 @@ void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punt
         waddch(playerstat, emptyHeart);
 
     // stampo i punti
-    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", 6); // cosa sono i punti?
+    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", player->get_score());
 
     wrefresh(playerstat);
 }

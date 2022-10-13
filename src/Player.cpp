@@ -21,3 +21,7 @@ Player::Player(
 int Player::get_max_health() {
     return this->max_health;
 }
+int Player::get_score(){
+    return this->score;
+}
+
