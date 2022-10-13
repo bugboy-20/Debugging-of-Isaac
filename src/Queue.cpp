@@ -16,9 +16,6 @@ Queue::Queue(node *head) : Queue() {
 }
 */
 
-Queue::~Queue() {
-    destroy();
-}
 
 void Queue::destroy() {
     while (dequeue()!=NULL);

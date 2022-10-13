@@ -22,6 +22,8 @@
 using namespace std;
 
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
+#define utom(x) (1000 * x) // from micro to milli
+#define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
 void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
@@ -87,9 +89,9 @@ int main()
 
         fine_frame = time(0);
 #ifdef _WIN32
-        Sleep(FRAMETIME - (fine_frame - inizio_frame));
+        Sleep(sleep_time(inizio_frame,fine_frame));
 #else
-        usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
+        usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
 }

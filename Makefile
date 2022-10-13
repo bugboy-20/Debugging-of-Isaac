@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -lncurses -lm -I./include/
+CFLAGS = -lncurses -lm -I./include/ -g
 SOURCES = ./src/*.cpp
 
 ifeq ($(OS),Windows_NT)

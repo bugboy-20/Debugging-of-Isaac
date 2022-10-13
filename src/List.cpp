@@ -26,9 +26,6 @@ List::List(node *head)
     }
 }
 
-List::~List() {
-    destroy();
-}
 
 void List::push(void *e) {
     node *nw_head = new node;

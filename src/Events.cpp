@@ -15,7 +15,7 @@ EntityKilledE::EntityKilledE(Entity *e) : RoomEvent(ENTITY_KILLED) {
     this->data = e;
 }
 
-EntityKilledE::~EntityKilledE() {
+void EntityKilledE::destroy() {
     delete this->data;
 }
 
