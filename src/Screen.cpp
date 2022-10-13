@@ -233,8 +233,8 @@ void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punt
         emptyHeart = '-'; // cuore vuoto
 
     int nFullHeart = player->get_health() / 2,
-        nHalfHeart = player->get_health() - nFullHeart * 2,                     // get_health è dispari allora è 1 se è pari è 0
-        nEmptyHeart = (player->get_max_health() / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
+        nHalfHeart = player->get_health() - nFullHeart * 2,                           // get_health è dispari allora è 1 se è pari è 0
+        nEmptyHeart = ((player->get_max_health() + 1) / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
 
     // stampo il nome
     char name[10];
