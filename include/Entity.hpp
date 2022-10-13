@@ -21,6 +21,7 @@ public:
   char* get_name();
   void get_name(char[10]);
   int get_health();
+  void set_health(int health);
   int get_damage();
 private:
   bool move(Room *r, int x, int y);

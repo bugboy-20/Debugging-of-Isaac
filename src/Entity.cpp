@@ -45,7 +45,8 @@ bool Entity::move(Room *r, int x, int y)
 
 void Entity::action(){};
 int Entity::get_damage() { return damage; };
-int Entity::get_health() { return health; };
+int Entity::get_health() { return this->health; };
+void Entity::set_health(int health){ this->health = health; }
 char *Entity::get_name()
 {
   char *nome = new char[10];
