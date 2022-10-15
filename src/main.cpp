@@ -55,7 +55,7 @@ Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
 
 
-Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
+Player *player = new Player(10, 10, NULL, NULL, n, 6, {20, 15}, '@', desc);
 Screen schermo = Screen();
 
 int main()

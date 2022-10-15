@@ -32,14 +32,11 @@ void Screen::do_screen(Room *r)
         {
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0], newC = t->data[1];
-            char oldCh = ' ', newCh = ' ';
+            char oldCh = ' ', newCh = t->ed;
 
             Core *oldE = r->get_element_in_this_position(oldC);
-            Core *newE = r->get_element_in_this_position(newC);
             if (oldE != NULL)
                 oldCh = oldE->get_display();
-            if (newE != NULL)
-                newCh = newE->get_display();
 
             mvwaddch(wroom, oldC.y, oldC.x, oldCh); // vecchia posizione
             mvwaddch(wroom, newC.y, newC.x, newCh); // nuova posizione
@@ -71,9 +68,10 @@ void Screen::do_screen(Room *r)
                 ch = el->get_display();
 
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
-            wrefresh(wroom);
+            wnoutrefresh(wroom);
             this->render_moblist(*r);
 
+            t->destroy();
             delete t;
             break;
         }
@@ -103,6 +101,11 @@ void Screen::do_screen(Room *r)
 
 void Screen::stop_screen()
 {
+    delwin(wroom);
+    delwin(playerstat);
+    delwin(legend);
+    delwin(moblist);
+    delwin(inventory);
     endwin();
 }
 
@@ -233,8 +236,8 @@ void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punt
         emptyHeart = '-'; // cuore vuoto
 
     int nFullHeart = player->get_health() / 2,
-        nHalfHeart = player->get_health() - nFullHeart * 2,                     // get_health è dispari allora è 1 se è pari è 0
-        nEmptyHeart = (player->get_max_health() / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
+        nHalfHeart = player->get_health() - nFullHeart * 2,                           // get_health è dispari allora è 1 se è pari è 0
+        nEmptyHeart = ((player->get_max_health() + 1) / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
 
     // stampo il nome
     char name[10];
@@ -254,7 +257,7 @@ void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punt
         waddch(playerstat, emptyHeart);
 
     // stampo i punti
-    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", 6); // cosa sono i punti?
+    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", player->get_score());
 
     wrefresh(playerstat);
 }

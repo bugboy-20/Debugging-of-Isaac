@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -lncurses -lm -I./include/ -g
+CFLAGS = -lncurses -lm -I./include/ -g -fsanitize=address
 SOURCES = ./src/*.cpp
 
 ifeq ($(OS),Windows_NT)
@@ -17,7 +17,7 @@ run:
 ifeq ($(detected_OS), Windows)
 	.\main.exe
 else
-	./main
+	./main 2> errors
 endif
 
 clean:

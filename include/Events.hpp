@@ -12,8 +12,9 @@
 // evento una entità s'è mossa
 class EntityMoveE : public RoomEvent {
     public:
-        EntityMoveE(coords old_pos, coords new_pos);
+        EntityMoveE(coords old_pos, coords new_pos, char entity_display);
         coords data[2];
+        char ed;
 };
 
 // evento una entità è stata eliminata

@@ -13,7 +13,7 @@ protected:
     int score;
 
 public:
-
-    Player(int ammo, int max_health, class Weapon *w, class Armor *a, char name[10], int health, int damage, coords pos, char display, char description[]);
+    Player(int ammo, int max_health, class Weapon *w, class Armor *a, char name[10], int damage, coords pos, char display, char description[]);
     int get_max_health();
+    int get_score();
 };
