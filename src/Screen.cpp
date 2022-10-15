@@ -32,14 +32,11 @@ void Screen::do_screen(Room *r)
         {
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0], newC = t->data[1];
-            char oldCh = ' ', newCh = ' ';
+            char oldCh = ' ', newCh = t->ed;
 
             Core *oldE = r->get_element_in_this_position(oldC);
-            Core *newE = r->get_element_in_this_position(newC);
             if (oldE != NULL)
                 oldCh = oldE->get_display();
-            if (newE != NULL)
-                newCh = newE->get_display();
 
             mvwaddch(wroom, oldC.y, oldC.x, oldCh); // vecchia posizione
             mvwaddch(wroom, newC.y, newC.x, newCh); // nuova posizione
@@ -71,7 +68,7 @@ void Screen::do_screen(Room *r)
                 ch = el->get_display();
 
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
-            wrefresh(wroom);
+            wnoutrefresh(wroom);
             this->render_moblist(*r);
 
             t->destroy();
