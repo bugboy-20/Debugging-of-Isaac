@@ -74,6 +74,7 @@ void Screen::do_screen(Room *r)
             wrefresh(wroom);
             this->render_moblist(*r);
 
+            t->destroy();
             delete t;
             break;
         }
@@ -103,6 +104,11 @@ void Screen::do_screen(Room *r)
 
 void Screen::stop_screen()
 {
+    delwin(wroom);
+    delwin(playerstat);
+    delwin(legend);
+    delwin(moblist);
+    delwin(inventory);
     endwin();
 }
 
