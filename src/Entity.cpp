@@ -34,7 +34,7 @@ bool Entity::move(Room *r, int x, int y)
 
   if (!collision(this->pos.x + x, this->pos.y + y, *r))
   {
-    r->add_event(new EntityMoveE(pos, n_pos));
+    r->add_event(new EntityMoveE(pos, n_pos, this->get_display()));
     this->pos.x += x;
     this->pos.y += y;
     return true;
@@ -46,7 +46,7 @@ bool Entity::move(Room *r, int x, int y)
 void Entity::action(){};
 int Entity::get_damage() { return damage; };
 int Entity::get_health() { return this->health; };
-void Entity::set_health(int health){ this->health = health; }
+void Entity::set_health(int health) { this->health = health; }
 char *Entity::get_name()
 {
   char *nome = new char[10];
