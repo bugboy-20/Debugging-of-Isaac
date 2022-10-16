@@ -1,14 +1,14 @@
 #pragma once
-#include "Core.hpp"
+#include "Entity.hpp"
 #include "Room.hpp"
 
-class Bullet : public Core
+class Bullet : public Entity
 {
     
 
 public:
     //Costruttore
-    Bullet(coords pos, char display, char description[]);
+    Bullet(char name[10], int health, int damage, coords pos, char display, char description[]);
 
     //Metodo setter per x
     void set_x(int x);

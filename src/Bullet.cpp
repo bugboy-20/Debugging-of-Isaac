@@ -8,7 +8,7 @@
 #include <ncurses.h>
 #endif
 
-Bullet::Bullet(coords pos, char display, char description[]) : Core(pos,display,description,false) {}
+Bullet::Bullet(char name[10], int health, int damage, coords pos, char display, char description[]) : Entity(name,health,damage,pos,display,description) {}
 bool Bullet::shoot(Room *r, int x, int y){
 
     coords n_pos = {this->pos.x + x, this->pos.y + y};
@@ -17,7 +17,7 @@ bool Bullet::shoot(Room *r, int x, int y){
     r->add_event(new EntityMoveE(pos, n_pos, this->get_display()));
     return true;
     }else return false;
-    
+
 }
 
 void Bullet::set_x(int x){

@@ -1,6 +1,9 @@
 #pragma once
 #include "Player.hpp"
 #include "Room.hpp"
+#include "Bullet.hpp"
+
+
 
 bool collision(int x, int y, Room& r);
 

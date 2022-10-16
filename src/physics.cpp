@@ -4,6 +4,9 @@
 #include "Events.hpp"
 #include "Hostile.hpp"
 #include "Map.h"
+
+List bullets;
+
 bool collision(int x, int y, Room& r)
 {
     bool flag1, flag2, flag3;
