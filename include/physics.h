@@ -4,7 +4,6 @@
 #include "Bullet.hpp"
 
 
-
 bool collision(int x, int y, Room& r);
 
 bool wall_collision(coords pos, Room& r);
