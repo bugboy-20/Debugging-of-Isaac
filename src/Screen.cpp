@@ -200,7 +200,8 @@ void Screen::render_room(Room &r)
     while (list != NULL)
     {
         Core *c = (Core *)list->element;
-        mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
+        if (c->get_x() < ROOM_WIDTH - 1 && c->get_y() < ROOM_HEIGHT - 1)
+            mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
         list = list->next;
     }
 
@@ -211,19 +212,21 @@ void Screen::render_room(Room &r)
     while (list != NULL)
     {
         Wall *c = (Wall *)list->element;
-        wmove(wroom, c->get_y(), c->get_x());
+        if (c->get_x() < ROOM_WIDTH - 1 && c->get_y() < ROOM_HEIGHT - 1)
+        {
+            wmove(wroom, c->get_y(), c->get_x());
 
-        if (c->get_alignment())                                        // linea verticale
-            wvline(wroom, c->get_display(), c->get_line_lenght() + 1); // stampo la testa + il corpo
-        else                                                           // linea orizzontale
-            whline(wroom, c->get_display(), c->get_line_lenght() + 1);
-
+            if (c->get_alignment())                                        // linea verticale
+                wvline(wroom, c->get_display(), c->get_line_lenght() + 1); // stampo la testa + il corpo
+            else                                                           // linea orizzontale
+                whline(wroom, c->get_display(), c->get_line_lenght() + 1);
+        }
         list = list->next;
     }
     wrefresh(wroom);
 }
 
-void Screen::render_playerstat(Room &r) // TODO: implementare la stampa dei punti
+void Screen::render_playerstat(Room &r)
 {
     // estraggo il player
     Player *player = (Player *)r.p;
