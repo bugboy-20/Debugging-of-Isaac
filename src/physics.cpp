@@ -52,18 +52,13 @@ void door_collision(coords pos, Room& r)
 }
 
 void next_room_position(Room& r, enum door_pos p){
-    if(r.next_room(p) != NULL){
-        //change_room(r.next_room(p));
-    }else{
-        add_room(&r, p);
-        //change_room(r.next_room(p));
+    if(r.door[p]!=NULL) {
         if(r.door[p]->next_room != NULL){
             change_room(r.next_room(p));
         }else{
             change_room(add_room(&r, p));
         }
     }
-    r.add_event(new RoomChangedE());
 }
 
 void do_room(Room *r){return ;}; // fa cose sulla stanza
