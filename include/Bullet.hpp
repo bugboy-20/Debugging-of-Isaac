@@ -8,7 +8,7 @@ class Bullet : public Entity
 
 public:
     //Costruttore
-    Bullet(char name[10], int health, int damage, coords pos, char display, char description[]);
+    Bullet(coords pos);
 
     //Metodo setter per x
     void set_x(int x);

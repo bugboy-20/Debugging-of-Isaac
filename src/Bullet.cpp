@@ -8,7 +8,11 @@
 #include <ncurses.h>
 #endif
 
-Bullet::Bullet(char name[10], int health, int damage, coords pos, char display, char description[]) : Entity(name,health,damage,pos,display,description) {}
+char bullet_name[10] = "bullet";
+char bullet_desc[20] = "bullet_desc";
+
+Bullet::Bullet(coords pos) : Entity(bullet_name,5000,0,pos,'.',bullet_desc) {}
+
 bool Bullet::shoot(Room *r, int x, int y){
 
     coords n_pos = {this->pos.x + x, this->pos.y + y};
