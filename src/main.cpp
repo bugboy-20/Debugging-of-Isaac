@@ -121,7 +121,7 @@ void controller(Player *player)
             exit_game();
             break;
         default:
-        do_room(*dummy_map->current_room);
+        do_room(dummy_map->current_room);
             break;
             // ...
         }
