@@ -1,7 +1,9 @@
 #include <cstddef>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "HostileList.hpp"
 #include "List.hpp"
 #include "Events.hpp"
 #include "Wall.hpp"
@@ -21,7 +23,7 @@ int new_id() {
 struct map *init_map(Player *p)
 {
     std::cout << "caca";
-    Room *ptr_start_room = room1();// new Room(new_id());
+    Room *ptr_start_room = new Room(new_id());
     std::cout << "pupu";
     for (int i=0; i<4; i++) {
         ptr_start_room->door[i]=new door;
@@ -41,12 +43,18 @@ struct map *init_map(Player *p)
 
 void change_room(Room *new_room)
 {
-    //sposto il player
-    new_room->p=game_map.current_room->p;
-    game_map.current_room->p=NULL;
+    if (new_room != NULL) {
+        //sposto il player
+        new_room->p=game_map.current_room->p;
+        game_map.current_room->p=NULL;
 
-    //cambio stanza attuale
-    game_map.current_room=new_room;
+        //cambio stanza attuale
+        game_map.current_room=new_room;
+        new_room->add_event(new RoomChangedE());
+    }
+    else {
+        fprintf(stderr, "si è cercato di accedere ad una stanza nulla\n");
+    }
 
 }
 
@@ -55,7 +63,7 @@ void change_room(Room *new_room)
 //TODO: far si che le stanze non siano sempre vuote
 //TODO: aggiungere consistenza e non violare le leggi di Euclide e del buon senso
 Room *add_room(Room *r, enum door_pos p) {
-    int i;
+    int i=0;
     door *d = r->door[p];
     Room *new_room = new Room(new_id());
 
@@ -74,10 +82,14 @@ LOWER_DOOR:
 LEFT_DOOR:
         i=RIGHT_DOOR;
     }
+    std::cout << "aggiungo porta allo pos " << i << std::endl;
 
     new_room->door[i]=new door;
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
+
+
+    new_room->add_entity(new Zombie({10,10}));
 
     return new_room;
 
@@ -118,6 +130,8 @@ Room *random_room() {
     switch (rand()%ROOM_TYPES) {
         case 0:
             return room0();
+        case 1:
+            return room1();
         default:
             return new Room(new_id());
     }
