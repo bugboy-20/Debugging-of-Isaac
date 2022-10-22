@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include "geometry.h"
 
 Player::Player(
     int ammo,
@@ -25,3 +26,6 @@ int Player::get_score(){
     return this->score;
 }
 
+void Player::reposition(coords p) {
+    this->pos=p;
+}
