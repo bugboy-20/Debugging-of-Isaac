@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "List.hpp"
 #include "Events.hpp"
@@ -11,10 +12,11 @@
 #include "Player.hpp"
 #include "Room.hpp"
 
-#define ROOM_TYPES 1 // numero di varianti di stanze disponibili
+#define ROOM_TYPES 2 // numero di varianti di stanze disponibili
 struct map game_map;
 
 Room *room1();
+Room *random_room();
 
 int id=0; // generazione di un ID unico per ogni stanza
 int new_id() {
@@ -22,9 +24,9 @@ int new_id() {
 }
 struct map *init_map(Player *p)
 {
-    std::cout << "caca";
+    srand(time(0));
+
     Room *ptr_start_room = new Room(new_id());
-    std::cout << "pupu";
     for (int i=0; i<4; i++) {
         ptr_start_room->door[i]=new door;
         ptr_start_room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
@@ -65,31 +67,30 @@ void change_room(Room *new_room)
 Room *add_room(Room *r, enum door_pos p) {
     int i=0;
     door *d = r->door[p];
-    Room *new_room = new Room(new_id());
+    Room *new_room = random_room();
 
     d->next_room=new_room;
 
     switch (d->position) {
-UPPER_DOOR:
-        i=LOWER_DOOR;
-        break;
-RIGHT_DOOR:
-        i=LEFT_DOOR;
-        break;
-LOWER_DOOR:
-        i=UPPER_DOOR;
-        break;
-LEFT_DOOR:
-        i=RIGHT_DOOR;
+        case UPPER_DOOR:
+            i=LOWER_DOOR;
+            break;
+        case RIGHT_DOOR:
+            i=LEFT_DOOR;
+            break;
+        case LOWER_DOOR:
+            i=UPPER_DOOR;
+            break;
+        case LEFT_DOOR:
+            i=RIGHT_DOOR;
+            break;
     }
-    std::cout << "aggiungo porta allo pos " << i << std::endl;
 
     new_room->door[i]=new door;
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
 
 
-    new_room->add_entity(new Zombie({10,10}));
 
     return new_room;
 
@@ -107,6 +108,7 @@ Room *room1() {
     //wl.push(w2);
 
     Room *r = new Room(new_id(), wl);
+    r->add_entity(new Zombie({10,10}));
 
     return r;
 };
@@ -119,21 +121,26 @@ Room *room0() {
 
     wl.push(w1);
 
+
+
+
     Room *r = new Room(new_id(), wl);
 
     return r;
 }
 
+Room *room2() {
+    return NULL;
+}
+
+#define return_room_N(N) case N: return room ## N(); break;
 
 Room *random_room() {
-    srand(time(0));
     switch (rand()%ROOM_TYPES) {
-        case 0:
-            return room0();
-        case 1:
-            return room1();
+        return_room_N(0);
+        return_room_N(1);
+        //return_room_N(2);
         default:
             return new Room(new_id());
     }
-    rand();
 }
