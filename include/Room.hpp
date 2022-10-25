@@ -27,6 +27,14 @@ struct door
     Room *next_room;
 };
 
+// restituisce la porta alle coordinate date
+// -1 se la posizione non è di alcuna porta
+int door_in_this_position(coords);
+
+// restituisce le coordinate di una porta
+// è un array di dimensione 2
+coords *door_position(door_pos);
+
 class Room {
     public:
          /* inizializzazione con lista di elementi
