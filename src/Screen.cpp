@@ -1,6 +1,7 @@
 #include "Screen.hpp"
 #include "Events.hpp"
 #include "Wall.hpp"
+#include "constants.h"
 
 #include <cstring>
 
@@ -144,7 +145,7 @@ void Screen::windows_init()
 
 void Screen::print_doors(door *doors[])
 {
-    char door = ' ';
+    char door = door_display;
 
     for (int i = 0; i < 4; i++)
     {
