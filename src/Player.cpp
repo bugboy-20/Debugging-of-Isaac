@@ -1,5 +1,4 @@
 #include "Player.hpp"
-#include "constants.h"
 
 char player_desc[20] = "giocatore";
 Player::Player(
@@ -7,7 +6,7 @@ Player::Player(
     char name[10],
     int max_health,
     class Weapon *w,
-    class Armor *a) : Entity(pos, player_display, player_desc, name, max_health, 3)
+    class Armor *a) : Entity(pos, '@', player_desc, name, max_health, 3)
 {
     this->arma = w;
     this->armatura = a;
