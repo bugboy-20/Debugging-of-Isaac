@@ -1,25 +1,20 @@
 #pragma once
 #include "Entity.hpp"
-#include "Armor.hpp"
-#include "Weapon.hpp"
+#include "Equipment.hpp"
 #include "geometry.h"
 
 class Player : public Entity
 {
 protected:
-    int ammo;
     int max_health;
+    int score;
+    int ammo;
     class Weapon *arma;
     class Armor *armatura;
-    int score;
 
 public:
-    Player(int ammo, int max_health, class Weapon *w, class Armor *a, char name[10], int damage, coords pos, char display, char description[]);
+    Player(coords pos, char name[10], int max_health, class Weapon *w, class Armor *a);
+    Player(coords pos, char display, char description[], char name[10], int damage, int max_health, int ammo, class Weapon *w, class Armor *a);
     int get_max_health();
     int get_score();
-
-    // riposiziona il player alle cordinate specificate
-    //  utile per quando cambia stanza
-    //  possibile fonte di glitch
-    void reposition(coords);
 };

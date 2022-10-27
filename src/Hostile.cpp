@@ -1,29 +1,13 @@
 #include "Hostile.hpp"
 
 Hostile::Hostile(
-    int trigger_radius,
-    char name[10],
-    int health,
-    int damage,
     coords pos,
     char display,
-    char description[]) : Entity(name, health, damage, pos, display, description)
+    char description[],
+    char name[10], int health,
+    int damage, int trigger_radius) : Entity(pos, display, description, name, health, damage)
 {
-    this->trigger_radius=trigger_radius;
-    this->health=health;
-    this->damage=damage;
-};
-
-
-
-int Hostile::get_trigger_radius() {
-    return this->trigger_radius;
+    this->trigger_radius = trigger_radius;
 }
 
-void Hostile::set_x(int x){
-    pos.x = x;
-}
-
-void Hostile::set_y(int y){
-    pos.y = y;
-}
+int Hostile::get_trigger_radius() { return this->trigger_radius; }

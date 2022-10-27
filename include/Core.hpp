@@ -10,8 +10,7 @@ protected:
     bool crossable; // se questo è `true` l'elemento è una decorazione del pavimento
 
 public:
-    Core(coords pos, char display, char description[]); // DEPRECATO: lo tengo per non star ad alterare tutto il codice già scritto
-    Core(coords pos, char display, char description[], bool crossable);
+    Core(coords pos, char display, char description[], bool crossable = false);
     int get_x();
     int get_y();
     char get_display();

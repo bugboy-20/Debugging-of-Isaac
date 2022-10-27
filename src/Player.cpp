@@ -1,31 +1,37 @@
 #include "Player.hpp"
-#include "geometry.h"
 
+char player_desc[20] = "giocatore";
 Player::Player(
-    int ammo,
-    int max_health,
-    class Weapon *w, 
-    class Armor *a,
+    coords pos,
     char name[10],
-    int damage,
-    coords pos, 
-    char display, 
-    char description[]) : Entity(name, max_health, damage, pos, display, description)
+    int max_health,
+    class Weapon *w,
+    class Armor *a) : Entity(pos, '@', player_desc, name, max_health, 3)
 {
     this->arma = w;
     this->armatura = a;
-    this->max_health=max_health;
-    this->ammo =ammo;
+    this->max_health = max_health;
+    this->ammo = 40;
     this->score = 0;
-};
-
-int Player::get_max_health() {
-    return this->max_health;
-}
-int Player::get_score(){
-    return this->score;
 }
 
-void Player::reposition(coords p) {
-    this->pos=p;
+Player::Player(
+    coords pos,
+    char display,
+    char description[20],
+    char name[10],
+    int damage,
+    int max_health,
+    int ammo,
+    class Weapon *w,
+    class Armor *a) : Entity(pos, display, description, name, max_health, damage)
+{
+    this->arma = w;
+    this->armatura = a;
+    this->max_health = max_health;
+    this->ammo = ammo;
+    this->score = 0;
 }
+
+int Player::get_max_health() { return this->max_health; }
+int Player::get_score() { return this->score; }

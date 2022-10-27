@@ -46,16 +46,15 @@ char desc6[20] = "muro di pietra";
 
 Zombie *z = new Zombie({45, 15});
 
-Hostile *villan = new Hostile(3, n1, 8, 5, {40, 15}, '*', desc1);
-Hostile *villan1 = new Hostile(3, n2, 3, 5, {60, 7}, '=', desc2);
-Hostile *villan2 = new Hostile(3, n3, 7, 5, {20, 10}, '$', desc3);
-Hostile *villan3 = new Hostile(3, n4, 10, 5, {22, 4}, ')', desc4);
+Hostile *villan = new Hostile({40, 15}, '*', desc1, n1, 8, 5, 3);
+Hostile *villan1 = new Hostile({60, 7}, '=', desc2, n2, 3, 5, 3);
+Hostile *villan2 = new Hostile({20, 10}, '$', desc3, n3, 7, 5, 3);
+Hostile *villan3 = new Hostile({22, 4}, ')', desc4, n4, 10, 5, 3);
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
 
-
-Player *player = new Player(10, 10, NULL, NULL, n, 6, {20, 15}, '@', desc);
+Player *player = new Player({20, 15}, n, 10, NULL, NULL);
 Screen schermo = Screen();
 
 int main()
@@ -121,7 +120,7 @@ void controller(Player *player)
             exit_game();
             break;
         default:
-        do_room(dummy_map->current_room);
+            do_room(dummy_map->current_room);
             break;
             // ...
         }

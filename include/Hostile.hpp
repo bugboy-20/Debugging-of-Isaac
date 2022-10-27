@@ -8,9 +8,7 @@ protected:
     int trigger_radius;
 
 public:
-    Hostile(int trigger_radius, char name[10], int health, int damage, coords pos, char display, char description[]);
+    Hostile(coords pos, char display, char description[], char name[10], int health, int damage, int trigger_radius);
 
     int get_trigger_radius();
-    void set_x(int x);
-    void set_y(int y);
 };
