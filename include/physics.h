@@ -12,7 +12,9 @@ bool general_collision(coords pos, Room& r);
 
 void door_collision(coords pos, Room& r);
 
-void next_room_position(Room& r, enum door_pos p);
+bool next_room_position(Room& r, enum door_pos p);
+
+void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_pos p1);
 
 void do_room(Room *r); // fa cose sulla stanza
 
