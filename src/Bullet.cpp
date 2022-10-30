@@ -1,17 +1,17 @@
 #include "Bullet.hpp"
 #include "physics.h"
 #include "Events.hpp"
-
-#ifdef _WIN32 // sleep fn
+#include "constants.h"
+#ifdef _WIN32 // include temporaneao
 #include <ncursesw/ncurses.h>
 #else
 #include <ncurses.h>
 #endif
 
-char bullet_name[10] = "bullet";
-char bullet_desc[20] = "bullet_desc";
+char bullet_name[STR_LENGTH] = bullet_n;
+char bullet_desc[STR_LENGTH] = bullet_d;
 
-Bullet::Bullet(coords pos) : Entity(pos, '.', bullet_desc, bullet_name, 5000, 0) {}
+Bullet::Bullet(coords pos) : Entity(pos, bullet_display, bullet_desc, bullet_name, 5000, 0) {}
 
 bool Bullet::shoot(Room *r, int x, int y)
 {

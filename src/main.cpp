@@ -31,25 +31,14 @@ void exit_game(); // permette di uscire
 map *dummy_map;
 
 char n[10] = "gino";
-char n1[10] = "perino";
-char n2[10] = "rubedo";
-char n3[10] = "albedo";
-char n4[10] = "jasmine";
-
-char desc[20] = "giocatore";
-char desc1[20] = "goblin";
-char desc2[20] = "mago";
-char desc3[20] = "ladro";
-char desc4[20] = "napoletano";
 char desc5[20] = "sasso";
-char desc6[20] = "muro di pietra";
+
 
 Zombie *z = new Zombie({45, 15});
-
-Hostile *villan = new Hostile({40, 15}, '*', desc1, n1, 8, 5, 3);
-Hostile *villan1 = new Hostile({60, 7}, '=', desc2, n2, 3, 5, 3);
-Hostile *villan2 = new Hostile({20, 10}, '$', desc3, n3, 7, 5, 3);
-Hostile *villan3 = new Hostile({22, 4}, ')', desc4, n4, 10, 5, 3);
+Slime *slime = new Slime({40, 15});
+Scheletro *scheleton = new Scheletro({60, 7});
+Goblin *goblin = new Goblin({20, 10});
+Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
@@ -65,10 +54,10 @@ int main()
     dummy_map = init_map(player);
 
     // aggiungo elementi alla stanza
-    dummy_map->current_room->add_entity(villan);
-    dummy_map->current_room->add_entity(villan1);
-    dummy_map->current_room->add_entity(villan2);
-    dummy_map->current_room->add_entity(villan3);
+    dummy_map->current_room->add_entity(slime);
+    dummy_map->current_room->add_entity(scheleton);
+    dummy_map->current_room->add_entity(goblin);
+    dummy_map->current_room->add_entity(fantasma);
     dummy_map->current_room->add_entity(z);
     dummy_map->current_room->add_Core(rock);
     dummy_map->current_room->add_wall(w2);
