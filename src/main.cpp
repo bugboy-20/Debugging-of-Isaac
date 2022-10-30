@@ -11,7 +11,6 @@
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "GameMenu.hpp"
-#include <locale.h>
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -62,11 +61,6 @@ Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
 Screen schermo;
 int main()
 {
-
-    setlocale(LC_ALL, "");
-    //^^^^^^^^^^^^^^^^^^^^^^^ piske che fa Ctrl+C Ctrl+V alla cieca
-
-
     // init schermo
     schermo = Screen();
 
@@ -89,6 +83,7 @@ int main()
     // dummy_map->current_room->add_wall(w1);
 
     game_loop();
+    exit_game();
 }
 
 void menu(Screen& schermo) {

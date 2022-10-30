@@ -3,16 +3,17 @@
 #include "Wall.hpp"
 
 #include <cstring>
+#include <locale.h>
 
 Screen::Screen()
 {
+    setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
     initscr();
     cbreak(); // ctrl+c behaviour
     noecho(); // avoids user input from being printed
     // nodelay(stdscr, TRUE);
     curs_set(0);
     intrflush(stdscr, FALSE);
-    // setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
     keypad(stdscr, true);
     refresh();
 

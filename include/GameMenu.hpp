@@ -20,7 +20,7 @@ private:
         selected_menu,
         width,
         height;
-    char menus[EXIT_GAME + 1][STRLEN]; // deve essere l'ultimo elemento perchè la dimensione è dinamica
+    char menus[EXIT_GAME + 1][STRLEN];
 
 public:
     GameMenu() = default;

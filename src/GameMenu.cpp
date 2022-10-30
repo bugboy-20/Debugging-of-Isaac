@@ -14,7 +14,7 @@ GameMenu::GameMenu(WINDOW *w, int width, int height)
     this->height = height;
 
     // print title
-    char str[] = "Super Mario Galaxy";
+    char str[] = "The Binding of Isaac";
     int length = strlen(str), pad;
     if (length >= width)
         pad = 0;
