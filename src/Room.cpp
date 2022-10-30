@@ -24,6 +24,7 @@ int door_in_this_position(coords p) {
         return -1;
 
 }
+
 /*
 int door_in_this_position(coords p) {
     coords *door;
@@ -48,6 +49,7 @@ coords *door_position(door_pos pos) {
         case RIGHT_DOOR:
             dp[0] = {ROOM_WIDTH-1,ROOM_HEIGHT/2};
             dp[1] = {ROOM_WIDTH-1,ROOM_HEIGHT/2-1};
+            break;
         case UPPER_DOOR:
             dp[0] = {ROOM_WIDTH/2,0};
             dp[1] = {ROOM_WIDTH/2-1,0};
