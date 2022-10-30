@@ -70,7 +70,6 @@ int main()
     // init della mappa
     dummy_map = init_map(player);
 
-    schermo.start_gameinterface();
 
     // aggiungo elementi alla stanza
     dummy_map->current_room->add_entity(villan);
@@ -124,6 +123,7 @@ void menu(Screen& schermo) {
 }
 
 void game_loop() {
+    schermo.start_gameinterface();
     time_t inizio_frame, fine_frame;
     while (!game_over(*player))
     {
@@ -132,7 +132,8 @@ void game_loop() {
         controller(player);
 
         //do_room(dummy_map->current_room);
-        schermo.do_screen(dummy_map->current_room);
+        schermo.gi.set_room(dummy_map->current_room);
+        schermo.gi.handle_events();
 
         fine_frame = time(0);
 #ifdef _WIN32
