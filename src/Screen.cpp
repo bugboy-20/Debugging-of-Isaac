@@ -268,6 +268,9 @@ void Screen::render_playerstat(Room &r)
 
 void Screen::render_legend(Room &r)
 {
+    werase(legend);
+    box(legend, 0,0);
+
     mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
     wmove(legend, 1, start_x);
@@ -313,6 +316,9 @@ void Screen::render_legend(Room &r)
 
 void Screen::render_moblist(Room &r)
 {
+    werase(moblist);
+    box(moblist, 0,0);
+
     int line = 2, col = 2, gap = 4;
     char fullHeart = '0', // cuore intero
         halfHeart = 'O';  // mezzo cuore
