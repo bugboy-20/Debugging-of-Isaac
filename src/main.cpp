@@ -72,7 +72,7 @@ int main()
 
         controller(player);
 
-        // do_room(dummy_map->current_room);
+        do_room(dummy_map->current_room);
         schermo.do_screen(dummy_map->current_room);
 
         fine_frame = time(0);
@@ -82,6 +82,8 @@ int main()
         usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
+
+    exit_game();
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
@@ -109,7 +111,6 @@ void controller(Player *player)
             exit_game();
             break;
         default:
-            do_room(dummy_map->current_room);
             break;
             // ...
         }
