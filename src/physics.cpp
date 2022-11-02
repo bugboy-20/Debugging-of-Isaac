@@ -1,11 +1,26 @@
 #include <cstddef>
 #include <string.h>
+#include <ctime>
+#include <chrono>
 #include "physics.h"
 #include "Events.hpp"
 #include "Hostile.hpp"
 #include "Map.h"
+#define COOLDOWN 1
+#define VELOCITA_PROIETTILE 150
+#ifdef _WIN32 // sleep fn
+#include <Windows.h>
+#include <ncursesw/ncurses.h>
+#else
+#include <unistd.h>
+#include <ncurses.h>
+#endif
 
-List bullets;
+using namespace std::chrono;
+List bullets = List();
+time_t frametime_sparo;
+auto frametime_proiettile = high_resolution_clock().now();
+bool first_time = true, first_time2 = true;
 
 bool collision(int x, int y, Room& r)
 {
@@ -38,27 +53,23 @@ bool general_collision(coords pos, Room& r){
     }
 }
 
-void door_collision(coords pos, Room& r)
+void door_collision(coords p, Room& r)
 {
-    if(pos.x == door_position(LEFT_DOOR)[0].x &&  pos.y == door_position(LEFT_DOOR)[0].y || 
-    pos.x == door_position(LEFT_DOOR)[1].x &&  pos.y == door_position(LEFT_DOOR)[1].y){  
+    if(p.x == 0 && p.y == (ROOM_HEIGHT/2) || p.x == 0 && p.y == (ROOM_HEIGHT/2) - 1){  
 
-        if(next_room_position(r, LEFT_DOOR))  repos_player_in_new_room(pos, r, LEFT_DOOR, RIGHT_DOOR);
+        if(next_room_position(r, LEFT_DOOR))  repos_player_in_new_room(p, r, LEFT_DOOR, RIGHT_DOOR);
            
-    }else if(pos.x == door_position(RIGHT_DOOR)[0].x &&  pos.y == door_position(RIGHT_DOOR)[0].y || 
-    pos.x == door_position(RIGHT_DOOR)[1].x &&  pos.y == door_position(RIGHT_DOOR)[1].y){
+    }else if(p.x == ROOM_WIDTH-1 && p.y == (ROOM_HEIGHT/2) || p.x ==  ROOM_WIDTH-1 && p.y == (ROOM_HEIGHT/2) - 1){
            
-        if(next_room_position(r, RIGHT_DOOR))  repos_player_in_new_room(pos, r, RIGHT_DOOR, LEFT_DOOR);
+        if(next_room_position(r, RIGHT_DOOR))  repos_player_in_new_room(p, r, RIGHT_DOOR, LEFT_DOOR);
 
-    }else if(pos.x == door_position(UPPER_DOOR)[0].x &&  pos.y == door_position(UPPER_DOOR)[0].y || 
-    pos.x == door_position(UPPER_DOOR)[1].x &&  pos.y == door_position(UPPER_DOOR)[1].y){
+    }else if(p.x == ROOM_WIDTH/2 && p.y == 0 || p.x ==  (ROOM_WIDTH/2) - 1 && p.y == 0){
 
-        if(next_room_position(r, UPPER_DOOR))  repos_player_in_new_room(pos, r, UPPER_DOOR, LOWER_DOOR);
+        if(next_room_position(r, UPPER_DOOR))  repos_player_in_new_room(p, r, UPPER_DOOR, LOWER_DOOR);
 
-    }else if(pos.x == door_position(LOWER_DOOR)[0].x &&  pos.y == door_position(LOWER_DOOR)[0].y || 
-    pos.x == door_position(LOWER_DOOR)[1].x &&  pos.y == door_position(LOWER_DOOR)[1].y){
+    }else if(p.x == ROOM_WIDTH/2 && p.y == (ROOM_HEIGHT-1) || p.x ==  (ROOM_WIDTH/2) - 1 && p.y == (ROOM_HEIGHT-1)){
             
-        if(next_room_position(r, LOWER_DOOR))  repos_player_in_new_room(pos, r, LOWER_DOOR, UPPER_DOOR);
+        if(next_room_position(r, LOWER_DOOR))  repos_player_in_new_room(p, r, LOWER_DOOR, UPPER_DOOR);
 
     }
 }
@@ -67,10 +78,10 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
     coords old_pos, new_pos;
     if(pos.x == door_position(p)[0].x &&  pos.y == door_position(p)[0].y){
         old_pos = door_position(p)[0];
-        new_pos = door_position(p1)[0];
+        new_pos = door_position2(p1)[0];
     }else{
         old_pos = door_position(p)[1];
-        new_pos = door_position(p1)[1];
+        new_pos = door_position2(p1)[1];
     }
     r.next_room(p)->p->reposition(new_pos);
     r.next_room(p)->add_event(new EntityMoveE(old_pos, new_pos, r.next_room(p)->p->get_display()));
@@ -88,7 +99,48 @@ bool next_room_position(Room& r, enum door_pos p){
     }else return false;
 }
 
-void do_room(Room *r){return ;}; // fa cose sulla stanza
+
+void enemy_range(Room& r){
+    List entities = r.get_entities(false);
+    node *tmp = entities.head;
+    
+    while(tmp != NULL){
+        Hostile *e = (Hostile*) tmp->element;
+        bool enemy_range = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
+        if((enemy_range && time(0) - frametime_sparo >= COOLDOWN) || (enemy_range && first_time)){
+            Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
+            bullets.push(b);
+            first_time = false;
+            frametime_sparo = time(0);
+        }    
+        tmp = tmp->next;  
+    }
+    
+
+    node *tmp_bullets = bullets.head;
+    while(tmp_bullets != NULL){
+        Bullet *b = (Bullet*) tmp_bullets->element;
+        node *successivo = tmp_bullets->next;
+        auto duration(duration_cast<milliseconds>(high_resolution_clock().now() - frametime_proiettile));
+        if((duration.count() >= VELOCITA_PROIETTILE) || first_time2){
+            if(!(b->move_down(&r))){
+                if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                    r.p->set_health(r.p->get_health() - b->get_damage());
+                    r.add_event(new PlayerHealthChangedE(r.p));
+                }         
+                r.add_event(new EntityKilledE(b));
+                bullets.delete_element(b);                                                         
+            }
+            first_time2 = false;
+            frametime_proiettile = high_resolution_clock().now();
+        }
+        tmp_bullets = successivo;
+        
+    }   
+    
+}
+
+void do_room(Room *r){enemy_range(*r);}; // fa cose sulla stanza
 
 bool game_over(Player p)
 {

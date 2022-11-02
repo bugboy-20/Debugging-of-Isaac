@@ -64,6 +64,34 @@ coords *door_position(door_pos pos) {
 
     return dp;
 }
+
+coords *door_position2(door_pos pos) {
+    coords *dp = new coords[2];
+    switch (pos) {
+        case LEFT_DOOR:
+            dp[0] = {1,ROOM_HEIGHT/2};
+            dp[1] = {1,ROOM_HEIGHT/2-1};
+            break;
+        case RIGHT_DOOR:
+            dp[0] = {ROOM_WIDTH-2,ROOM_HEIGHT/2};
+            dp[1] = {ROOM_WIDTH-2,ROOM_HEIGHT/2-1};
+            break;
+        case UPPER_DOOR:
+            dp[0] = {ROOM_WIDTH/2,1};
+            dp[1] = {ROOM_WIDTH/2-1,1};
+            break;
+        case LOWER_DOOR:
+            dp[0] = {ROOM_WIDTH/2,ROOM_HEIGHT-2};
+            dp[1] = {ROOM_WIDTH/2-1,ROOM_HEIGHT-2};
+            break;
+        default:
+            return NULL;
+    }
+
+    return dp;
+}
+
+
 Room::Room(int id, List walls, List entities, List cores) : Room(id, walls)
 {
 

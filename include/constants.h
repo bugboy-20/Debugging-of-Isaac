@@ -7,7 +7,7 @@
 #define zombie_display 'z'
 #define zombie_health 4
 #define zombie_damage 1
-#define zombie_tr 2
+#define zombie_tr 3
 
 #define scheletro_s "scheletro"
 // char scheletro_name[STR_LENGTH] = "Scheletro";
@@ -23,7 +23,7 @@
 #define goblin_display 'g'
 #define goblin_health 1
 #define goblin_damage 4
-#define goblin_tr 6
+#define goblin_tr 3
 
 #define fantasma_s "fantasma"
 // char fantasma_name[STR_LENGTH] = "Fantasma";
@@ -31,7 +31,7 @@
 #define fantasma_display 'f'
 #define fantasma_health 6
 #define fantasma_damage 1
-#define fantasma_tr 5
+#define fantasma_tr 3
 
 #define slime_s "slime"
 // char slime_name[STR_LENGTH] = "Slime";
@@ -39,7 +39,7 @@
 #define slime_display 'l'
 #define slime_health 7
 #define slime_damage 2
-#define slime_tr 2
+#define slime_tr 3
 
 #define player_display '@'
 #define door_display ' '

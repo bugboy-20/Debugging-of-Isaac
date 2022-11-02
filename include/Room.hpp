@@ -34,7 +34,7 @@ int door_in_this_position(coords);
 // restituisce le coordinate di una porta
 // è un array di dimensione 2
 coords *door_position(door_pos);
-
+coords *door_position2(door_pos pos);
 class Room {
     public:
          /* inizializzazione con lista di elementi
