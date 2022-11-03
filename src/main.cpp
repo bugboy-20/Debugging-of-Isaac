@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <iostream>
 #include <ctime>
+#include "time_handle.h"
 #include "Map.h"
 #include "Player.hpp"
 #include "Room.hpp"
@@ -23,7 +24,8 @@ using namespace std;
 
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
 #define utom(x) (1000 * x) // from micro to milli
-#define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
+//#define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
+int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
@@ -49,7 +51,7 @@ Screen schermo = Screen();
 int main()
 {
     // init schermo
-    time_t inizio_frame, fine_frame;
+    timeval inizio_frame, fine_frame;
     // init della mappa
     dummy_map = init_map(player);
 
@@ -68,14 +70,15 @@ int main()
     // game loop
     while (!game_over(*player))
     {
-        inizio_frame = time(0);
+        // il secondo parametro è la timezone, non importa usare quella giusta basta che sia uguale ovunque
+        time_now(inizio_frame);
 
         controller(player);
 
         do_room(dummy_map->current_room);
         schermo.do_screen(dummy_map->current_room);
 
-        fine_frame = time(0);
+        time_now(fine_frame);
 #ifdef _WIN32
         Sleep(sleep_time(inizio_frame,fine_frame));
 #else
@@ -134,4 +137,10 @@ void exit_game()
     schermo.stop_screen();
     // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
+}
+
+int sleep_time(timeval start, timeval end){
+    time_t te = time_elapsed(start, end);
+    if(te > FRAMETIME) return 0;
+    return FRAMETIME - te;
 }

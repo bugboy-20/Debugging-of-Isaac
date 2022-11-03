@@ -1,13 +1,11 @@
 #include <cstddef>
 #include <string.h>
-#include <ctime>
-#include <chrono>
 #include "physics.h"
 #include "Events.hpp"
 #include "Hostile.hpp"
 #include "Map.h"
+#include "time_handle.h"
 
-using namespace std::chrono;
 List bullets = List();
 
 bool collision(int x, int y, Room& r)
@@ -93,11 +91,14 @@ bool next_room_position(Room& r, enum door_pos p){
 }
 
 void bullet_creation(Entity *e, enum direction direction){
-    if(time(0) - e->get_last_shot() >= e->get_attack_speed()){
+    timeval now;
+    time_now(now);
+    if(time_elapsed(e->get_last_shot(), now) >= e->get_attack_speed()){
         Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
         b->set_direction(direction);
         bullets.push(b);
-        e->set_last_shot(time(0));
+        time_now(now);
+        e->set_last_shot(now);
     }
 }
 
@@ -176,7 +177,9 @@ void shoot_in_direction(Room& r, Bullet *b){
                 }
                 break;
         } 
-        b->set_last_move(high_resolution_clock().now());  
+        timeval now;
+        time_now(now);
+        b->set_last_move(now);  
     }
 }
 
@@ -197,8 +200,9 @@ void bullet_movement(Room& r){
     while(tmp_bullets != NULL){
         Bullet *b = (Bullet*) tmp_bullets->element;
         node *successivo = tmp_bullets->next;
-        auto duration(duration_cast<milliseconds>(high_resolution_clock().now() - b->get_last_move()));
-        if(duration.count() >= b->get_movement_speed()){
+        timeval now;
+        time_now(now);
+        if(time_elapsed(b->get_last_move(), now) >= b->get_movement_speed()){
             shoot_in_direction(r, b);
         }
         tmp_bullets = successivo;      

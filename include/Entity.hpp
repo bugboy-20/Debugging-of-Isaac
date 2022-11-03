@@ -1,7 +1,7 @@
 #pragma once
 #include "Core.hpp"
-#include <ctime>
-#include <chrono>
+#include "time_handle.h"
+
 class Room;
 
 class Entity : public Core
@@ -10,8 +10,8 @@ protected:
     char name[10];
     int health;
     int damage;
-    int attack_speed;
-    time_t last_shot;
+    int attack_speed; // tempo in millisecondi
+    timeval last_shot;
 
 public:
     Entity(coords pos, char display, char description[], char name[10], int health, int damage);
@@ -32,8 +32,8 @@ public:
     void set_health(int health);
     int get_attack_speed();
     void set_attack_speed(int as);
-    time_t get_last_shot();
-    void set_last_shot(time_t ls);
+    timeval get_last_shot();
+    void set_last_shot(timeval ls);
     int get_damage();
 
 private:

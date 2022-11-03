@@ -10,8 +10,8 @@ Entity::Entity(coords pos, char display, char description[], char name[10], int 
     strcpy(this->name, name);
     this->health = health;
     this->damage = damage;
-    this->attack_speed = 1;
-    this->last_shot = 0; // il primo controllo è (time(0) - 0 >= attack_speed) che è sempre vero
+    this->attack_speed = 1000; // 1 secondo
+    time_now(this->last_shot); // il primo controllo è (time(0) - 0 >= attack_speed) che è sempre vero
 }
 
 bool Entity::move_up(Room *room) { return move(room, 0, -1); }
@@ -48,8 +48,8 @@ char *Entity::get_name()
 }
 void Entity::get_name(char n[10]) { strcpy(n, this->name); }
 
-time_t Entity::get_last_shot() { return this->last_shot; }
-void Entity::set_last_shot(time_t ls) { this->last_shot = ls; }
+timeval Entity::get_last_shot() { return this->last_shot; }
+void Entity::set_last_shot(timeval ls) { this->last_shot = ls; }
 
 int Entity::get_attack_speed() { return this->attack_speed; }
 void Entity::set_attack_speed(int as) { this->attack_speed = as; }
