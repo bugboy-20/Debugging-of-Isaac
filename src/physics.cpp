@@ -14,7 +14,7 @@ bool collision(int x, int y, Room& r)
 {
     bool flag1, flag2, flag3;
     flag1 = wall_collision({x, y}, r);
-    flag2 = general_collision({x, y}, r);
+    flag2 = entity_collision({x, y}, r);
     if(player_in_door(x, y, r)) door_collision({x, y}, r);
     if(flag1 || flag2) return true;
     else return false;
@@ -38,7 +38,7 @@ bool wall_collision(coords pos, Room& r)
     else return false;
 }
 
-bool general_collision(coords pos, Room& r){
+bool entity_collision(coords pos, Room& r){
     if(r.get_element_in_this_position(pos) == NULL){
         return false;
     }else{
@@ -93,15 +93,25 @@ bool next_room_position(Room& r, enum door_pos p){
 }
 
 void bullet_creation(Entity *e, enum direction direction){
-    Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
-    b->set_direction(direction);
-    bullets.push(b);
-    e->set_last_shot(time(0));
+    if(time(0) - e->get_last_shot() >= e->get_attack_speed()){
+        Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
+        b->set_direction(direction);
+        bullets.push(b);
+        e->set_last_shot(time(0));
+    }
 }
 
-void shoot(Room& r, Bullet *b){
+void player_damage(Room& r, Bullet *b){
     r.p->set_health(r.p->get_health() - b->get_damage());
     r.add_event(new PlayerHealthChangedE(r.p));
+}
+
+void entity_damage(Room& r, Bullet *b, Entity *e){
+    e->set_health(e->get_health() - r.p->get_damage());
+    r.add_event(new EntityDamagedE(e));
+    if(e->get_health() <= 0){
+        r.add_event(new EntityKilledE(e));
+    }
 }
 
 void destroy_bullet(Room& r, Bullet *b){
@@ -136,31 +146,31 @@ void shoot_in_direction(Room& r, Bullet *b){
             case DOWN:
                 if(!(b->move_down(&r))){
                     if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                        shoot(r, b);
-                    }         
+                        player_damage(r, b);
+                    }
                     destroy_bullet(r, b);                                                     
                 }
                 break;
             case UP:
                 if(!(b->move_up(&r))){
                     if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                        shoot(r, b);
-                    }         
+                        player_damage(r, b);
+                    }       
                     destroy_bullet(r, b);                                                      
                 }
                 break;
             case RIGHT:
                 if(!(b->move_right(&r))){
                     if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
-                        shoot(r, b);
-                    }         
+                        player_damage(r, b);
+                    }       
                     destroy_bullet(r, b);                                                  
                 }
                 break;
             case LEFT:
                 if(!(b->move_left(&r))){
                     if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
-                        shoot(r, b);
+                        player_damage(r, b);
                     }         
                     destroy_bullet(r, b);                                                         
                 }
@@ -168,19 +178,21 @@ void shoot_in_direction(Room& r, Bullet *b){
         } 
         b->set_last_move(high_resolution_clock().now());  
     }
-    
 }
-void enemy_range(Room& r){
+
+void bullets_push(Room& r){
     List entities = r.get_entities(false);
     node *tmp = entities.head;
     while(tmp != NULL){
         Hostile *e = (Hostile*) tmp->element;
-        if(enemy_in_range(r, e) && time(0) - e->get_last_shot() >= e->get_attack_speed()){
+        if(enemy_in_range(r, e)){
             bullet_creation(e, enemy_shot_direction(r, e));
         }
         tmp = tmp->next;  
     }
+}
 
+void bullet_movement(Room& r){
     node *tmp_bullets = bullets.head;        
     while(tmp_bullets != NULL){
         Bullet *b = (Bullet*) tmp_bullets->element;
@@ -190,10 +202,13 @@ void enemy_range(Room& r){
             shoot_in_direction(r, b);
         }
         tmp_bullets = successivo;      
-    }  
+    } 
 }
 
-void do_room(Room *r){enemy_range(*r);}; // fa cose sulla stanza
+void do_room(Room *r){ // fa cose sulla stanza
+    bullets_push(*r);
+    bullet_movement(*r);
+}; 
 
 bool game_over(Player p)
 {

@@ -13,7 +13,7 @@ Screen::Screen()
     nodelay(stdscr, TRUE);
     curs_set(0);
     // setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
-    // keypad(wroom, true);
+    keypad(stdscr, true);
     refresh();
 
     this->windows_init();

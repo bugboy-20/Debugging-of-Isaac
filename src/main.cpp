@@ -110,6 +110,18 @@ void controller(Player *player)
         case 'q':
             exit_game();
             break;
+        case KEY_UP:
+            bullet_creation(player, UP);
+            break;
+        case KEY_DOWN:
+            bullet_creation(player, DOWN);
+            break;
+        case KEY_RIGHT:
+            bullet_creation(player, RIGHT);
+            break;
+        case KEY_LEFT:
+            bullet_creation(player, LEFT);
+            break;
         default:
             break;
             // ...
