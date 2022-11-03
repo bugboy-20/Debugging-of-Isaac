@@ -56,7 +56,7 @@ bool List::delete_element(void *e) {
 
     if(head->element==e) {
         tmp=head;
-        this->head=cn->next;
+        this->head=head->next;
         delete tmp;
         return true;
     }
