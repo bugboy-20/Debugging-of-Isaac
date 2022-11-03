@@ -16,7 +16,13 @@ bool next_room_position(Room& r, enum door_pos p);
 
 void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_pos p1);
 
+void shoot(Room& r, Bullet *b);
+
+void destroy_bullet(Room& r, Bullet *b);
+
 void enemy_range(Room& r);
+
+void bullet_creation(Entity *e, int direction);
 
 void do_room(Room *r); // fa cose sulla stanza
 

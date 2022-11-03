@@ -87,39 +87,93 @@ bool next_room_position(Room& r, enum door_pos p){
     }else return false;
 }
 
+void bullet_creation(Entity *e, int direction){
+    Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
+    b->set_direction(direction);
+    bullets.push(b);
+    e->set_last_shot(time(0));
+}
+
+void shoot(Room& r, Bullet *b){
+    r.p->set_health(r.p->get_health() - b->get_damage());
+    r.add_event(new PlayerHealthChangedE(r.p));
+}
+
+void destroy_bullet(Room& r, Bullet *b){
+    r.add_event(new EntityKilledE(b));
+    bullets.delete_element(b); 
+}
 
 void enemy_range(Room& r){
     List entities = r.get_entities(false);
     node *tmp = entities.head;
     while(tmp != NULL){
         Hostile *e = (Hostile*) tmp->element;
-        bool enemy_range = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
-        if((enemy_range && time(0) - e->get_last_shot() >= e->get_attack_speed())){
-            Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
-            bullets.push(b);
-            e->set_last_shot(time(0));
-        }    
+        bool enemy_range_down = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
+        bool enemy_range_up = (r.p->get_x() == e->get_x() && (r.p->get_y() >= e->get_y() - e->get_trigger_radius()) && (r.p->get_y() <= e->get_y()));
+        bool enemy_range_right = (r.p->get_y() == e->get_y() && (r.p->get_x() <= e->get_x() + e->get_trigger_radius()+ 2) && (r.p->get_x() >= e->get_x()));
+        bool enemy_range_left = (r.p->get_y() == e->get_y() && (r.p->get_x() >= e->get_x() - e->get_trigger_radius() - 2) && (r.p->get_x() <= e->get_x()));
+        if((enemy_range_down && time(0) - e->get_last_shot() >= e->get_attack_speed())){
+            bullet_creation(e, 0);
+        }else if((enemy_range_up && time(0) - e->get_last_shot() >= e->get_attack_speed())){
+            bullet_creation(e, 1);
+        }else if((enemy_range_right && time(0) - e->get_last_shot() >= e->get_attack_speed())){
+            bullet_creation(e, 2);
+        }else if(enemy_range_left && time(0) - e->get_last_shot() >= e->get_attack_speed()){
+            bullet_creation(e, 3);
+        }
         tmp = tmp->next;  
     }
-    
-    node *tmp_bullets = bullets.head;
+
+    node *tmp_bullets = bullets.head;        
     while(tmp_bullets != NULL){
         Bullet *b = (Bullet*) tmp_bullets->element;
         node *successivo = tmp_bullets->next;
         auto duration(duration_cast<milliseconds>(high_resolution_clock().now() - b->get_last_move()));
         if(duration.count() >= b->get_movement_speed()){
-            if(!(b->move_down(&r))){
-                if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                    r.p->set_health(r.p->get_health() - b->get_damage());
-                    r.add_event(new PlayerHealthChangedE(r.p));
-                }         
-                r.add_event(new EntityKilledE(b));
-                bullets.delete_element(b);                                                        
-            }
-            b->set_last_move(high_resolution_clock().now());
+            switch(b->get_direction()){
+                case 0:
+                    if(!(b->move_down(&r))){
+                        if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                            shoot(r, b);
+                        }         
+                        destroy_bullet(r, b);                                                     
+                    }
+                    b->set_last_move(high_resolution_clock().now());
+                    break;
+                case 1:
+                    if(!(b->move_up(&r))){
+                        if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                            shoot(r, b);
+                        }         
+                        destroy_bullet(r, b);                                                      
+                    }
+                    b->set_last_move(high_resolution_clock().now());
+                    break;
+                case 2:
+                    if(!(b->move_right(&r))){
+                        if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
+                            shoot(r, b);
+                        }         
+                        destroy_bullet(r, b);                                                  
+                    }
+                    b->set_last_move(high_resolution_clock().now());
+                    break;
+                case 3:
+                    if(!(b->move_left(&r))){
+                        if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
+                            shoot(r, b);
+                        }         
+                        destroy_bullet(r, b);                                                         
+                    }
+                    b->set_last_move(high_resolution_clock().now());
+                    break;
+                default:
+                    break;
+            }   
         }
-        tmp_bullets = tmp_bullets->next;      
-    }     
+        tmp_bullets = successivo;      
+    }  
 }
 
 void do_room(Room *r){enemy_range(*r);}; // fa cose sulla stanza
