@@ -6,21 +6,9 @@
 #include "Events.hpp"
 #include "Hostile.hpp"
 #include "Map.h"
-#define COOLDOWN 1
-#define VELOCITA_PROIETTILE 150
-#ifdef _WIN32 // sleep fn
-#include <Windows.h>
-#include <ncursesw/ncurses.h>
-#else
-#include <unistd.h>
-#include <ncurses.h>
-#endif
 
 using namespace std::chrono;
 List bullets = List();
-time_t frametime_sparo;
-auto frametime_proiettile = high_resolution_clock().now();
-bool first_time = true, first_time2 = true;
 
 bool collision(int x, int y, Room& r)
 {
@@ -103,41 +91,35 @@ bool next_room_position(Room& r, enum door_pos p){
 void enemy_range(Room& r){
     List entities = r.get_entities(false);
     node *tmp = entities.head;
-    
     while(tmp != NULL){
         Hostile *e = (Hostile*) tmp->element;
         bool enemy_range = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
-        if((enemy_range && time(0) - frametime_sparo >= COOLDOWN) || (enemy_range && first_time)){
+        if((enemy_range && time(0) - e->get_last_shot() >= e->get_attack_speed())){
             Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
             bullets.push(b);
-            first_time = false;
-            frametime_sparo = time(0);
+            e->set_last_shot(time(0));
         }    
         tmp = tmp->next;  
     }
     
-
     node *tmp_bullets = bullets.head;
     while(tmp_bullets != NULL){
         Bullet *b = (Bullet*) tmp_bullets->element;
         node *successivo = tmp_bullets->next;
-        auto duration(duration_cast<milliseconds>(high_resolution_clock().now() - frametime_proiettile));
-        if((duration.count() >= VELOCITA_PROIETTILE) || first_time2){
+        auto duration(duration_cast<milliseconds>(high_resolution_clock().now() - b->get_last_move()));
+        if(duration.count() >= b->get_movement_speed()){
             if(!(b->move_down(&r))){
                 if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
                     r.p->set_health(r.p->get_health() - b->get_damage());
                     r.add_event(new PlayerHealthChangedE(r.p));
                 }         
                 r.add_event(new EntityKilledE(b));
-                bullets.delete_element(b);                                                         
+                bullets.delete_element(b);                                                        
             }
-            first_time2 = false;
-            frametime_proiettile = high_resolution_clock().now();
+            b->set_last_move(high_resolution_clock().now());
         }
-        tmp_bullets = successivo;
-        
-    }   
-    
+        tmp_bullets = tmp_bullets->next;      
+    }     
 }
 
 void do_room(Room *r){enemy_range(*r);}; // fa cose sulla stanza
