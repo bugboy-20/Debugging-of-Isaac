@@ -13,15 +13,20 @@ List bullets = List();
 bool collision(int x, int y, Room& r)
 {
     bool flag1, flag2, flag3;
-    coords pos;
-
-    pos.x = x;
-    pos.y = y;
-    flag1 = wall_collision(pos, r);
-    flag2 = general_collision(pos, r);
-    door_collision(pos, r);
+    flag1 = wall_collision({x, y}, r);
+    flag2 = general_collision({x, y}, r);
+    if(player_in_door(x, y, r)) door_collision({x, y}, r);
     if(flag1 || flag2) return true;
     else return false;
+}
+
+bool player_in_door(int x, int y, Room& r){
+    bool flag = (r.p->get_x() == x - 1 && r.p->get_y() == y) 
+                || (r.p->get_x() == x + 1 && r.p->get_y() == y)
+                || (r.p->get_x() == x && r.p->get_y() == y - 1) 
+                || (r.p->get_x() == x && r.p->get_y() == y + 1) ;
+    
+    return flag;
 }
 
 bool wall_collision(coords pos, Room& r)
@@ -87,7 +92,7 @@ bool next_room_position(Room& r, enum door_pos p){
     }else return false;
 }
 
-void bullet_creation(Entity *e, int direction){
+void bullet_creation(Entity *e, enum direction direction){
     Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
     b->set_direction(direction);
     bullets.push(b);
@@ -104,23 +109,74 @@ void destroy_bullet(Room& r, Bullet *b){
     bullets.delete_element(b); 
 }
 
+enum direction enemy_shot_direction(Room& r, Hostile *e){
+    bool enemy_range_down = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
+    bool enemy_range_up = (r.p->get_x() == e->get_x() && (r.p->get_y() >= e->get_y() - e->get_trigger_radius()) && (r.p->get_y() <= e->get_y()));
+    bool enemy_range_right = (r.p->get_y() == e->get_y() && (r.p->get_x() <= e->get_x() + e->get_trigger_radius()+ 2) && (r.p->get_x() >= e->get_x()));
+    bool enemy_range_left = (r.p->get_y() == e->get_y() && (r.p->get_x() >= e->get_x() - e->get_trigger_radius() - 2) && (r.p->get_x() <= e->get_x()));
+    
+    if(enemy_range_down) return DOWN;
+    else if(enemy_range_up) return UP;
+    else if(enemy_range_right) return RIGHT;
+    else if(enemy_range_left) return LEFT;
+}
+
+bool enemy_in_range(Room& r, Hostile *e){
+    bool enemy_in_range = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()))
+    || (r.p->get_x() == e->get_x() && (r.p->get_y() >= e->get_y() - e->get_trigger_radius()) && (r.p->get_y() <= e->get_y()))
+    || (r.p->get_y() == e->get_y() && (r.p->get_x() <= e->get_x() + e->get_trigger_radius()+ 2) && (r.p->get_x() >= e->get_x()))
+    || (r.p->get_y() == e->get_y() && (r.p->get_x() >= e->get_x() - e->get_trigger_radius() - 2) && (r.p->get_x() <= e->get_x()));
+    
+    return enemy_in_range;
+}
+
+void shoot_in_direction(Room& r, Bullet *b){
+    if(b->get_direction() >= 0 && b->get_direction() <= 3){
+        switch(b->get_direction()){
+            case DOWN:
+                if(!(b->move_down(&r))){
+                    if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                        shoot(r, b);
+                    }         
+                    destroy_bullet(r, b);                                                     
+                }
+                break;
+            case UP:
+                if(!(b->move_up(&r))){
+                    if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                        shoot(r, b);
+                    }         
+                    destroy_bullet(r, b);                                                      
+                }
+                break;
+            case RIGHT:
+                if(!(b->move_right(&r))){
+                    if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
+                        shoot(r, b);
+                    }         
+                    destroy_bullet(r, b);                                                  
+                }
+                break;
+            case LEFT:
+                if(!(b->move_left(&r))){
+                    if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
+                        shoot(r, b);
+                    }         
+                    destroy_bullet(r, b);                                                         
+                }
+                break;
+        } 
+        b->set_last_move(high_resolution_clock().now());  
+    }
+    
+}
 void enemy_range(Room& r){
     List entities = r.get_entities(false);
     node *tmp = entities.head;
     while(tmp != NULL){
         Hostile *e = (Hostile*) tmp->element;
-        bool enemy_range_down = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
-        bool enemy_range_up = (r.p->get_x() == e->get_x() && (r.p->get_y() >= e->get_y() - e->get_trigger_radius()) && (r.p->get_y() <= e->get_y()));
-        bool enemy_range_right = (r.p->get_y() == e->get_y() && (r.p->get_x() <= e->get_x() + e->get_trigger_radius()+ 2) && (r.p->get_x() >= e->get_x()));
-        bool enemy_range_left = (r.p->get_y() == e->get_y() && (r.p->get_x() >= e->get_x() - e->get_trigger_radius() - 2) && (r.p->get_x() <= e->get_x()));
-        if((enemy_range_down && time(0) - e->get_last_shot() >= e->get_attack_speed())){
-            bullet_creation(e, 0);
-        }else if((enemy_range_up && time(0) - e->get_last_shot() >= e->get_attack_speed())){
-            bullet_creation(e, 1);
-        }else if((enemy_range_right && time(0) - e->get_last_shot() >= e->get_attack_speed())){
-            bullet_creation(e, 2);
-        }else if(enemy_range_left && time(0) - e->get_last_shot() >= e->get_attack_speed()){
-            bullet_creation(e, 3);
+        if(enemy_in_range(r, e) && time(0) - e->get_last_shot() >= e->get_attack_speed()){
+            bullet_creation(e, enemy_shot_direction(r, e));
         }
         tmp = tmp->next;  
     }
@@ -131,46 +187,7 @@ void enemy_range(Room& r){
         node *successivo = tmp_bullets->next;
         auto duration(duration_cast<milliseconds>(high_resolution_clock().now() - b->get_last_move()));
         if(duration.count() >= b->get_movement_speed()){
-            switch(b->get_direction()){
-                case 0:
-                    if(!(b->move_down(&r))){
-                        if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                            shoot(r, b);
-                        }         
-                        destroy_bullet(r, b);                                                     
-                    }
-                    b->set_last_move(high_resolution_clock().now());
-                    break;
-                case 1:
-                    if(!(b->move_up(&r))){
-                        if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                            shoot(r, b);
-                        }         
-                        destroy_bullet(r, b);                                                      
-                    }
-                    b->set_last_move(high_resolution_clock().now());
-                    break;
-                case 2:
-                    if(!(b->move_right(&r))){
-                        if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
-                            shoot(r, b);
-                        }         
-                        destroy_bullet(r, b);                                                  
-                    }
-                    b->set_last_move(high_resolution_clock().now());
-                    break;
-                case 3:
-                    if(!(b->move_left(&r))){
-                        if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
-                            shoot(r, b);
-                        }         
-                        destroy_bullet(r, b);                                                         
-                    }
-                    b->set_last_move(high_resolution_clock().now());
-                    break;
-                default:
-                    break;
-            }   
+            shoot_in_direction(r, b);
         }
         tmp_bullets = successivo;      
     }  

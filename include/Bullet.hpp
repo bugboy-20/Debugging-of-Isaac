@@ -2,13 +2,19 @@
 #include "Entity.hpp"
 #include "Room.hpp"
 using namespace std::chrono::_V2;
+enum direction{
+    DOWN,
+    UP,
+    RIGHT,
+    LEFT
+};
 
 class Bullet : public Entity
 {
 protected:
     system_clock::time_point last_move;
     int movement_speed;
-    int direction;
+    enum direction d;
 
 public:
     // Costruttore
@@ -19,5 +25,5 @@ public:
     system_clock::time_point get_last_move();
     void set_last_move(system_clock::time_point lm);
     int get_direction();
-    void set_direction(int direction);
+    void set_direction(enum direction direction);
 };
