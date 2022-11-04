@@ -1,53 +1,53 @@
 #pragma once
 #define STR_LENGTH 20
 
-#define zombie_s "zombie"
-// char zombie_name[STR_LENGTH] = "Zombie";
-// char zombie_desc[STR_LENGTH] = "zombie";
-#define zombie_display 'z'
-#define zombie_health 4
-#define zombie_damage 1
-#define zombie_tr 3
+#define Zombie_s "zombie"
+// char Zombie_name[STR_LENGTH] = "Zombie";
+// char Zombie_desc[STR_LENGTH] = "zombie";
+#define Zombie_display 'z'
+#define Zombie_health 4
+#define Zombie_damage 1
+#define Zombie_tr 3
 
-#define scheletro_s "scheletro"
-// char scheletro_name[STR_LENGTH] = "Scheletro";
-// char scheletro_desc[STR_LENGTH] = "scheletro";
-#define scheletro_display 's'
-#define scheletro_health 2
-#define scheletro_damage 2
-#define scheletro_tr 3
+#define Scheletro_s "scheletro"
+// char Scheletro_name[STR_LENGTH] = "Scheletro";
+// char Scheletro_desc[STR_LENGTH] = "scheletro";
+#define Scheletro_display 's'
+#define Scheletro_health 2
+#define Scheletro_damage 2
+#define Scheletro_tr 3
 
-#define goblin_s "goblin"
-// char goblin_name[STR_LENGTH] = "Goblin";
-// char goblin_desc[STR_LENGTH] = "goblin";
-#define goblin_display 'g'
-#define goblin_health 1
-#define goblin_damage 4
-#define goblin_tr 3
+#define Goblin_s "goblin"
+// char Goblin_name[STR_LENGTH] = "Goblin";
+// char Goblin_desc[STR_LENGTH] = "goblin";
+#define Goblin_display 'g'
+#define Goblin_health 1
+#define Goblin_damage 4
+#define Goblin_tr 3
 
-#define fantasma_s "fantasma"
-// char fantasma_name[STR_LENGTH] = "Fantasma";
-// char fantasma_desc[STR_LENGTH] = "fantasma";
-#define fantasma_display 'f'
-#define fantasma_health 6
-#define fantasma_damage 1
-#define fantasma_tr 3
+#define Fantasma_s "fantasma"
+// char Fantasma_name[STR_LENGTH] = "Fantasma";
+// char Fantasma_desc[STR_LENGTH] = "fantasma";
+#define Fantasma_display 'f'
+#define Fantasma_health 6
+#define Fantasma_damage 1
+#define Fantasma_tr 3
 
-#define slime_s "slime"
-// char slime_name[STR_LENGTH] = "Slime";
-// char slime_desc[STR_LENGTH] = "slime";
-#define slime_display 'l'
-#define slime_health 7
-#define slime_damage 2
-#define slime_tr 3
+#define Slime_s "slime"
+// char Slime_name[STR_LENGTH] = "Slime";
+// char Slime_desc[STR_LENGTH] = "slime";
+#define Slime_display 'l'
+#define Slime_health 7
+#define Slime_damage 2
+#define Slime_tr 3
 
 #define player_display '@'
 #define door_display ' '
 #define h_wall_display '-'
 #define v_wall_display '|'
 
-#define bullet_n  "bullet"
-#define bullet_d  "bullet_desc"
+#define bullet_n "bullet"
+#define bullet_d "bullet_desc"
 // char bullet_name[10] = "bullet";
 // char bullet_desc[20] = "bullet_desc";
 #define bullet_display '.'
