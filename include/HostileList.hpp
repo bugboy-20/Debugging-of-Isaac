@@ -1,10 +1,21 @@
 #pragma once
 #include "Hostile.hpp"
 
+#define mob(name) class name : public Hostile { \
+    public: \
+            name (coords); \
+}
+
+mob(Zombie);
+mob(Scheletro);
+mob(Goblin);
+mob(Fantasma);
+mob(Slime);
+/*
 class Zombie : public Hostile
 {
 public:
-    Zombie(coords pos);
+    Zombie(coords pos, int livello);
 };
 
 class Scheletro : public Hostile
@@ -30,3 +41,6 @@ class Slime : public Hostile
 public:
     Slime(coords pos);
 };
+
+*/
+#undef mob

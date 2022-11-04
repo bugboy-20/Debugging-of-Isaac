@@ -1,8 +1,26 @@
 #include "HostileList.hpp"
 #include "constants.h"
 
+#define mc(n,c) n ## _ ## c
+
+#define mob(name) \
+    char name ## _string[STR_LENGTH] = name ## _s; \
+    name :: name (coords pos) : Hostile(pos, mc(name,display), mc(name,string), mc(name,string), mc(name,health), mc(name,damage), mc(name,tr)) {}
+
+
+
+mob(Zombie);
+mob(Scheletro);
+mob(Goblin);
+mob(Fantasma);
+mob(Slime);
+
+
+/*
+
+
 char zombie_string[STR_LENGTH] = zombie_s;
-Zombie::Zombie(coords pos) : Hostile(pos,
+Zombie::Zombie(coords pos, int livello) : Hostile(pos,
                                      zombie_display,
                                      zombie_string,
                                      zombie_string,
@@ -49,3 +67,4 @@ Slime::Slime(coords pos) : Hostile(
                                slime_health,
                                slime_damage,
                                slime_tr) {}
+                               */
