@@ -12,6 +12,7 @@ class Screen
 {
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
+    WINDOW *debug; // schermo temporaneo per i messaggi di debug
 
     /**
      * Inizializza le window e disegna i bordi per ognuna
@@ -34,7 +35,7 @@ private:
      *
      * @param r la stanza che viene stampata
      */
-    void render_room(Room& r);
+    void render_room(Room &r);
 
     /**
      * Stampa il riquadro in cui sono visualizzati punteggio e vita.
@@ -44,7 +45,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_playerstat(Room& r);
+    void render_playerstat(Room &r);
 
     /**
      * Stampa una legenda con elementi presenti nella stanza.
@@ -54,7 +55,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_legend(Room& r);
+    void render_legend(Room &r);
 
     /**
      * Stampa la sezione con la vita e il nome di tutti gli ostili nella stanza.
@@ -64,7 +65,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_moblist(Room& r);
+    void render_moblist(Room &r);
 
     /**
      * Stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore.
@@ -74,7 +75,7 @@ private:
      *
      * @param r la stanza da cui prende le informazioni
      */
-    void render_inventory(Room& r);
+    void render_inventory(Room &r);
 
 public:
     /**

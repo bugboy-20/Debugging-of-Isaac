@@ -21,12 +21,12 @@ Screen::Screen()
 
 void Screen::do_screen(Room *r)
 {
-    move(0, 0);
+    wmove(debug, 0, 0);
 
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {
-        printw("id evento: %d ", e->id);
+        wprintw(debug, "id evento: %d \n", e->id);
         switch (e->id)
         {
         case ENTITY_MOVE:
@@ -54,6 +54,7 @@ void Screen::do_screen(Room *r)
             this->render_playerstat(*r); // è qui solo temporaneamente per i test
             this->render_legend(*r);
             this->render_moblist(*r);
+            this->render_inventory(*r);
 
             delete t;
             break;
@@ -98,6 +99,7 @@ void Screen::do_screen(Room *r)
             break;
         }
     }
+    wrefresh(debug);
 }
 
 void Screen::stop_screen()
@@ -128,6 +130,7 @@ void Screen::windows_init()
     legend = newwin(legend_height, lateral_width, playerstat_height + start_y, lateral_start_x);
     inventory = newwin(inventory_height, lateral_width, playerstat_height + legend_height + start_y, lateral_start_x);
     moblist = newwin(lower_height, moblist_width, lower_start_y + start_y, start_x);
+    debug = newwin(50, 30, start_y, lateral_start_x + lateral_width + 3);
     box(wroom, 0, 0);
     box(playerstat, 0, 0);
     box(legend, 0, 0);
@@ -140,6 +143,7 @@ void Screen::windows_init()
     wnoutrefresh(legend);
     wnoutrefresh(inventory);
     wnoutrefresh(moblist);
+    wnoutrefresh(debug);
     doupdate();
 }
 
@@ -269,7 +273,7 @@ void Screen::render_playerstat(Room &r)
 void Screen::render_legend(Room &r)
 {
     werase(legend);
-    box(legend, 0,0);
+    box(legend, 0, 0);
 
     mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
@@ -317,7 +321,7 @@ void Screen::render_legend(Room &r)
 void Screen::render_moblist(Room &r)
 {
     werase(moblist);
-    box(moblist, 0,0);
+    box(moblist, 0, 0);
 
     int line = 2, col = 2, gap = 4;
     char fullHeart = '0', // cuore intero
@@ -379,4 +383,10 @@ void Screen::render_moblist(Room &r)
     }
     mvwprintw(moblist, 0, 1, "Nemici");
     wrefresh(moblist);
+}
+
+void Screen::render_inventory(Room &r)
+{
+    mvwprintw(inventory, 0, 1, "Inventario");
+    wrefresh(inventory);
 }
