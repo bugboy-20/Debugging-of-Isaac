@@ -12,7 +12,7 @@
 #include "Player.hpp"
 #include "Room.hpp"
 
-#define ROOM_TYPES 2 // numero di varianti di stanze disponibili
+#define ROOM_TYPES 3 // numero di varianti di stanze disponibili
 struct map game_map;
 
 Room *room1();
@@ -96,41 +96,114 @@ Room *add_room(Room *r, enum door_pos p) {
 
 }
 
+// I calcoli sono stati eseguiti su carta, quindi fidatevi
 
-Room *room1() {
-
-    List wl = List();
-
-    Wall *w1 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, false, ROOM_WIDTH / 4});
-    //Wall *w2 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, true, ROOM_HEIGHT / 4 -1});
-
-    wl.push(w1);
-    //wl.push(w2);
-
-    Room *r = new Room(new_id(), wl);
-    r->add_entity(new Zombie({10,10}));
-
-    return r;
-};
-
+/*
+ *   _____  _____
+ *  |            |
+ *  |            |
+ *
+ *  |            |
+ *  |_____  _____|
+ */
 Room *room0() {
 
-    List wl = List();
+    Room *r = new Room(new_id());
 
-    Wall *w1 = new Wall({{ROOM_HEIGHT / 2, ROOM_WIDTH / 4}, true, ROOM_WIDTH / 4});
+    for (int i=0; i<4; i++) {
+        r->door[i]=new door;
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->next_room=NULL;
+    }
 
-    wl.push(w1);
-
-
-
-
-    Room *r = new Room(new_id(), wl);
 
     return r;
 }
 
+/*
+ *   _____  _____
+ *  |         |  |
+ *  |         |  |
+ *      |     |
+ *  |   |        |
+ *  |___|_  _____|
+ */
+Room *room1() {
+
+    List wl = List();
+
+    int xshift = (1.0/5.0)* ROOM_WIDTH;
+    int yshift =  (1.0/3.0)* ROOM_HEIGHT;
+
+    int xw1 = xshift + rand()%xshift;
+    int yw1 = yshift + rand()%yshift;
+    int l = ROOM_HEIGHT - yw1 - 2;
+
+    line lw1 = { { xw1, yw1} , true, l};
+    line lw2 = { {ROOM_WIDTH - xw1, 1}, true, l};
+    Wall *w1 = new Wall(lw1);
+    Wall *w2 = new Wall(lw2);
+
+    std::cerr << "(x,y,l)=(" << xw1 << "," << yw1 << "," << l << ")" << std::endl;
+    wl.push(w1);
+    wl.push(w2);
+
+
+
+    Room *r = new Room(new_id(), wl);
+
+    for (int i=0; i<4; i++) {
+        r->door[i]=new door;
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->next_room=NULL;
+    }
+
+
+    return r;
+}
+
+/*
+ *   _____  _____
+ *  |   |        |
+ *  |            |
+ *      |      
+ *  |   |        |
+ *  |___|_  _____|
+ */
 Room *room2() {
-    return NULL;
+
+    List wl = List();
+
+    int xshift = 0.3 * ROOM_WIDTH;
+
+    int x1 = (.2)* ROOM_WIDTH + rand()%xshift -2;
+    int y1 = 1;
+    int l1 = 1 + rand()%(ROOM_HEIGHT-3);
+
+    int x2 = x1;
+    int y2 = l1 + 4;
+    int l2 = ROOM_HEIGHT - y2 - 2;
+
+    line lw1 = { { x1, y1} , true, l1};
+    line lw2 = { { x2, y2}, true, l2};
+    Wall *w1 = new Wall(lw1);
+    Wall *w2 = new Wall(lw2);
+
+    wl.push(w1);
+    wl.push(w2);
+
+
+
+    Room *r = new Room(new_id(), wl);
+
+    for (int i=0; i<4; i++) {
+        r->door[i]=new door;
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->next_room=NULL;
+    }
+
+
+    return r;
 }
 
 #define return_room_N(N) case N: return room ## N(); break;
