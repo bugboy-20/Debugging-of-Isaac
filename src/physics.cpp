@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <iostream>
 #include <string.h>
 #include "physics.h"
 #include "Events.hpp"
@@ -19,6 +20,8 @@ bool collision(int x, int y, Room& r)
 }
 
 bool player_in_door(int x, int y, Room& r){
+    std::cerr << "player: " << "{" << r.p->get_x() << ", " << r.p->get_y() << "}" << std::endl
+              << "pos: " << "{" << x << ", " << y << "}" << std::endl<<std::endl;
     bool flag = (r.p->get_x() == x - 1 && r.p->get_y() == y) 
                 || (r.p->get_x() == x + 1 && r.p->get_y() == y)
                 || (r.p->get_x() == x && r.p->get_y() == y - 1) 
