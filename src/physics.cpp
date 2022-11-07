@@ -78,7 +78,7 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
         new_pos = door_position2(p1)[1];
     }
     r.next_room(p)->p->reposition(new_pos);
-    r.next_room(p)->add_event(new EntityMoveE(old_pos, new_pos, r.next_room(p)->p->get_display()));
+    // r.next_room(p)->add_event(new EntityMoveE(old_pos, new_pos, r.next_room(p)->p->get_display()));
 }
 
 bool next_room_position(Room& r, enum door_pos p){
@@ -133,6 +133,7 @@ enum direction enemy_shot_direction(Room& r, Hostile *e){
     else if(enemy_range_up) return UP;
     else if(enemy_range_right) return RIGHT;
     else if(enemy_range_left) return LEFT;
+    return NULLO;
 }
 
 bool enemy_in_range(Room& r, Hostile *e){
@@ -192,7 +193,9 @@ void bullets_push(Room& r){
     while(tmp != NULL){
         Hostile *e = (Hostile*) tmp->element;
         if(enemy_in_range(r, e)){
-            bullet_creation(e, enemy_shot_direction(r, e));
+            direction temp = enemy_shot_direction(r, e);
+            if(temp != NULLO)
+                bullet_creation(e, temp);
         }
         tmp = tmp->next;  
     }

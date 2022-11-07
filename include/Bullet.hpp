@@ -6,7 +6,8 @@ enum direction
     DOWN,
     UP,
     RIGHT,
-    LEFT
+    LEFT,
+    NULLO
 };
 
 class Bullet : public Entity
