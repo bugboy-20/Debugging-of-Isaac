@@ -10,7 +10,7 @@ ifeq ($(OS),Windows_NT)
 	EXECUTABLE = main
 else
 	detected_OS := $(shell uname)
-	ADDITIONAL_FLAG = -fsanitize=address
+	ADDITIONAL_FLAG = #-fsanitize=address
 	EXECUTABLE = main.out
 endif
 
