@@ -16,7 +16,28 @@ Item::Item(int id, char display, char desc[])
 6- Bacca magica (no ammo)
 */
 
-Consumable::Consumable(int id, char display, char desc[]) : Item(id, display, desc) {}
+Consumable::Consumable(int id, char display, char desc[]) : Item(id, display, desc)
+{
+    n_utilizzi = 0;
+}
+int Consumable::get_n_utilizzi() { return this->n_utilizzi; }
+void Consumable::set_n_utilizzi(int n) { this->n_utilizzi = n_utilizzi; }
+void Consumable::use() { n_utilizzi -= 1; }
+
+Potion::Potion() : Consumable(potions, '+', "pozione")
+{
+    livello = 1;
+}
+int Potion::use()
+{
+    Consumable::use();
+    int heal = livello * 1.5;
+    return heal;
+}
+
+Key::Key() : Consumable(keys, 'k', "chiave")
+{
+}
 
 Weapon::Weapon(int id, char display, char desc[], int damage) : Item(id, display, desc)
 {

@@ -388,28 +388,28 @@ void Screen::render_moblist(Room &r)
 void Screen::render_inventory(Room &r)
 {
     // stampare gli slot dell'inventario, che sono player_inventory_slots
-    int start_x = 2, start_y = 2, screen_width = this->lateral_width + this->lateral_start_x;
+    int start_x = 2, curr_x = start_x, start_y = 4, curr_y = start_y, spacing = 2;
+    mvwprintw(inventory, 2, start_x, "%c:%d    %c:%d", r.p->get_inventory().pots.display, r.p->get_inventory().pots.get_n_utilizzi(), r.p->get_inventory().keys.display, r.p->get_inventory().keys.get_n_utilizzi());
 
     for (int i = 0; i < player_inventory_slots; i++)
     {
-        char d = ' ';
+        char d = '.';
         if (r.p->get_inventory().items[i] != NULL)
             d = r.p->get_inventory().items[i]->display;
 
-        wmove(inventory, start_y, start_x);
+        wmove(inventory, start_y, curr_x);
         waddch(inventory, d);
-        if (start_x + 2 >= lateral_width)
+        if (curr_x + spacing + 2 >= lateral_width) //+2 uno è il bordo e l'altro è per il padding
         {
-            start_y += 2;
-            start_x = 0;
+            start_y += spacing - 1;
+            curr_x = start_x - spacing;
         }
 
-        start_x += 2;
+        curr_x += spacing;
     }
 
     Weapon *w = r.p->get_inventory().arma;
     Armor *a = r.p->get_inventory().armatura;
-    int curr_x, curr_y;
     getyx(inventory, curr_y, curr_x);
     if (w != NULL)
         mvwprintw(inventory, curr_y + 2, 2, "%c", w->display);

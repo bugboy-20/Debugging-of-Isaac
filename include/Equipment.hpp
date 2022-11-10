@@ -5,7 +5,8 @@ enum item_id
 {
     weapon,
     armor,
-    consumable
+    potions,
+    keys
 };
 
 class Item
@@ -19,10 +20,34 @@ public:
     Item();
     Item(int id, char display, char desc[]);
 };
+
 class Consumable : public Item
 {
+private:
+    int n_utilizzi;
+
 public:
     Consumable(int id, char display, char desc[]);
+
+    int get_n_utilizzi();
+    void set_n_utilizzi(int n);
+    void use();
+};
+
+class Potion : public Consumable
+{
+private:
+    int livello;
+
+public:
+    Potion();
+    int use();
+};
+
+class Key : public Consumable
+{
+public:
+    Key();
 };
 
 class Weapon : public Item

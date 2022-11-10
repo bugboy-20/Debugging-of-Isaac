@@ -9,6 +9,8 @@ struct inventory
     Armor *armatura;
     Item *items[player_inventory_slots];
     int item_n;
+    Potion pots;
+    Key keys;
 };
 
 class Player : public Entity
@@ -27,5 +29,8 @@ public:
     int get_score();
 
     inventory get_inventory();
+    // inserisce un item in uno slot preciso
     void add_item(int slot, Item *);
+    // inserisce un item nel primo slot libero
+    void add_item(Item *);
 };
