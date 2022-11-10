@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "Core.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "List.hpp"
@@ -12,7 +13,7 @@
 #include "Player.hpp"
 #include "Room.hpp"
 
-#define ROOM_TYPES 3 // numero di varianti di stanze disponibili
+#define ROOM_TYPES 4 // numero di varianti di stanze disponibili
 struct map game_map;
 
 Room *room1();
@@ -86,7 +87,9 @@ Room *add_room(Room *r, enum door_pos p) {
             break;
     }
 
-    new_room->door[i]=new door;
+    if (new_room == NULL)
+        new_room->door[i]=new door;
+
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
 
@@ -205,6 +208,48 @@ Room *room2() {
 
     return r;
 }
+/*
+ *   _____  _____
+ *  |            |
+ *  |   O    O   |
+ *
+ *  |       O    |
+ *  |_____  _____|
+ */
+char ssasso[] = "sasso";
+
+Room *room3() {
+
+
+    Room *r = new Room(new_id());
+
+    int n_sasso = 2 + rand()%10;
+
+// #define x_range (ROOM_WIDTH/4 + rand()%(ROOM_WIDTH/4))
+// #define y_range (ROOM_HEIGHT/4 + rand()%(ROOM_HEIGHT/4))
+#define x_range (2 + rand()%(ROOM_WIDTH - 4))
+#define y_range (2 + rand()%(ROOM_HEIGHT - 4))
+
+
+    for (int i=0; i<n_sasso; i++) {
+        Core *sasso = new Core({x_range,y_range},'O', ssasso);
+        r->add_Core(sasso);
+    }
+
+    for (int i=0; i<4; i++) {
+        r->door[i]=new door;
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->next_room=NULL;
+    }
+
+
+
+#undef x_range
+#undef y_range
+
+    return r;
+}
+
 
 #define return_room_N(N) case N: return room ## N(); break;
 
@@ -212,6 +257,8 @@ Room *random_room() {
     switch (rand()%ROOM_TYPES) {
         return_room_N(0);
         return_room_N(1);
+        return_room_N(2);
+        return_room_N(3);
         //return_room_N(2);
         default:
             return new Room(new_id());
