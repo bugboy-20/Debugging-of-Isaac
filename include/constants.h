@@ -41,6 +41,10 @@
 #define Slime_damage 2
 #define Slime_tr 3
 
+#define player_s "giocatore"
+#define player_base_damage 3
+#define player_ammo 40
+#define player_inventory_slots 10
 #define player_display '@'
 #define door_display ' '
 #define h_wall_display '-'

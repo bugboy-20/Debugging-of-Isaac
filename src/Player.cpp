@@ -1,18 +1,34 @@
 #include "Player.hpp"
 #include "constants.h"
 
-char player_desc[20] = "giocatore";
+char player_desc[20] = player_s;
+Player::Player(
+    coords pos,
+    char name[10],
+    int max_health) : Entity(pos, player_display, player_desc, name, max_health, player_base_damage)
+{
+    this->inv = {NULL, NULL, {}, 0};
+    for (int i = 0; i < player_inventory_slots; i++)
+        this->inv.items[i] = NULL;
+
+    this->max_health = max_health;
+    this->ammo = player_ammo;
+    this->score = 0;
+}
+
 Player::Player(
     coords pos,
     char name[10],
     int max_health,
     class Weapon *w,
-    class Armor *a) : Entity(pos, player_display, player_desc, name, max_health, 3)
+    class Armor *a) : Entity(pos, player_display, player_desc, name, max_health, player_base_damage)
 {
-    this->arma = w;
-    this->armatura = a;
+    this->inv = {w, a, {}, 0};
+    for (int i = 0; i < player_inventory_slots; i++)
+        this->inv.items[i] = NULL;
+
     this->max_health = max_health;
-    this->ammo = 40;
+    this->ammo = player_ammo;
     this->score = 0;
 }
 
@@ -27,8 +43,10 @@ Player::Player(
     class Weapon *w,
     class Armor *a) : Entity(pos, display, description, name, max_health, damage)
 {
-    this->arma = w;
-    this->armatura = a;
+    this->inv = {w, a, {}, 0};
+    for (int i = 0; i < player_inventory_slots; i++)
+        this->inv.items[i] = NULL;
+
     this->max_health = max_health;
     this->ammo = ammo;
     this->score = 0;
@@ -36,3 +54,13 @@ Player::Player(
 
 int Player::get_max_health() { return this->max_health; }
 int Player::get_score() { return this->score; }
+
+inventory Player::get_inventory() { return this->inv; }
+
+void Player::add_item(int slot, Item *i)
+{
+    if (slot >= player_inventory_slots)
+        return;
+    this->inv.items[slot] = i;
+    this->inv.item_n += 1;
+}

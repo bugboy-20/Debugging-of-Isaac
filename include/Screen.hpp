@@ -14,6 +14,17 @@ private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
     WINDOW *debug; // schermo temporaneo per i messaggi di debug
 
+    int lateral_width,
+        lower_height,
+        playerstat_height,
+        legend_height,
+        inventory_height,
+        moblist_width,
+        start_x,
+        start_y,
+        lateral_start_x,
+        lower_start_y;
+
     /**
      * Inizializza le window e disegna i bordi per ognuna
      */

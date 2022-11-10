@@ -1,34 +1,44 @@
 #pragma once
+#include "constants.h"
 
-class Inventoryable
+enum item_id
 {
-protected:
+    weapon,
+    armor,
+    consumable
+};
+
+class Item
+{
+public:
     int id;
+    char display;
+    char description[STR_LENGTH];
 
 public:
-    Inventoryable(int id);
+    Item();
+    Item(int id, char display, char desc[]);
 };
-
-class Consumable
+class Consumable : public Item
 {
 public:
-    Consumable();
+    Consumable(int id, char display, char desc[]);
 };
 
-class Weapon
+class Weapon : public Item
 {
 protected:
     int damage;
 
 public:
-    Weapon(int damage);
+    Weapon(int id, char display, char desc[], int damage);
 };
 
-class Armor
+class Armor : public Item
 {
 protected:
     int health;
 
 public:
-    Armor(int health);
+    Armor(int id, char display, char desc[], int health);
 };

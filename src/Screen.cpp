@@ -114,16 +114,16 @@ void Screen::stop_screen()
 
 void Screen::windows_init()
 {
-    int lateral_width = 20,
-        lower_height = 10,
-        playerstat_height = 4,
-        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
-        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
-        moblist_width = ROOM_WIDTH,
-        start_x = 1,
-        start_y = 0,
-        lateral_start_x = ROOM_WIDTH + 1 + start_x,
-        lower_start_y = ROOM_HEIGHT;
+    lateral_width = 20,
+    lower_height = 10,
+    playerstat_height = 4,
+    legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
+    inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
+    moblist_width = ROOM_WIDTH,
+    start_x = 1,
+    start_y = 0,
+    lateral_start_x = ROOM_WIDTH + 1 + start_x,
+    lower_start_y = ROOM_HEIGHT;
 
     wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
     playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
@@ -387,6 +387,34 @@ void Screen::render_moblist(Room &r)
 
 void Screen::render_inventory(Room &r)
 {
+    // stampare gli slot dell'inventario, che sono player_inventory_slots
+    int start_x = 2, start_y = 2, screen_width = this->lateral_width + this->lateral_start_x;
+
+    for (int i = 0; i < player_inventory_slots; i++)
+    {
+        char d = ' ';
+        if (r.p->get_inventory().items[i] != NULL)
+            d = r.p->get_inventory().items[i]->display;
+
+        wmove(inventory, start_y, start_x);
+        waddch(inventory, d);
+        if (start_x + 2 >= lateral_width)
+        {
+            start_y += 2;
+            start_x = 0;
+        }
+
+        start_x += 2;
+    }
+
+    Weapon *w = r.p->get_inventory().arma;
+    Armor *a = r.p->get_inventory().armatura;
+    int curr_x, curr_y;
+    getyx(inventory, curr_y, curr_x);
+    if (w != NULL)
+        mvwprintw(inventory, curr_y + 2, 2, "%c", w->display);
+    if (a != NULL)
+        mvwprintw(inventory, curr_y + 2, 4, "%c", a->display);
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
 }
