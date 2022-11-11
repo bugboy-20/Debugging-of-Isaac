@@ -22,21 +22,31 @@ Consumable::Consumable(int id, char display, char desc[]) : Item(id, display, de
 }
 int Consumable::get_n_utilizzi() { return this->n_utilizzi; }
 void Consumable::set_n_utilizzi(int n) { this->n_utilizzi = n_utilizzi; }
-void Consumable::use() { n_utilizzi -= 1; }
+bool Consumable::use()
+{
+    if (n_utilizzi <= 0)
+        return false;
+    n_utilizzi -= 1;
+    return true;
+}
 
 Potion::Potion() : Consumable(potions, '+', "pozione")
 {
     livello = 1;
+    n_utilizzi = 10;
 }
 int Potion::use()
 {
-    Consumable::use();
-    int heal = livello * 1.5;
-    return heal;
+    bool is_used = Consumable::use();
+
+    if (is_used)
+        return livello * 1.5;
+    return 0;
 }
 
 Key::Key() : Consumable(keys, 'k', "chiave")
 {
+    n_utilizzi = 0;
 }
 
 Weapon::Weapon(int id, char display, char desc[], int damage) : Item(id, display, desc)

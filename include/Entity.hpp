@@ -30,6 +30,8 @@ public:
     void get_name(char[10]);
     int get_health();
     void set_health(int health);
+    // somma il paramentro alla vita attuale
+    void change_health(int h);
     int get_attack_speed();
     void set_attack_speed(int as);
     timeval get_last_shot();

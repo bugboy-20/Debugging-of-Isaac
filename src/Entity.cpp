@@ -1,5 +1,4 @@
 #include "Entity.hpp"
-#include "Entity.hpp"
 #include "Events.hpp"
 #include "geometry.h"
 #include "physics.h"
@@ -40,6 +39,8 @@ void Entity::action(){};
 int Entity::get_damage() { return damage; }
 int Entity::get_health() { return this->health; }
 void Entity::set_health(int health) { this->health = health; }
+void Entity::change_health(int h) { this->health += h; }
+
 char *Entity::get_name()
 {
     char *nome = new char[10];

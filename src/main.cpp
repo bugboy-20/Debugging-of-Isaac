@@ -127,6 +127,9 @@ void controller(Player *player)
         case KEY_LEFT:
             bullet_creation(player, LEFT);
             break;
+        case 'h':
+            player->use_potion(dummy_map->current_room);
+            break;
         default:
             break;
             // ...

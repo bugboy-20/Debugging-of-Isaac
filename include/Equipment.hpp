@@ -23,7 +23,7 @@ public:
 
 class Consumable : public Item
 {
-private:
+protected:
     int n_utilizzi;
 
 public:
@@ -31,7 +31,7 @@ public:
 
     int get_n_utilizzi();
     void set_n_utilizzi(int n);
-    void use();
+    bool use();
 };
 
 class Potion : public Consumable
@@ -41,6 +41,7 @@ private:
 
 public:
     Potion();
+    // restituisce la quantità di vita curata
     int use();
 };
 

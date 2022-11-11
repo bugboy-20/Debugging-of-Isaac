@@ -27,10 +27,14 @@ public:
     Player(coords pos, char display, char description[], char name[10], int damage, int max_health, int ammo, class Weapon *w, class Armor *a);
     int get_max_health();
     int get_score();
+    void set_health(int health);
+    void change_health(int health);
 
     inventory get_inventory();
     // inserisce un item in uno slot preciso
     void add_item(int slot, Item *);
     // inserisce un item nel primo slot libero
     void add_item(Item *);
+
+    void use_potion(Room *room);
 };

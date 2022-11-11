@@ -1,6 +1,6 @@
 #include "ItemOnGround.hpp"
 
-ItemOnGround::ItemOnGround(coords pos, char display, char description[], Item *i) : Core(pos, display, description)
+ItemOnGround::ItemOnGround(coords pos, char display, char description[], Item *i) : Core(pos, display, description, true)
 {
     this->item = i;
 };

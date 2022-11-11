@@ -2,7 +2,6 @@
 #include "Events.hpp"
 #include "Wall.hpp"
 #include "constants.h"
-
 #include <cstring>
 
 Screen::Screen()
@@ -91,6 +90,15 @@ void Screen::do_screen(Room *r)
             PlayerHealthChangedE *t = (PlayerHealthChangedE *)e;
 
             this->render_playerstat(*r);
+
+            delete t;
+            break;
+        }
+        case CONSUMABLE_USED:
+        {
+            ConsumableUsedE *t = (ConsumableUsedE *)e;
+
+            this->render_inventory(*r);
 
             delete t;
             break;
@@ -387,9 +395,15 @@ void Screen::render_moblist(Room &r)
 
 void Screen::render_inventory(Room &r)
 {
+    werase(inventory);
+    box(inventory, 0, 0);
     // stampare gli slot dell'inventario, che sono player_inventory_slots
     int start_x = 2, curr_x = start_x, start_y = 4, curr_y = start_y, spacing = 2;
-    mvwprintw(inventory, 2, start_x, "%c:%d    %c:%d", r.p->get_inventory().pots.display, r.p->get_inventory().pots.get_n_utilizzi(), r.p->get_inventory().keys.display, r.p->get_inventory().keys.get_n_utilizzi());
+    mvwprintw(inventory, 2, start_x, "%c:%d    %c:%d",
+              r.p->get_inventory().pots.display,
+              r.p->get_inventory().pots.get_n_utilizzi(),
+              r.p->get_inventory().keys.display,
+              r.p->get_inventory().keys.get_n_utilizzi());
 
     for (int i = 0; i < player_inventory_slots; i++)
     {
