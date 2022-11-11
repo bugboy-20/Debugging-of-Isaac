@@ -17,15 +17,21 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
+    flag = true;
 }
 
 void Screen::do_screen(Room *r)
 {
     wmove(debug, 0, 0);
-
+    flag = true;
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {
+        if (flag)
+        {
+            werase(debug);
+            flag = false;
+        }
         wprintw(debug, "id evento: %d \n", e->id);
         switch (e->id)
         {

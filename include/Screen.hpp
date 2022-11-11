@@ -12,7 +12,7 @@ class Screen
 {
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
-    WINDOW *debug; // schermo temporaneo per i messaggi di debug
+    int flag;
 
     /**
      * Inizializza le window e disegna i bordi per ognuna
@@ -95,4 +95,6 @@ public:
      * Termina lo schermo
      */
     void stop_screen();
+    WINDOW *debug; // schermo temporaneo per i messaggi di debug
+
 };
