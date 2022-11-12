@@ -15,13 +15,13 @@ protected:
     int id;
     char display;
     char description[STR_LENGTH];
-    int livello;
+    int level;
 
 public:
     Item(int id, char display, char desc[]);
-    Item(int id, char display, char desc[], int livello);
+    Item(int id, char display, char desc[], int level);
 
-    int get_livello();
+    int get_level();
     int get_id();
     char get_display();
     char *get_description();
@@ -68,7 +68,7 @@ protected:
 
 public:
     Weapon(int id, char display, char desc[]);
-    Weapon(int id, char display, char desc[], int livello);
+    Weapon(int id, char display, char desc[], int level);
 
     int get_damage();
 };
@@ -83,7 +83,7 @@ protected:
 
 public:
     Armor(int id, char display, char desc[]);
-    Armor(int id, char display, char desc[], int livello);
+    Armor(int id, char display, char desc[], int level);
 
     int get_health();
 };

@@ -65,3 +65,17 @@
 
 #define weapon_damage 2
 #define armor_health 2
+
+#define potion_d "pozione"
+#define key_d "chiave"
+
+enum level
+{
+    lvl1 = 1, // BIANCO
+    lvl2,     // BLUE
+    lvl3,     // CYAN
+    lvl4,     // GREEN
+    lvl5,     // YELLOW
+    lvl6,     // MAGENTA
+    lvl7      // RED
+};

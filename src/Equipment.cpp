@@ -6,14 +6,14 @@ Item::Item(int id, char display, char desc[])
     this->id = id;
     this->display = display;
     strcpy(this->description, desc);
-    this->livello = 1;
+    this->level = 1;
 }
-Item::Item(int id, char display, char desc[], int livello) : Item(id, display, desc)
+Item::Item(int id, char display, char desc[], int level) : Item(id, display, desc)
 {
-    this->livello = livello;
+    this->level = level;
 }
 
-int Item::get_livello() { return this->livello; }
+int Item::get_level() { return this->level; }
 int Item::get_id() { return this->id; }
 char Item::get_display() { return this->display; }
 
@@ -48,9 +48,10 @@ bool Consumable::use()
     return true;
 }
 
-Potion::Potion() : Consumable(potions, '+', "pozione")
+char potion_desc[STR_LENGTH] = potion_d;
+Potion::Potion() : Consumable(potions, '+', potion_desc)
 {
-    livello = 1;
+    level = 1;
     n_utilizzi = 10;
 }
 int Potion::use()
@@ -58,29 +59,30 @@ int Potion::use()
     bool is_used = Consumable::use();
 
     if (is_used)
-        return livello * 1.5;
+        return level * 1.5;
     return 0;
 }
 
-Key::Key() : Consumable(keys, 'k', "chiave")
+char key_desc[STR_LENGTH] = key_d;
+Key::Key() : Consumable(keys, 'k', key_desc)
 {
     n_utilizzi = 0;
 }
 
 Weapon::Weapon(int id, char display, char desc[]) : Weapon(id, display, desc, 1) {}
 
-Weapon::Weapon(int id, char display, char desc[], int livello) : Item(id, display, desc, livello)
+Weapon::Weapon(int id, char display, char desc[], int level) : Item(id, display, desc, level)
 {
-    this->damage = weapon_damage + (livello - 1) * 2;
+    this->damage = weapon_damage + (level - 1) * 2;
 }
 
 int Weapon::get_damage() { return this->damage; }
 
 Armor::Armor(int id, char display, char desc[]) : Armor(id, display, desc, 1) {}
 
-Armor::Armor(int id, char display, char desc[], int livello) : Item(id, display, desc, livello)
+Armor::Armor(int id, char display, char desc[], int level) : Item(id, display, desc, level)
 {
-    this->health = armor_health + (livello - 1) * 3;
+    this->health = armor_health + (level - 1) * 3;
 }
 
 int Armor::get_health() { return this->health; }

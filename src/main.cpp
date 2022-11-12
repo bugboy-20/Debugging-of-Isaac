@@ -35,6 +35,7 @@ map *dummy_map;
 
 char n[10] = "gino";
 char desc5[20] = "sasso";
+char desc1[20] = "spada";
 
 Zombie *z = new Zombie({45, 15});
 Slime *slime = new Slime({40, 15});
@@ -44,7 +45,7 @@ Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
-Weapon *spada = new Weapon(weapon, '\\', "spada", 5);
+Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
 Player *player = new Player({20, 15}, n, 10, spada, NULL);

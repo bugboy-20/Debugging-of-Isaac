@@ -3,6 +3,7 @@
 #include "Wall.hpp"
 #include "constants.h"
 #include <cstring>
+#include <iostream>
 
 Screen::Screen()
 {
@@ -13,6 +14,26 @@ Screen::Screen()
     curs_set(0);
     // setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
     keypad(stdscr, true);
+
+    /* initialize colors */
+
+    if (has_colors() == FALSE)
+    {
+        endwin();
+        std::cerr << "Your terminal does not support color\n"
+                  << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    start_color();
+    init_pair(lvl1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(lvl2, COLOR_BLUE, COLOR_BLACK);
+    init_pair(lvl3, COLOR_CYAN, COLOR_BLACK);
+    init_pair(lvl4, COLOR_GREEN, COLOR_BLACK);
+    init_pair(lvl5, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(lvl6, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(lvl7, COLOR_RED, COLOR_BLACK);
+
     refresh();
 
     this->windows_init();
@@ -426,9 +447,17 @@ void Screen::render_inventory(Room &r)
     Armor *a = r.p->get_inventory().armatura;
     getyx(inventory, curr_y, curr_x);
     if (w != NULL)
-        mvwprintw(inventory, curr_y + 2, 2, "%c", w->get_display());
+    {
+        wattron(inventory, COLOR_PAIR(w->get_level()));
+        mvwaddch(inventory, curr_y + 2, 2, w->get_display());
+        wattroff(inventory, COLOR_PAIR(w->get_level()));
+    }
     if (a != NULL)
-        mvwprintw(inventory, curr_y + 2, 4, "%c", a->get_display());
+    {
+        wattron(inventory, COLOR_PAIR(a->get_level()));
+        mvwaddch(inventory, curr_y + 2, 4, a->get_display());
+        wattroff(inventory, COLOR_PAIR(a->get_level()));
+    }
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
 }
