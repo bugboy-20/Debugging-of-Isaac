@@ -6,7 +6,25 @@ Item::Item(int id, char display, char desc[])
     this->id = id;
     this->display = display;
     strcpy(this->description, desc);
-};
+    this->livello = 1;
+}
+Item::Item(int id, char display, char desc[], int livello) : Item(id, display, desc)
+{
+    this->livello = livello;
+}
+
+int Item::get_livello() { return this->livello; }
+int Item::get_id() { return this->id; }
+char Item::get_display() { return this->display; }
+
+char *Item::get_description()
+{
+    char *desc = new char[STR_LENGTH];
+    strcpy(desc, this->description);
+    return desc;
+}
+void Item::get_description(char d[STR_LENGTH]) { strcpy(d, this->description); }
+
 /* ipotesi per id:
 1- consumabile
 2- armatura
@@ -49,12 +67,20 @@ Key::Key() : Consumable(keys, 'k', "chiave")
     n_utilizzi = 0;
 }
 
-Weapon::Weapon(int id, char display, char desc[], int damage) : Item(id, display, desc)
+Weapon::Weapon(int id, char display, char desc[]) : Weapon(id, display, desc, 1) {}
+
+Weapon::Weapon(int id, char display, char desc[], int livello) : Item(id, display, desc, livello)
 {
-    this->damage = damage;
+    this->damage = weapon_damage + (livello - 1) * 2;
 }
 
-Armor::Armor(int id, char display, char desc[], int health) : Item(id, display, desc)
+int Weapon::get_damage() { return this->damage; }
+
+Armor::Armor(int id, char display, char desc[]) : Armor(id, display, desc, 1) {}
+
+Armor::Armor(int id, char display, char desc[], int livello) : Item(id, display, desc, livello)
 {
-    this->health = health;
+    this->health = armor_health + (livello - 1) * 3;
 }
+
+int Armor::get_health() { return this->health; }

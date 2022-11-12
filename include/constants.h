@@ -46,6 +46,7 @@
 #define player_ammo 40
 #define player_inventory_slots 10
 #define player_display '@'
+
 #define door_display ' '
 #define h_wall_display '-'
 #define v_wall_display '|'
@@ -61,3 +62,6 @@
 #define left_button 'a'
 #define right_button 'd'
 #define quit_button 'q'
+
+#define weapon_damage 2
+#define armor_health 2

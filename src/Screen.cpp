@@ -400,16 +400,16 @@ void Screen::render_inventory(Room &r)
     // stampare gli slot dell'inventario, che sono player_inventory_slots
     int start_x = 2, curr_x = start_x, start_y = 4, curr_y = start_y, spacing = 2;
     mvwprintw(inventory, 2, start_x, "%c:%d    %c:%d",
-              r.p->get_inventory().pots.display,
+              r.p->get_inventory().pots.get_display(),
               r.p->get_inventory().pots.get_n_utilizzi(),
-              r.p->get_inventory().keys.display,
+              r.p->get_inventory().keys.get_display(),
               r.p->get_inventory().keys.get_n_utilizzi());
 
     for (int i = 0; i < player_inventory_slots; i++)
     {
         char d = '.';
         if (r.p->get_inventory().items[i] != NULL)
-            d = r.p->get_inventory().items[i]->display;
+            d = r.p->get_inventory().items[i]->get_display();
 
         wmove(inventory, start_y, curr_x);
         waddch(inventory, d);
@@ -426,9 +426,9 @@ void Screen::render_inventory(Room &r)
     Armor *a = r.p->get_inventory().armatura;
     getyx(inventory, curr_y, curr_x);
     if (w != NULL)
-        mvwprintw(inventory, curr_y + 2, 2, "%c", w->display);
+        mvwprintw(inventory, curr_y + 2, 2, "%c", w->get_display());
     if (a != NULL)
-        mvwprintw(inventory, curr_y + 2, 4, "%c", a->display);
+        mvwprintw(inventory, curr_y + 2, 4, "%c", a->get_display());
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
 }

@@ -36,6 +36,14 @@ Player::Player(
     this->max_health = max_health;
     this->ammo = ammo;
     this->score = 0;
+
+    if (a != NULL)
+    {
+        this->health = a->get_health() + max_health;
+        this->max_health = a->get_health() + max_health;
+    }
+    if (w != NULL)
+        this->damage = damage + w->get_damage();
 }
 
 int Player::get_max_health() { return this->max_health; }
