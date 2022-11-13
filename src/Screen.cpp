@@ -5,6 +5,8 @@
 #include <cstring>
 #include <iostream>
 
+#define rgbtc(c) (int)(c / (51 / 200.0)) // trasforma un valore rgb 0-255 in scala 0-1000
+
 Screen::Screen()
 {
     initscr();
@@ -16,19 +18,30 @@ Screen::Screen()
     keypad(stdscr, true);
 
     /* initialize colors */
-
-    if (has_colors() == FALSE)
+    if (!has_colors())
     {
         endwin();
-        std::cerr << "Your terminal does not support color\n"
-                  << std::endl;
+        std::cerr << "Your terminal does not support color" << std::endl;
         exit(EXIT_FAILURE);
     }
-
     start_color();
+
+    if (can_change_color())
+    {
+        // cambio i colori per i terminale che li supportano
+        init_color(COLOR_WHITE, rgbtc(140), rgbtc(140), rgbtc(140));  // gray
+        init_color(COLOR_CYAN, rgbtc(22), rgbtc(100), rgbtc(0));      // green
+        init_color(COLOR_BLUE, rgbtc(34), rgbtc(8), rgbtc(156));      // blue
+        init_color(COLOR_GREEN, rgbtc(112), rgbtc(7), rgbtc(232));    // purple
+        init_color(COLOR_YELLOW, rgbtc(202), rgbtc(102), rgbtc(5));   // orange
+        init_color(COLOR_MAGENTA, rgbtc(153), rgbtc(101), rgbtc(21)); // gold
+        init_color(COLOR_RED, rgbtc(239), rgbtc(11), rgbtc(11));      // red
+    }
+    // std::cerr << COLORS << " " << COLOR_PAIRS << std::endl;
+
     init_pair(lvl1, COLOR_WHITE, COLOR_BLACK);
-    init_pair(lvl2, COLOR_BLUE, COLOR_BLACK);
-    init_pair(lvl3, COLOR_CYAN, COLOR_BLACK);
+    init_pair(lvl2, COLOR_CYAN, COLOR_BLACK);
+    init_pair(lvl3, COLOR_BLUE, COLOR_BLACK);
     init_pair(lvl4, COLOR_GREEN, COLOR_BLACK);
     init_pair(lvl5, COLOR_YELLOW, COLOR_BLACK);
     init_pair(lvl6, COLOR_MAGENTA, COLOR_BLACK);

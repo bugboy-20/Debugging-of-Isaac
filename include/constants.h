@@ -72,8 +72,8 @@
 enum level
 {
     lvl1 = 1, // BIANCO
-    lvl2,     // BLUE
-    lvl3,     // CYAN
+    lvl2,     // CYAN
+    lvl3,     // BLUE
     lvl4,     // GREEN
     lvl5,     // YELLOW
     lvl6,     // MAGENTA
