@@ -5,8 +5,8 @@ GameMenu::GameMenu(WINDOW *w, int width, int height)
 {
     // init variables
     this->win = w;
-    this->num_menu = EXIT_GAME + 1; // exit game e` l'ultimo elemento
-    this->selected_menu = NEW_GAME;
+    this->num_menu = EXIT_GAME + 1; // exit game e` sempre l'ultimo elemento
+    this->selected_menu = 0;        // il menù selezionato è il primo, qualunque esso sia
     strcpy(menus[NEW_GAME], "Nuova Partita");
     strcpy(menus[EXIT_GAME], "Esci dal Gioco");
 

@@ -29,8 +29,6 @@ public:
      *
      * Funzione che dovrebbe essere chiamata quando:
      * si cambia stanza
-     *
-     * @param r la stanza che viene stampata
      */
     void render_room();
 
@@ -40,7 +38,6 @@ public:
      * Funzione che dovrebbe essere chiamata quando:
      * inizia il gioco, la vita del player aumenta o diminuisce, il player guadagna punti
      *
-     * @param r la stanza da cui prende le informazioni
      */
     void render_playerstat();
 
@@ -50,7 +47,6 @@ public:
      * Funzione che dovrebbe essere chiamata quando:
      * si cambia stanza
      *
-     * @param r la stanza da cui prende le informazioni
      */
     void render_legend();
 
@@ -60,7 +56,6 @@ public:
      * Funzione che dovrebbe essere chiamata quando:
      * si cambia stanza, un hostile prende danno, un hostile muore
      *
-     * @param r la stanza da cui prende le informazioni
      */
     void render_moblist();
 
@@ -70,7 +65,6 @@ public:
      * Funzione che dovrebbe essere chiamata quando:
      * ancora non lo so
      *
-     * @param r la stanza da cui prende le informazioni
      */
     void render_inventory();
 

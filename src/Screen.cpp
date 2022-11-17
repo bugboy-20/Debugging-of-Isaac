@@ -6,12 +6,11 @@ Screen::Screen()
 {
     setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
     initscr();
-    cbreak(); // ctrl+c behaviour
-    noecho(); // avoids user input from being printed
-    // nodelay(stdscr, TRUE);
-    curs_set(0);
-    intrflush(stdscr, FALSE);
-    keypad(stdscr, true);
+    cbreak();             // ctrl+c behaviour
+    noecho();             // avoids user input from being printed
+    curs_set(0);          // rende invisibile il cursore
+    keypad(stdscr, true); // permette l'utilizzo del arrow_key
+    // nodelay(stdscr, TRUE); // il nodelay viene attivato sono nel gioco
     refresh();
 }
 
