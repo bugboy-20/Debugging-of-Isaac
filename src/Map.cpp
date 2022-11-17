@@ -14,12 +14,13 @@
 #include "Room.hpp"
 
 #define ROOM_TYPES 4 // numero di varianti di stanze disponibili
-struct map game_map;
+static struct map game_map;
+static int difficulty;
 
 Room *room1();
 Room *random_room();
 
-int id=0; // generazione di un ID unico per ogni stanza
+static int id=0; // generazione di un ID unico per ogni stanza
 int new_id() {
     return id++;
 }
@@ -242,13 +243,42 @@ Room *room3() {
         r->door[i]->next_room=NULL;
     }
 
-
-
 #undef x_range
 #undef y_range
 
     return r;
 }
+
+/* TODO sistemare la circolarità
+ *   _____  _____
+ *  |            |
+ *  |     O      |
+ *      O   O
+ *  |     O      |
+ *  |_____  _____|
+ */
+Room *room4() {
+
+    Room *room = new Room(new_id());
+
+    int r= 1 + rand()%5;
+
+    for (int i=-2*r; i< 2*r; i++)
+        for (int j=-2*r; j< 2*r; j++)
+            if( ((float)(i*i/2.0) + j*j < r*r))
+                room->add_Core(new Core({ROOM_WIDTH/2 + i, ROOM_HEIGHT/2 + j},'O',ssasso));
+
+    for (int i=0; i<4; i++) {
+        room->door[i]=new door;
+        room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        room->door[i]->next_room=NULL;
+    }
+
+
+    return room;
+}
+
+
 
 
 #define return_room_N(N) case N: return room ## N(); break;
@@ -259,6 +289,7 @@ Room *random_room() {
         return_room_N(1);
         return_room_N(2);
         return_room_N(3);
+        return_room_N(4);
         //return_room_N(2);
         default:
             return new Room(new_id());
