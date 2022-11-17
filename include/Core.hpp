@@ -16,4 +16,5 @@ public:
     char get_display();
     char *get_description();
     void get_description(char[20]);
+    bool is_crossable();
 };

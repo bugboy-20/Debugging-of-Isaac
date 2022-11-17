@@ -61,6 +61,9 @@ void shoot_in_direction(Room& r, Bullet *b);
 sparato il proiettile*/
 enum direction enemy_shot_direction(Room& r, Hostile *e);
 
+//Funzione che controlla se l'entità passata in input è un nemico
+bool is_entity(Room& r, Entity *entity);
+
 /*Funzione che gestisce lo sparo di un proiettile*/
 void bullets_push(Room& r);
 
