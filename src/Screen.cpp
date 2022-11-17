@@ -6,7 +6,7 @@
 #include <iostream>
 
 #define rgbtc(c) (int)(c / (51 / 200.0)) // trasforma un valore rgb 0-255 in scala 0-1000
-
+#define COLOR_DEFAULT -1
 Screen::Screen()
 {
     initscr();
@@ -25,6 +25,7 @@ Screen::Screen()
         exit(EXIT_FAILURE);
     }
     start_color();
+    use_default_colors();
 
     if (can_change_color())
     {
@@ -39,13 +40,13 @@ Screen::Screen()
     }
     // std::cerr << COLORS << " " << COLOR_PAIRS << std::endl;
 
-    init_pair(lvl1, COLOR_WHITE, COLOR_BLACK);
-    init_pair(lvl2, COLOR_CYAN, COLOR_BLACK);
-    init_pair(lvl3, COLOR_BLUE, COLOR_BLACK);
-    init_pair(lvl4, COLOR_GREEN, COLOR_BLACK);
-    init_pair(lvl5, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(lvl6, COLOR_MAGENTA, COLOR_BLACK);
-    init_pair(lvl7, COLOR_RED, COLOR_BLACK);
+    init_pair(lvl1, COLOR_WHITE, COLOR_DEFAULT);
+    init_pair(lvl2, COLOR_CYAN, COLOR_DEFAULT);
+    init_pair(lvl3, COLOR_BLUE, COLOR_DEFAULT);
+    init_pair(lvl4, COLOR_GREEN, COLOR_DEFAULT);
+    init_pair(lvl5, COLOR_YELLOW, COLOR_DEFAULT);
+    init_pair(lvl6, COLOR_MAGENTA, COLOR_DEFAULT);
+    init_pair(lvl7, COLOR_RED, COLOR_DEFAULT);
 
     refresh();
 
