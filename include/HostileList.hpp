@@ -3,7 +3,7 @@
 
 #define mob(name) class name : public Hostile { \
     public: \
-            name (coords); \
+            name (coords, int level=0); \
 }
 
 mob(Zombie);
