@@ -6,7 +6,6 @@
 #include <iostream>
 
 #define rgbtc(c) (int)(c / (51 / 200.0)) // trasforma un valore rgb 0-255 in scala 0-1000
-#define COLOR_DEFAULT -1
 Screen::Screen()
 {
     initscr();
@@ -25,7 +24,9 @@ Screen::Screen()
         exit(EXIT_FAILURE);
     }
     start_color();
-    use_default_colors();
+    int COLOR_DEFAULT = -1;
+    if (use_default_colors() == ERR)
+        COLOR_DEFAULT = COLOR_BLACK;
 
     if (can_change_color())
     {
