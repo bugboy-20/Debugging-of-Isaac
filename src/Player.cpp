@@ -8,14 +8,7 @@ char player_desc[20] = player_s;
 Player::Player(
     coords pos,
     char name[10],
-    int max_health) : Player(pos, player_display, player_desc, name, player_base_damage, max_health, player_ammo, NULL, NULL) {}
-
-Player::Player(
-    coords pos,
-    char name[10],
-    int max_health,
-    class Weapon *w,
-    class Armor *a) : Player(pos, player_display, player_desc, name, player_base_damage, max_health, player_ammo, w, a) {}
+    int max_health) : Player(pos, player_display, player_desc, name, player_base_damage, max_health) {}
 
 Player::Player(
     coords pos,
@@ -23,27 +16,14 @@ Player::Player(
     char description[20],
     char name[10],
     int damage,
-    int max_health,
-    int ammo,
-    class Weapon *w,
-    class Armor *a) : Entity(pos, display, description, name, max_health, damage)
+    int max_health) : Entity(pos, display, description, name, max_health, damage)
 {
-    this->inv = {w, a, {}, 0, Potion(), Key()};
-    // this->inv.pots->set_n_utilizzi(4);
+    this->inv = {{}, 0, Potion(), Key()};
     for (int i = 0; i < player_inventory_slots; i++)
         this->inv.items[i] = NULL;
 
     this->max_health = max_health;
-    this->ammo = ammo;
     this->score = 0;
-
-    if (a != NULL)
-    {
-        this->health = a->get_health() + max_health;
-        this->max_health = a->get_health() + max_health;
-    }
-    if (w != NULL)
-        this->damage = damage + w->get_damage();
 }
 
 int Player::get_max_health() { return this->max_health; }
@@ -75,6 +55,7 @@ void Player::add_item(int slot, Item *i)
         return;
     this->inv.items[slot] = i;
     this->inv.item_n += 1;
+    add_stats(i->get_stats());
 }
 
 void Player::add_item(Item *i)
@@ -83,8 +64,32 @@ void Player::add_item(Item *i)
     while (inv.items[slot] != NULL)
         slot += 1;
 
-    this->inv.items[slot] = i;
-    this->inv.item_n += 1;
+    add_item(slot, i);
+}
+
+Item *Player::remove_item(int slot)
+{
+    if (inv.items[slot] == NULL)
+        return;
+    add_stats(inv.items[slot]->get_stats(true));
+    Item *temp = inv.items[slot];
+    inv.items[slot] = NULL;
+    return temp;
+}
+
+Item *Player::remove_item(Item *item)
+{
+    int slot = -1;
+    for (int i = 0; i < player_inventory_slots; i++)
+        if (item == inv.items[i])
+        {
+            slot = i;
+            break;
+        }
+
+    if (slot == -1)
+        return NULL;
+    return remove_item(slot);
 }
 
 void Player::use_potion(Room *room)
@@ -95,4 +100,12 @@ void Player::use_potion(Room *room)
     change_health(cura);
     room->add_event(new PlayerHealthChangedE(this));
     room->add_event(new ConsumableUsedE());
+}
+
+void Player::add_stats(stats s)
+{
+    this->damage += s.damage;
+    this->health += s.health;
+    this->max_health += s.health;
+    this->attack_speed = s.attack_speed;
 }

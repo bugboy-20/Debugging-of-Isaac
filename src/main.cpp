@@ -48,7 +48,7 @@ Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
 Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
-Player *player = new Player({20, 15}, n, 10, spada, NULL);
+Player *player = new Player({20, 15}, n, 10);
 Screen schermo = Screen();
 
 int main()
@@ -57,7 +57,7 @@ int main()
     timeval inizio_frame, fine_frame;
     // init della mappa
     dummy_map = init_map(player);
-    player->add_item(6, spada);
+    player->add_item(spada);
 
     // aggiungo elementi alla stanza
     dummy_map->current_room->add_entity(slime);

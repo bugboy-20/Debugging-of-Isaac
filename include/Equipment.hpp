@@ -9,6 +9,15 @@ enum item_id
     keys
 };
 
+struct stats
+{
+    int damage;
+    int health;
+    int attack_speed;
+    int movement_speed;
+    int range;
+};
+
 class Item
 {
 protected:
@@ -16,16 +25,18 @@ protected:
     char display;
     char description[STR_LENGTH];
     int level;
+    stats item_stats;
 
 public:
-    Item(int id, char display, char desc[]);
-    Item(int id, char display, char desc[], int level);
+    Item(int id, char display, char desc[], int level = 1);
 
     int get_level();
     int get_id();
     char get_display();
     char *get_description();
     void get_description(char[20]);
+    // se il parametro è false resituisce le stats, altrimenti le restituisce negate
+    stats get_stats(bool negate = false);
 };
 
 class Consumable : public Item
@@ -34,7 +45,7 @@ protected:
     int n_utilizzi;
 
 public:
-    Consumable(int id, char display, char desc[]);
+    Consumable(int id, char display, char desc[], int n_utilizzi = 0);
 
     int get_n_utilizzi();
     void set_n_utilizzi(int n);
@@ -62,13 +73,11 @@ public:
 // il danno viene sommato al danno base del player
 class Weapon : public Item
 {
-protected:
-    int damage; // damage formula: base_damage+(livello-1)*2
-                // in pratica ogni livello il danno aumenta di 2
+    // damage formula: base_damage+(livello-1)*2
+    // in pratica ogni livello il danno aumenta di 2
 
 public:
-    Weapon(int id, char display, char desc[]);
-    Weapon(int id, char display, char desc[], int level);
+    Weapon(int id, char display, char desc[], int level = 1);
 
     int get_damage();
 };
@@ -77,13 +86,11 @@ public:
 // la vita viene sommata alla vita massima del player
 class Armor : public Item
 {
-protected:
-    int health; // damage formula: base_health+(livello-1)*3
-                // in pratica ogni livello il danno aumenta di 3
+    // health formula: base_health+(livello-1)*3
+    // in pratica ogni livello la vita aumenta di 3
 
 public:
-    Armor(int id, char display, char desc[]);
-    Armor(int id, char display, char desc[], int level);
+    Armor(int id, char display, char desc[], int level = 1);
 
     int get_health();
 };

@@ -6,6 +6,7 @@
 #include <iostream>
 
 #define rgbtc(c) (int)(c / (51 / 200.0)) // trasforma un valore rgb 0-255 in scala 0-1000
+#define DEFAULT 0
 Screen::Screen()
 {
     initscr();
@@ -24,9 +25,12 @@ Screen::Screen()
         exit(EXIT_FAILURE);
     }
     start_color();
-    int COLOR_DEFAULT = -1;
+    int COLOR_DEFAULT_BG = -1, COLOR_DEFAULT_FG = -1;
     if (use_default_colors() == ERR)
-        COLOR_DEFAULT = COLOR_BLACK;
+    {
+        COLOR_DEFAULT_BG = COLOR_BLACK;
+        COLOR_DEFAULT_FG = COLOR_WHITE;
+    }
 
     if (can_change_color())
     {
@@ -40,14 +44,14 @@ Screen::Screen()
         init_color(COLOR_RED, rgbtc(239), rgbtc(11), rgbtc(11));      // red
     }
     // std::cerr << COLORS << " " << COLOR_PAIRS << std::endl;
-
-    init_pair(lvl1, COLOR_WHITE, COLOR_DEFAULT);
-    init_pair(lvl2, COLOR_CYAN, COLOR_DEFAULT);
-    init_pair(lvl3, COLOR_BLUE, COLOR_DEFAULT);
-    init_pair(lvl4, COLOR_GREEN, COLOR_DEFAULT);
-    init_pair(lvl5, COLOR_YELLOW, COLOR_DEFAULT);
-    init_pair(lvl6, COLOR_MAGENTA, COLOR_DEFAULT);
-    init_pair(lvl7, COLOR_RED, COLOR_DEFAULT);
+    init_pair(DEFAULT, COLOR_DEFAULT_FG, COLOR_DEFAULT_BG);
+    init_pair(lvl1, COLOR_WHITE, COLOR_DEFAULT_BG);
+    init_pair(lvl2, COLOR_CYAN, COLOR_DEFAULT_BG);
+    init_pair(lvl3, COLOR_BLUE, COLOR_DEFAULT_BG);
+    init_pair(lvl4, COLOR_GREEN, COLOR_DEFAULT_BG);
+    init_pair(lvl5, COLOR_YELLOW, COLOR_DEFAULT_BG);
+    init_pair(lvl6, COLOR_MAGENTA, COLOR_DEFAULT_BG);
+    init_pair(lvl7, COLOR_RED, COLOR_DEFAULT_BG);
 
     refresh();
 
@@ -441,14 +445,19 @@ void Screen::render_inventory(Room &r)
               r.p->get_inventory().keys.get_display(),
               r.p->get_inventory().keys.get_n_utilizzi());
 
+    // stampa l'inventario
     for (int i = 0; i < player_inventory_slots; i++)
     {
-        char d = '.';
-        if (r.p->get_inventory().items[i] != NULL)
-            d = r.p->get_inventory().items[i]->get_display();
+        Item *curr = r.p->get_inventory().items[i];
+        if (curr != NULL)
+        {
+            wattron(inventory, COLOR_PAIR(curr->get_level()));
+            mvwaddch(inventory, start_y, curr_x, curr->get_display());
+            wattroff(inventory, COLOR_PAIR(curr->get_level()));
+        }
+        else
+            mvwaddch(inventory, start_y, curr_x, '_');
 
-        wmove(inventory, start_y, curr_x);
-        waddch(inventory, d);
         if (curr_x + spacing + 2 >= lateral_width) //+2 uno è il bordo e l'altro è per il padding
         {
             start_y += spacing - 1;
@@ -458,21 +467,10 @@ void Screen::render_inventory(Room &r)
         curr_x += spacing;
     }
 
-    Weapon *w = r.p->get_inventory().arma;
-    Armor *a = r.p->get_inventory().armatura;
     getyx(inventory, curr_y, curr_x);
-    if (w != NULL)
-    {
-        wattron(inventory, COLOR_PAIR(w->get_level()));
-        mvwaddch(inventory, curr_y + 2, 2, w->get_display());
-        wattroff(inventory, COLOR_PAIR(w->get_level()));
-    }
-    if (a != NULL)
-    {
-        wattron(inventory, COLOR_PAIR(a->get_level()));
-        mvwaddch(inventory, curr_y + 2, 4, a->get_display());
-        wattroff(inventory, COLOR_PAIR(a->get_level()));
-    }
+    if (r.p->get_inventory().items[0] != NULL)
+        mvwprintw(inventory, curr_y + 3, start_x, r.p->get_inventory().items[0]->get_description());
+
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
 }

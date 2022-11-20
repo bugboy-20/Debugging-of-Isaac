@@ -1,16 +1,13 @@
 #include "Equipment.hpp"
 #include <cstring>
 
-Item::Item(int id, char display, char desc[])
+Item::Item(int id, char display, char desc[], int level)
 {
     this->id = id;
     this->display = display;
     strcpy(this->description, desc);
-    this->level = 1;
-}
-Item::Item(int id, char display, char desc[], int level) : Item(id, display, desc)
-{
     this->level = level;
+    this->item_stats = {0, 0, 0, 0, 0};
 }
 
 int Item::get_level() { return this->level; }
@@ -24,6 +21,20 @@ char *Item::get_description()
     return desc;
 }
 void Item::get_description(char d[STR_LENGTH]) { strcpy(d, this->description); }
+stats Item::get_stats(bool negate)
+{
+    stats s = item_stats;
+    if (negate)
+    {
+        s.damage *= -1;
+        s.health *= -1;
+        s.attack_speed *= -1;
+        s.movement_speed *= -1;
+        s.range *= -1;
+    }
+
+    return s;
+}
 
 /* ipotesi per id:
 1- consumabile
@@ -34,9 +45,9 @@ void Item::get_description(char d[STR_LENGTH]) { strcpy(d, this->description); }
 6- Bacca magica (no ammo)
 */
 
-Consumable::Consumable(int id, char display, char desc[]) : Item(id, display, desc)
+Consumable::Consumable(int id, char display, char desc[], int n) : Item(id, display, desc)
 {
-    n_utilizzi = 0;
+    n_utilizzi = n;
 }
 int Consumable::get_n_utilizzi() { return this->n_utilizzi; }
 void Consumable::set_n_utilizzi(int n) { this->n_utilizzi = n_utilizzi; }
@@ -69,20 +80,16 @@ Key::Key() : Consumable(keys, 'k', key_desc)
     n_utilizzi = 0;
 }
 
-Weapon::Weapon(int id, char display, char desc[]) : Weapon(id, display, desc, 1) {}
-
 Weapon::Weapon(int id, char display, char desc[], int level) : Item(id, display, desc, level)
 {
-    this->damage = weapon_damage + (level - 1) * 2;
+    this->item_stats.damage = weapon_damage + (level - 1) * 2;
 }
 
-int Weapon::get_damage() { return this->damage; }
-
-Armor::Armor(int id, char display, char desc[]) : Armor(id, display, desc, 1) {}
+int Weapon::get_damage() { return this->item_stats.damage; }
 
 Armor::Armor(int id, char display, char desc[], int level) : Item(id, display, desc, level)
 {
-    this->health = armor_health + (level - 1) * 3;
+    this->item_stats.health = armor_health + (level - 1) * 3;
 }
 
-int Armor::get_health() { return this->health; }
+int Armor::get_health() { return this->item_stats.health; }

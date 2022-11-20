@@ -43,8 +43,7 @@
 
 #define player_s "giocatore"
 #define player_base_damage 3
-#define player_ammo 40
-#define player_inventory_slots 10
+#define player_inventory_slots 5
 #define player_display '@'
 
 #define door_display ' '
