@@ -3,6 +3,7 @@
 #include "geometry.h"
 #include "physics.h"
 #include <cstring>
+#include <iostream>
 
 Entity::Entity(coords pos, char display, char description[], char name[10], int health, int damage) : Core(pos, display, description)
 {
@@ -10,7 +11,13 @@ Entity::Entity(coords pos, char display, char description[], char name[10], int 
     this->health = health;
     this->damage = damage;
     this->attack_speed = 1000; // 1 secondo
-    time_now(this->last_shot); // il primo controllo è (time(0) - 0 >= attack_speed) che è sempre vero
+    time_now(this->last_shot);
+    this->last_shot.tv_sec -= (attack_speed / 1000) + 1; // faccio in modo che per il primo controllo è vero
+    this->movement_speed = 150;
+    time_now(this->last_move);
+    this->last_move.tv_sec -= (movement_speed / 1000) + 1; // stessa cosa di sopra
+    timeval now;
+    time_now(now);
 }
 
 bool Entity::move_up(Room *room) { return move(room, 0, -1); }
@@ -21,12 +28,14 @@ bool Entity::move_right(Room *Room) { return move(Room, 1, 0); }
 bool Entity::move(Room *r, int x, int y)
 {
     coords n_pos = {this->pos.x + x, this->pos.y + y};
-
-    if (!collision(this->pos.x + x, this->pos.y + y, *r))
+    timeval now;
+    time_now(now);
+    if (!collision(this->pos.x + x, this->pos.y + y, *r) && time_elapsed(last_move, now) >= movement_speed)
     {
         r->add_event(new EntityMoveE(pos, n_pos, this->get_display()));
         this->pos.x += x;
         this->pos.y += y;
+        this->last_move = now;
         return true;
     }
     else
@@ -54,3 +63,9 @@ void Entity::set_last_shot(timeval ls) { this->last_shot = ls; }
 
 int Entity::get_attack_speed() { return this->attack_speed; }
 void Entity::set_attack_speed(int as) { this->attack_speed = as; }
+
+timeval Entity::get_last_move() { return this->last_move; }
+void Entity::set_last_move(timeval lm) { this->last_move = lm; }
+
+int Entity::get_movement_speed() { return this->movement_speed; }
+void Entity::set_movement_speed(int ms) { this->movement_speed = ms; }

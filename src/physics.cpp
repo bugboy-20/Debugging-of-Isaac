@@ -181,9 +181,6 @@ void shoot_in_direction(Room& r, Bullet *b){
                 }
                 break;
         } 
-        timeval now;
-        time_now(now);
-        b->set_last_move(now);  
     }
 }
 
@@ -206,11 +203,7 @@ void bullet_movement(Room& r){
     while(tmp_bullets != NULL){
         Bullet *b = (Bullet*) tmp_bullets->element;
         node *successivo = tmp_bullets->next;
-        timeval now;
-        time_now(now);
-        if(time_elapsed(b->get_last_move(), now) >= b->get_movement_speed()){
-            shoot_in_direction(r, b);
-        }
+        shoot_in_direction(r, b);
         tmp_bullets = successivo;      
     } 
 }

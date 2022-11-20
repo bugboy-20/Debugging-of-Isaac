@@ -24,6 +24,7 @@ Player::Player(
 
     this->max_health = max_health;
     this->score = 0;
+    this->movement_speed = 250;
 }
 
 int Player::get_max_health() { return this->max_health; }
@@ -70,7 +71,7 @@ void Player::add_item(Item *i)
 Item *Player::remove_item(int slot)
 {
     if (inv.items[slot] == NULL)
-        return;
+        return NULL;
     add_stats(inv.items[slot]->get_stats(true));
     Item *temp = inv.items[slot];
     inv.items[slot] = NULL;
@@ -107,5 +108,5 @@ void Player::add_stats(stats s)
     this->damage += s.damage;
     this->health += s.health;
     this->max_health += s.health;
-    this->attack_speed = s.attack_speed;
+    this->attack_speed += s.attack_speed;
 }

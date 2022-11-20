@@ -12,6 +12,8 @@ protected:
     int damage;
     int attack_speed; // tempo in millisecondi
     timeval last_shot;
+    timeval last_move;
+    int movement_speed;
 
 public:
     Entity(coords pos, char display, char description[], char name[10], int health, int damage);
@@ -36,6 +38,10 @@ public:
     void set_attack_speed(int as);
     timeval get_last_shot();
     void set_last_shot(timeval ls);
+    int get_movement_speed();
+    void set_movement_speed(int ms);
+    timeval get_last_move();
+    void set_last_move(timeval lm);
     int get_damage();
 
 private:
