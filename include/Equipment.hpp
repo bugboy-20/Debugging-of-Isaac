@@ -94,3 +94,33 @@ public:
 
     int get_health();
 };
+
+// un Boots è un item che aumenta la velocità di movimento
+class Boots : public Item
+{
+    // ogni livello aumenta di 30
+public:
+    Boots(int id, char display, char desc[], int level = 1);
+
+    int get_move_speed();
+};
+
+// un Crosshair è un item che aumenta il range,
+class Crosshair : public Item
+{
+    // ogni livello aumenta di 15
+public:
+    Crosshair(int id, char display, char desc[], int level = 1);
+
+    int get_range();
+};
+
+// una attacck speed up è un item che aumenta la velocità di attacco
+class Booster : public Item
+{
+    // ogni livello aumenta di 90
+public:
+    Booster(int id, char display, char desc[], int level = 1);
+
+    int get_attack_speed();
+};

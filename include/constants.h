@@ -64,6 +64,9 @@
 
 #define weapon_damage 2
 #define armor_health 2
+#define boots_speed 15
+#define crosshair_range 15
+#define booster_speed 100
 
 #define potion_d "pozione"
 #define key_d "chiave"
