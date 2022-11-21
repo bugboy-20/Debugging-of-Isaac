@@ -9,15 +9,6 @@ enum item_id
     keys
 };
 
-struct stats
-{
-    int damage;
-    int health;
-    int attack_speed;
-    int movement_speed;
-    int range;
-};
-
 class Item
 {
 protected:
