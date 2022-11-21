@@ -33,6 +33,7 @@ struct map *init_map(Player *p)
         ptr_start_room->door[i]=new door;
         ptr_start_room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         ptr_start_room->door[i]->next_room=NULL;
+        ptr_start_room->door[i]->locked=false;
     }
 
     ptr_start_room->p=p;
@@ -93,6 +94,7 @@ Room *add_room(Room *r, enum door_pos p) {
 
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
+    new_room->door[i]->locked=false;
 
 
 
@@ -118,6 +120,7 @@ Room *room0() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 
@@ -160,6 +163,7 @@ Room *room1() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 
@@ -204,6 +208,7 @@ Room *room2() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 
@@ -241,6 +246,7 @@ Room *room3() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 #undef x_range
@@ -272,6 +278,7 @@ Room *room4() {
         room->door[i]=new door;
         room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         room->door[i]->next_room=NULL;
+        room->door[i]->locked=false;
     }
 
 

@@ -226,7 +226,7 @@ Room *Room::next_room(enum door_pos p) {
     if (this->door[p] != NULL)
         return this->door[p]->next_room;
     else {
-        fprintf(stderr, "Errore: si è tentato di entrare per una porta inesistente\n");
+        //fprintf(stderr, "Errore: si è tentato di entrare per una porta inesistente\n");
         exit(EXIT_FAILURE);
     }
 }
