@@ -14,9 +14,10 @@ protected:
     timeval last_shot;
     timeval last_move;
     int movement_speed;
+    int range;
 
 public:
-    Entity(coords pos, char display, char description[], char name[10], int health, int damage);
+    Entity(coords pos, char display, char description[], char name[10], stats);
     bool move_up(Room *room);
     bool move_down(Room *room);
     bool move_left(Room *room);

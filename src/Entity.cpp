@@ -5,19 +5,21 @@
 #include <cstring>
 #include <iostream>
 
-Entity::Entity(coords pos, char display, char description[], char name[10], int health, int damage) : Core(pos, display, description)
+Entity::Entity(coords pos, char display, char description[], char name[10], stats s) : Core(pos, display, description)
 {
     strcpy(this->name, name);
-    this->health = health;
-    this->damage = damage;
-    this->attack_speed = 1000; // 1 secondo
+    this->health = s.health;
+    this->damage = s.damage;
+
+    this->attack_speed = s.attack_speed; // 1 secondo
     time_now(this->last_shot);
-    this->last_shot.tv_sec -= (attack_speed / 1000) + 1; // faccio in modo che per il primo controllo è vero
-    this->movement_speed = 150;
+    this->last_shot.tv_sec -= (attack_speed / 1000) + 1; // faccio in modo che per il primo controllo sia sempre
+
+    this->movement_speed = s.movement_speed;
     time_now(this->last_move);
     this->last_move.tv_sec -= (movement_speed / 1000) + 1; // stessa cosa di sopra
-    timeval now;
-    time_now(now);
+
+    this->range = s.range;
 }
 
 bool Entity::move_up(Room *room) { return move(room, 0, -1); }
@@ -31,7 +33,7 @@ bool Entity::move(Room *r, int x, int y)
     timeval now;
     time_now(now);
     // se non posso muovermi termino e ritorno che non ho avuto collisione
-    if(time_elapsed(last_move, now) < movement_speed)
+    if (time_elapsed(last_move, now) < movement_speed)
         return true;
     // se posso muovermi controllo se collido con qualcosa
     if (!collision(this->pos.x + x, this->pos.y + y, *r))

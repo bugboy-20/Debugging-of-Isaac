@@ -16,7 +16,7 @@ Player::Player(
     char description[20],
     char name[10],
     int damage,
-    int max_health) : Entity(pos, display, description, name, max_health, damage)
+    int max_health) : Entity(pos, display, description, name, {damage, max_health, 1000, 250, 10})
 {
     this->inv = {{}, 0, Potion(), Key()};
     for (int i = 0; i < player_inventory_slots; i++)
@@ -24,7 +24,7 @@ Player::Player(
 
     this->max_health = max_health;
     this->score = 0;
-    this->movement_speed = 250;
+    // this->movement_speed = 250;
 }
 
 int Player::get_max_health() { return this->max_health; }

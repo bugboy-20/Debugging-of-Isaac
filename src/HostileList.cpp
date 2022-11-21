@@ -1,20 +1,18 @@
 #include "HostileList.hpp"
 #include "constants.h"
 
-#define mc(n,c) n ## _ ## c
+// concatena i due elementi in input mettendo il simbolo _ in mezzo
+#define mc(n, c) n##_##c
 
-#define mob(name) \
-    char name ## _string[STR_LENGTH] = name ## _s; \
-    name :: name (coords pos) : Hostile(pos, mc(name,display), mc(name,string), mc(name,string), mc(name,health), mc(name,damage), mc(name,tr)) {}
-
-
+#define mob(name)                              \
+    char name##_string[STR_LENGTH] = name##_s; \
+    name::name(coords pos) : Hostile(pos, mc(name, display), mc(name, string), mc(name, string), {mc(name, damage), mc(name, health), mc(name, as), mc(name, ms), mc(name, range)}, mc(name, tr)) {}
 
 mob(Zombie);
 mob(Scheletro);
 mob(Goblin);
 mob(Fantasma);
 mob(Slime);
-
 
 /*
 
