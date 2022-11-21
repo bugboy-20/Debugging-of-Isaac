@@ -47,8 +47,10 @@ protected:
 public:
     Consumable(int id, char display, char desc[], int n_utilizzi = 0);
 
+    void set_level(int);
     int get_n_utilizzi();
-    void set_n_utilizzi(int n);
+    void set_n_utilizzi(int);
+    void add_utilizzi(int);
     // resituisce true se il consumabile è stato usato false altrimenti
     bool use();
 };

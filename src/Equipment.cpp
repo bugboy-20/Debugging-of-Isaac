@@ -49,8 +49,10 @@ Consumable::Consumable(int id, char display, char desc[], int n) : Item(id, disp
 {
     n_utilizzi = n;
 }
+void Consumable::set_level(int lvl) { this->level = lvl; }
 int Consumable::get_n_utilizzi() { return this->n_utilizzi; }
-void Consumable::set_n_utilizzi(int n) { this->n_utilizzi = n_utilizzi; }
+void Consumable::set_n_utilizzi(int n) { this->n_utilizzi = n; }
+void Consumable::add_utilizzi(int n) { this->n_utilizzi += n; }
 bool Consumable::use()
 {
     if (n_utilizzi <= 0)

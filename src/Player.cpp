@@ -93,6 +93,16 @@ Item *Player::remove_item(Item *item)
     return remove_item(slot);
 }
 
+void Player::add_potion(Room *r, Potion *p)
+{
+    int lvl = p->get_level();
+    if (lvl > this->inv.pots.get_level())
+        inv.pots.set_level(lvl);
+    inv.pots.add_utilizzi(p->get_n_utilizzi());
+    delete p;
+    r->add_event(new ConsumableUsedE());
+}
+
 void Player::use_potion(Room *room)
 {
     if (health == max_health) // TODO: decidere se tenere o no questa feature
@@ -103,6 +113,20 @@ void Player::use_potion(Room *room)
     room->add_event(new ConsumableUsedE());
 }
 
+void Player::add_key(Room *r, Key *key)
+{
+    this->inv.keys.add_utilizzi(key->get_n_utilizzi());
+    delete key;
+    r->add_event(new ConsumableUsedE());
+}
+
+bool Player::use_key(Room *room)
+{
+    bool used = this->inv.keys.use();
+    if (used)
+        room->add_event(new ConsumableUsedE());
+    return used;
+}
 void Player::add_stats(stats s)
 {
     this->damage += s.damage;

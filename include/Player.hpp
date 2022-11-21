@@ -40,5 +40,14 @@ public:
     // rimuove l'item se è presente
     Item *remove_item(Item *);
 
+    // se la pozione passata come paramentro è di livello superiore faccio l'upgrade,
+    // aggiungo il numero di utilizzi della pozione a quello del player
+    // delloco il puntotatore alla pozione
+    void add_potion(Room *, Potion *);
+    // rimuove un utilizzo alle pozioni e se manca della vita al player lo cura
     void use_potion(Room *room);
+    // aggiunge il numero di utilizzi della chiave alla chiave del player e delloca il puntatore passato in input
+    void add_key(Room *, Key *);
+    // rimuove un utilizzo alla chiave se ne ha, e restituisce se è stata usato oppure no
+    bool use_key(Room *room);
 };
