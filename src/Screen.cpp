@@ -445,13 +445,19 @@ void Screen::render_inventory(Room &r)
     werase(inventory);
     box(inventory, 0, 0);
     // stampare gli slot dell'inventario, che sono player_inventory_slots
-    int start_x = 2, curr_x = start_x, start_y = 4, curr_y = start_y, spacing = 2;
-    mvwprintw(inventory, 2, start_x, "%c:%d    %c:%d",
-              r.p->get_inventory().pots.get_display(),
-              r.p->get_inventory().pots.get_n_utilizzi(),
-              r.p->get_inventory().keys.get_display(),
-              r.p->get_inventory().keys.get_n_utilizzi());
+    int start_x = 2, curr_x = start_x, start_y = 2, curr_y = start_y, spacing = 2;
+    Potion p = r.p->get_inventory().pots;
+    Key k = r.p->get_inventory().keys;
 
+    // stampo il simbolo delle pozioni colorato
+    wattron(inventory, COLOR_PAIR(p.get_level()));
+    mvwaddch(inventory, start_y, start_x, p.get_display());
+    wattroff(inventory, COLOR_PAIR(p.get_level()));
+
+    // stampo il resto della riga
+    wprintw(inventory, ":%d    %c:%d", p.get_n_utilizzi(), k.get_display(), k.get_n_utilizzi());
+
+    start_y += 2;
     // stampa l'inventario
     for (int i = 0; i < player_inventory_slots; i++)
     {
