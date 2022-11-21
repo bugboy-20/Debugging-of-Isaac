@@ -45,5 +45,6 @@ public:
     int get_damage();
 
 private:
+    // restituisce true se non ha fatto collsione
     bool move(Room *r, int x, int y);
 };

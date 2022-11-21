@@ -30,7 +30,11 @@ bool Entity::move(Room *r, int x, int y)
     coords n_pos = {this->pos.x + x, this->pos.y + y};
     timeval now;
     time_now(now);
-    if (!collision(this->pos.x + x, this->pos.y + y, *r) && time_elapsed(last_move, now) >= movement_speed)
+    // se non posso muovermi termino e ritorno che non ho avuto collisione
+    if(time_elapsed(last_move, now) < movement_speed)
+        return true;
+    // se posso muovermi controllo se collido con qualcosa
+    if (!collision(this->pos.x + x, this->pos.y + y, *r))
     {
         r->add_event(new EntityMoveE(pos, n_pos, this->get_display()));
         this->pos.x += x;

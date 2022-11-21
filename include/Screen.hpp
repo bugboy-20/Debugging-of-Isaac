@@ -14,6 +14,8 @@ private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
     WINDOW *debug; // schermo temporaneo per i messaggi di debug
 
+    bool newEvents;
+
     int lateral_width,
         lower_height,
         playerstat_height,

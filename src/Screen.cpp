@@ -56,6 +56,7 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
+    newEvents = true;
 }
 
 void Screen::do_screen(Room *r)
@@ -65,6 +66,11 @@ void Screen::do_screen(Room *r)
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {
+        if (newEvents)
+        {
+            newEvents = false;
+            werase(debug);
+        }
         wprintw(debug, "id evento: %d \n", e->id);
         switch (e->id)
         {
@@ -148,6 +154,7 @@ void Screen::do_screen(Room *r)
         }
     }
     wrefresh(debug);
+    newEvents = true;
 }
 
 void Screen::stop_screen()
@@ -469,7 +476,7 @@ void Screen::render_inventory(Room &r)
 
     getyx(inventory, curr_y, curr_x);
     if (r.p->get_inventory().items[0] != NULL)
-        mvwprintw(inventory, curr_y + 3, start_x, r.p->get_inventory().items[0]->get_description());
+        mvwprintw(inventory, curr_y + 3, start_x, "%s", r.p->get_inventory().items[0]->get_description());
 
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
