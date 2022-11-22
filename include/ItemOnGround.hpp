@@ -1,11 +1,13 @@
 #pragma once
 #include "Core.hpp"
+#include "Equipment.hpp"
 
 class ItemOnGround : public Core
 {
 protected:
-    // odio messina
+    Item *item;
+
 public:
-    // devo 215 milioni di riyal al governo iraniano
-    ItemOnGround(coords pos, char display, char description[] /*puntatore al collezionabile*/);
+    ItemOnGround(coords pos, Item *);
+    ItemOnGround(coords pos, char display, char description[], Item *);
 };

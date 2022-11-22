@@ -11,6 +11,7 @@
 #include "Wall.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
+#include "ItemOnGround.hpp"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -34,7 +35,7 @@ map *dummy_map;
 
 char n[10] = "gino";
 char desc5[20] = "sasso";
-
+char desc1[20] = "spada";
 
 Zombie *z = new Zombie({45, 15});
 Slime *slime = new Slime({40, 15});
@@ -44,8 +45,10 @@ Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
+Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
+ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
-Player *player = new Player({20, 15}, n, 10, NULL, NULL);
+Player *player = new Player({20, 15}, n, 10);
 Screen schermo = Screen();
 
 int main()
@@ -54,6 +57,7 @@ int main()
     timeval inizio_frame, fine_frame;
     // init della mappa
     dummy_map = init_map(player);
+    player->add_item(spada);
 
     // aggiungo elementi alla stanza
     dummy_map->current_room->add_entity(slime);
@@ -62,10 +66,9 @@ int main()
     dummy_map->current_room->add_entity(fantasma);
     dummy_map->current_room->add_entity(z);
     dummy_map->current_room->add_Core(rock);
+    dummy_map->current_room->add_Core(s);
     dummy_map->current_room->add_wall(w2);
-    //dummy_map->current_room->add_wall(w1);
-
-
+    // dummy_map->current_room->add_wall(w1);
 
     // game loop
     while (!game_over(*player))
@@ -80,7 +83,7 @@ int main()
 
         time_now(fine_frame);
 #ifdef _WIN32
-        Sleep(sleep_time(inizio_frame,fine_frame));
+        Sleep(sleep_time(inizio_frame, fine_frame));
 #else
         usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
@@ -125,6 +128,9 @@ void controller(Player *player)
         case KEY_LEFT:
             bullet_creation(player, LEFT);
             break;
+        case 'h':
+            player->use_potion(dummy_map->current_room);
+            break;
         default:
             break;
             // ...
@@ -139,8 +145,10 @@ void exit_game()
     exit(EXIT_SUCCESS);
 }
 
-int sleep_time(timeval start, timeval end){
+int sleep_time(timeval start, timeval end)
+{
     time_t te = time_elapsed(start, end);
-    if(te > FRAMETIME) return 0;
+    if (te > FRAMETIME)
+        return 0;
     return FRAMETIME - te;
 }

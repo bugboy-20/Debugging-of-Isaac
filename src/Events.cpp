@@ -34,3 +34,6 @@ PlayerHealthChangedE::PlayerHealthChangedE(Player *p) : RoomEvent(PLAYER_HEALTH_
 EntityDamagedE::EntityDamagedE(Entity *e) : RoomEvent(ENTITY_DAMAGED) {
     this->data = e;
 }
+
+// CONSUMABLE_USED
+ConsumableUsedE::ConsumableUsedE() : RoomEvent(CONSUMABLE_USED) {}

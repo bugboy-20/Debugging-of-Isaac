@@ -44,3 +44,9 @@ class EntityDamagedE : public RoomEvent {
         EntityDamagedE(Entity *e);
         Entity *data;
 };
+
+// evento è stato usato un consumabile, tipo pozza o chiave
+class ConsumableUsedE : public RoomEvent {
+    public: 
+        ConsumableUsedE();
+};

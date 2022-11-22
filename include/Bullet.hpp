@@ -13,18 +13,18 @@ enum direction
 class Bullet : public Entity
 {
 protected:
-    timeval last_move;
-    int movement_speed;
     enum direction d;
+    int space_travelled;
 
 public:
-    // Costruttore
-    Bullet(coords pos, int damage);
+    // di default ha range infinito
+    Bullet(coords pos, int damage, direction direction = NULLO, int range = 10000);
 
-    int get_movement_speed();
-    void set_movement_speed(int ms);
-    timeval get_last_move();
-    void set_last_move(timeval lm);
     int get_direction();
     void set_direction(enum direction direction);
+    bool move(Room *r, int x, int y);
+    bool move_up(Room *room);
+    bool move_down(Room *room);
+    bool move_left(Room *room);
+    bool move_right(Room *room);
 };

@@ -40,3 +40,4 @@ personal/*
 
 *.log
 errors
+core.*

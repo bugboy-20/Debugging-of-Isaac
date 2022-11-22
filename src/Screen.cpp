@@ -2,9 +2,11 @@
 #include "Events.hpp"
 #include "Wall.hpp"
 #include "constants.h"
-
 #include <cstring>
+#include <iostream>
 
+#define rgbtc(c) (int)(c / (51 / 200.0)) // trasforma un valore rgb 0-255 in scala 0-1000
+#define DEFAULT 0
 Screen::Screen()
 {
     initscr();
@@ -14,10 +16,49 @@ Screen::Screen()
     curs_set(0);
     // setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
     keypad(stdscr, true);
+
+    /* initialize colors */
+    if (!has_colors())
+    {
+        endwin();
+        std::cerr << "Your terminal does not support color" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    start_color();
+    int COLOR_DEFAULT_BG = -1, COLOR_DEFAULT_FG = -1;
+    if (use_default_colors() == ERR)
+    {
+        COLOR_DEFAULT_BG = COLOR_BLACK;
+        COLOR_DEFAULT_FG = COLOR_WHITE;
+    }
+
+    if (can_change_color())
+    {
+        // cambio i colori per i terminale che li supportano
+        init_color(COLOR_WHITE, rgbtc(140), rgbtc(140), rgbtc(140));  // gray
+        init_color(COLOR_CYAN, rgbtc(22), rgbtc(100), rgbtc(0));      // green
+        init_color(COLOR_BLUE, rgbtc(34), rgbtc(8), rgbtc(156));      // blue
+        init_color(COLOR_GREEN, rgbtc(112), rgbtc(7), rgbtc(232));    // purple
+        init_color(COLOR_YELLOW, rgbtc(202), rgbtc(102), rgbtc(5));   // orange
+        init_color(COLOR_MAGENTA, rgbtc(153), rgbtc(101), rgbtc(21)); // gold
+        init_color(COLOR_RED, rgbtc(239), rgbtc(11), rgbtc(11));      // red
+    }
+    // std::cerr << COLORS << " " << COLOR_PAIRS << std::endl;
+    init_pair(DEFAULT, COLOR_DEFAULT_FG, COLOR_DEFAULT_BG);
+    init_pair(lvl1, COLOR_WHITE, COLOR_DEFAULT_BG);
+    init_pair(lvl2, COLOR_CYAN, COLOR_DEFAULT_BG);
+    init_pair(lvl3, COLOR_BLUE, COLOR_DEFAULT_BG);
+    init_pair(lvl4, COLOR_GREEN, COLOR_DEFAULT_BG);
+    init_pair(lvl5, COLOR_YELLOW, COLOR_DEFAULT_BG);
+    init_pair(lvl6, COLOR_MAGENTA, COLOR_DEFAULT_BG);
+    init_pair(lvl7, COLOR_RED, COLOR_DEFAULT_BG);
+
     refresh();
 
     this->windows_init();
-    flag = true;
+
+    newEvents = true;
+
 }
 
 void Screen::do_screen(Room *r)
@@ -27,10 +68,10 @@ void Screen::do_screen(Room *r)
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {
-        if (flag)
+        if (newEvents)
         {
+            newEvents = false;
             werase(debug);
-            flag = false;
         }
         wprintw(debug, "id evento: %d \n", e->id);
         switch (e->id)
@@ -101,11 +142,21 @@ void Screen::do_screen(Room *r)
             delete t;
             break;
         }
+        case CONSUMABLE_USED:
+        {
+            ConsumableUsedE *t = (ConsumableUsedE *)e;
+
+            this->render_inventory(*r);
+
+            delete t;
+            break;
+        }
         default:
             break;
         }
     }
     wrefresh(debug);
+    newEvents = true;
 }
 
 void Screen::stop_screen()
@@ -120,16 +171,16 @@ void Screen::stop_screen()
 
 void Screen::windows_init()
 {
-    int lateral_width = 20,
-        lower_height = 10,
-        playerstat_height = 4,
-        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
-        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
-        moblist_width = ROOM_WIDTH,
-        start_x = 1,
-        start_y = 0,
-        lateral_start_x = ROOM_WIDTH + 1 + start_x,
-        lower_start_y = ROOM_HEIGHT;
+    lateral_width = 20,
+    lower_height = 10,
+    playerstat_height = 4,
+    legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
+    inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
+    moblist_width = ROOM_WIDTH,
+    start_x = 1,
+    start_y = 0,
+    lateral_start_x = ROOM_WIDTH + 1 + start_x,
+    lower_start_y = ROOM_HEIGHT;
 
     wroom = newwin(ROOM_HEIGHT, ROOM_WIDTH, start_y, start_x);
     playerstat = newwin(playerstat_height, lateral_width, start_y, lateral_start_x);
@@ -393,6 +444,48 @@ void Screen::render_moblist(Room &r)
 
 void Screen::render_inventory(Room &r)
 {
+    werase(inventory);
+    box(inventory, 0, 0);
+    // stampare gli slot dell'inventario, che sono player_inventory_slots
+    int start_x = 2, curr_x = start_x, start_y = 2, curr_y = start_y, spacing = 2;
+    Potion p = r.p->get_inventory().pots;
+    Key k = r.p->get_inventory().keys;
+
+    // stampo il simbolo delle pozioni colorato
+    wattron(inventory, COLOR_PAIR(p.get_level()));
+    mvwaddch(inventory, start_y, start_x, p.get_display());
+    wattroff(inventory, COLOR_PAIR(p.get_level()));
+
+    // stampo il resto della riga
+    wprintw(inventory, ":%d    %c:%d", p.get_n_utilizzi(), k.get_display(), k.get_n_utilizzi());
+
+    start_y += 2;
+    // stampa l'inventario
+    for (int i = 0; i < player_inventory_slots; i++)
+    {
+        Item *curr = r.p->get_inventory().items[i];
+        if (curr != NULL)
+        {
+            wattron(inventory, COLOR_PAIR(curr->get_level()));
+            mvwaddch(inventory, start_y, curr_x, curr->get_display());
+            wattroff(inventory, COLOR_PAIR(curr->get_level()));
+        }
+        else
+            mvwaddch(inventory, start_y, curr_x, '_');
+
+        if (curr_x + spacing + 2 >= lateral_width) //+2 uno è il bordo e l'altro è per il padding
+        {
+            start_y += spacing - 1;
+            curr_x = start_x - spacing;
+        }
+
+        curr_x += spacing;
+    }
+
+    getyx(inventory, curr_y, curr_x);
+    if (r.p->get_inventory().items[0] != NULL)
+        mvwprintw(inventory, curr_y + 3, start_x, "%s", r.p->get_inventory().items[0]->get_description());
+
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
 }
