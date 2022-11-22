@@ -16,6 +16,9 @@ protected:
     int movement_speed;
     int range;
 
+    // restituisce true se non ha fatto collsione
+    bool move(Room *r, int x, int y);
+
 public:
     Entity(coords pos, char display, char description[], char name[10], stats);
     bool move_up(Room *room);
@@ -44,8 +47,4 @@ public:
     timeval get_last_move();
     void set_last_move(timeval lm);
     int get_damage();
-
-private:
-    // restituisce true se non ha fatto collsione
-    bool move(Room *r, int x, int y);
 };
