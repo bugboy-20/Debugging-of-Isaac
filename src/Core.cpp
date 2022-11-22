@@ -20,3 +20,4 @@ char *Core::get_description()
     return desc;
 }
 void Core::get_description(char d[20]) { strcpy(d, this->description); }
+bool Core::is_crossable(){ return crossable; }

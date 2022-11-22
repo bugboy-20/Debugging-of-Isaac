@@ -20,8 +20,6 @@ bool collision(int x, int y, Room& r)
 }
 
 bool player_in_door(int x, int y, Room& r){
-    std::cerr << "player: " << "{" << r.p->get_x() << ", " << r.p->get_y() << "}" << std::endl
-              << "pos: " << "{" << x << ", " << y << "}" << std::endl<<std::endl;
     bool flag = (r.p->get_x() == x - 1 && r.p->get_y() == y) 
                 || (r.p->get_x() == x + 1 && r.p->get_y() == y)
                 || (r.p->get_x() == x && r.p->get_y() == y - 1) 
@@ -40,7 +38,7 @@ bool wall_collision(coords pos, Room& r)
 }
 
 bool entity_collision(coords pos, Room& r){
-    if(r.get_element_in_this_position(pos) == NULL){
+    if(r.get_element_in_this_position(pos) == NULL || r.get_element_in_this_position(pos)->is_crossable()){
         return false;
     }else{
         return true;
@@ -111,11 +109,11 @@ void player_damage(Room& r, Bullet *b){
 }
 
 void entity_damage(Room& r, Bullet *b, Entity *e){
-    e->set_health(e->get_health() - r.p->get_damage());
-    r.add_event(new EntityDamagedE(e));
+    e->set_health(e->get_health() - r.p->get_damage());   
     if(e->get_health() <= 0){
+        r.delete_room_menber(e);
         r.add_event(new EntityKilledE(e));
-    }
+    }else r.add_event(new EntityDamagedE(e));
 }
 
 void destroy_bullet(Room& r, Bullet *b){
@@ -152,6 +150,11 @@ void shoot_in_direction(Room& r, Bullet *b){
                 if(!(b->move_down(&r))){
                     if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
                         player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x(), b->get_y() + 1};
+                        if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
                     }
                     destroy_bullet(r, b);                                                     
                 }
@@ -160,7 +163,12 @@ void shoot_in_direction(Room& r, Bullet *b){
                 if(!(b->move_up(&r))){
                     if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
                         player_damage(r, b);
-                    }       
+                    }else{
+                        coords bpos = {b->get_x(), b->get_y() - 1};
+                        if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
+                    }      
                     destroy_bullet(r, b);                                                      
                 }
                 break;
@@ -168,6 +176,11 @@ void shoot_in_direction(Room& r, Bullet *b){
                 if(!(b->move_right(&r))){
                     if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
                         player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x() + 1, b->get_y()};
+                        if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
                     }       
                     destroy_bullet(r, b);                                                  
                 }
@@ -176,12 +189,29 @@ void shoot_in_direction(Room& r, Bullet *b){
                 if(!(b->move_left(&r))){
                     if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
                         player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x() - 1, b->get_y()};
+                            if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
                     }         
                     destroy_bullet(r, b);                                                         
                 }
                 break;
         } 
     }
+}
+
+bool is_entity(Room& r, Entity *entity){
+    List entities = r.get_entities(false);
+    node *tmp = entities.head;
+    bool flag = false;
+    while(tmp != NULL){
+        Hostile *e = (Hostile*) tmp->element;
+        if(e == entity) flag = true;
+        tmp = tmp->next;  
+    }
+    return flag;
 }
 
 void bullets_push(Room& r){

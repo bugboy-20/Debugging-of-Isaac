@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "Core.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "List.hpp"
@@ -12,13 +13,14 @@
 #include "Player.hpp"
 #include "Room.hpp"
 
-#define ROOM_TYPES 3 // numero di varianti di stanze disponibili
-struct map game_map;
+#define ROOM_TYPES 4 // numero di varianti di stanze disponibili
+static struct map game_map;
+static int difficulty;
 
 Room *room1();
 Room *random_room();
 
-int id=0; // generazione di un ID unico per ogni stanza
+static int id=0; // generazione di un ID unico per ogni stanza
 int new_id() {
     return id++;
 }
@@ -31,6 +33,7 @@ struct map *init_map(Player *p)
         ptr_start_room->door[i]=new door;
         ptr_start_room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         ptr_start_room->door[i]->next_room=NULL;
+        ptr_start_room->door[i]->locked=false;
     }
 
     ptr_start_room->p=p;
@@ -86,9 +89,12 @@ Room *add_room(Room *r, enum door_pos p) {
             break;
     }
 
-    new_room->door[i]=new door;
+    if (new_room == NULL)
+        new_room->door[i]=new door;
+
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
+    new_room->door[i]->locked=false;
 
 
 
@@ -114,6 +120,7 @@ Room *room0() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 
@@ -156,6 +163,7 @@ Room *room1() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 
@@ -200,11 +208,85 @@ Room *room2() {
         r->door[i]=new door;
         r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
         r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
     }
 
 
     return r;
 }
+/*
+ *   _____  _____
+ *  |            |
+ *  |   O    O   |
+ *
+ *  |       O    |
+ *  |_____  _____|
+ */
+char ssasso[] = "sasso";
+
+Room *room3() {
+
+
+    Room *r = new Room(new_id());
+
+    int n_sasso = 2 + rand()%10;
+
+// #define x_range (ROOM_WIDTH/4 + rand()%(ROOM_WIDTH/4))
+// #define y_range (ROOM_HEIGHT/4 + rand()%(ROOM_HEIGHT/4))
+#define x_range (2 + rand()%(ROOM_WIDTH - 4))
+#define y_range (2 + rand()%(ROOM_HEIGHT - 4))
+
+
+    for (int i=0; i<n_sasso; i++) {
+        Core *sasso = new Core({x_range,y_range},'O', ssasso);
+        r->add_Core(sasso);
+    }
+
+    for (int i=0; i<4; i++) {
+        r->door[i]=new door;
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->next_room=NULL;
+        r->door[i]->locked=false;
+    }
+
+#undef x_range
+#undef y_range
+
+    return r;
+}
+
+/* TODO sistemare la circolarità
+ *   _____  _____
+ *  |            |
+ *  |     O      |
+ *      O   O
+ *  |     O      |
+ *  |_____  _____|
+ */
+Room *room4() {
+
+    Room *room = new Room(new_id());
+
+    int r= 1 + rand()%5;
+
+    for (int i=-2*r; i< 2*r; i++)
+        for (int j=-2*r; j< 2*r; j++)
+            if( ((float)(i*i/2.0) + j*j < r*r))
+                room->add_Core(new Core({ROOM_WIDTH/2 + i, ROOM_HEIGHT/2 + j},'O',ssasso));
+
+    for (int i=0; i<4; i++) {
+        room->door[i]=new door;
+        room->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        room->door[i]->next_room=NULL;
+        room->door[i]->locked=false;
+    }
+
+
+    return room;
+}
+
+
+
 
 #define return_room_N(N) case N: return room ## N(); break;
 
@@ -212,6 +294,9 @@ Room *random_room() {
     switch (rand()%ROOM_TYPES) {
         return_room_N(0);
         return_room_N(1);
+        return_room_N(2);
+        return_room_N(3);
+        return_room_N(4);
         //return_room_N(2);
         default:
             return new Room(new_id());

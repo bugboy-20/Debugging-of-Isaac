@@ -56,13 +56,15 @@ Screen::Screen()
     refresh();
 
     this->windows_init();
+
     newEvents = true;
+
 }
 
 void Screen::do_screen(Room *r)
 {
     wmove(debug, 0, 0);
-
+    flag = true;
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {

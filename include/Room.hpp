@@ -25,6 +25,7 @@ struct door
 {
     int position; // es LEFT_DOOR o RIGHT_DOOR
     Room *next_room;
+    bool locked;
 };
 
 // restituisce la porta alle coordinate date
