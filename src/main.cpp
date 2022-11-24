@@ -31,6 +31,9 @@ void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
 
+void menu(Screen&); //apre il menu
+void game_loop();
+
 map *dummy_map;
 
 char n[10] = "gino";
@@ -49,15 +52,20 @@ Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
 Player *player = new Player({20, 15}, n, 10);
-Screen schermo = Screen();
 
+Screen schermo;
 int main()
 {
     // init schermo
-    timeval inizio_frame, fine_frame;
+    schermo = Screen();
+
+    // apro il menu
+    menu(schermo);
+
     // init della mappa
     dummy_map = init_map(player);
     player->add_item(spada);
+
 
     // aggiungo elementi alla stanza
     dummy_map->current_room->add_entity(slime);
@@ -70,7 +78,50 @@ int main()
     dummy_map->current_room->add_wall(w2);
     // dummy_map->current_room->add_wall(w1);
 
-    // game loop
+    game_loop();
+    exit_game();
+}
+
+void menu(Screen& schermo) {
+    schermo.start_gamemenu();
+    int selected_menu, key;
+
+    // loop di controllo del menù
+    do
+    {
+        schermo.gm.draw();
+        key = getch();
+        if (key == '\n')
+        {
+            selected_menu = schermo.gm.get_selected_item();
+            break;
+        }
+        else if (key == KEY_UP || key == 'w')
+            schermo.gm.select_next_item();
+        else if (key == KEY_DOWN || key == 's')
+            schermo.gm.select_prev_item();
+    } while (true);
+    schermo.gm.clean();
+
+    switch (selected_menu)
+    {
+        case NEW_GAME:
+            // game loop
+            break;
+
+        case EXIT_GAME:
+            exit_game();
+            break;
+
+        default:
+            exit_game(); // qualcosa è andato storto meglio uscire
+            break;
+    }
+}
+
+void game_loop() {
+    schermo.start_gameinterface();
+    timeval inizio_frame, fine_frame;
     while (!game_over(*player))
     {
         // il secondo parametro è la timezone, non importa usare quella giusta basta che sia uguale ovunque
@@ -79,7 +130,8 @@ int main()
         controller(player);
 
         do_room(dummy_map->current_room);
-        schermo.do_screen(dummy_map->current_room);
+        schermo.gi.set_room(dummy_map->current_room);
+        schermo.gi.handle_events();
 
         time_now(fine_frame);
 #ifdef _WIN32
@@ -89,7 +141,6 @@ int main()
 #endif
     }
 
-    exit_game();
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
