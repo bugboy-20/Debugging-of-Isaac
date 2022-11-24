@@ -10,33 +10,37 @@ GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDO
     this->playerstat = pstat;
     this->legend = legend;
     this->moblist = moblist;
-    this->inventory = inventory;
+    this->inventory = inv;
+    newEvents = true;
+    debug = newwin(50, 30, 0, 130);
+    wrefresh(debug);
 }
 
 void GameInterface::set_room(Room *r) { this->r = r; }
 
 void GameInterface::handle_events()
 {
-    move(0, 0);
-
+    // wmove(debug, 0, 0);
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {
-        printw("id evento: %d ", e->id);
+        if (newEvents)
+        {
+            newEvents = false;
+            // werase(debug);
+        }
+        // wprintw(debug, "id evento: %d \n", e->id);
         switch (e->id)
         {
         case ENTITY_MOVE:
         {
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0], newC = t->data[1];
-            char oldCh = ' ', newCh = ' ';
+            char oldCh = ' ', newCh = t->ed;
 
             Core *oldE = r->get_element_in_this_position(oldC);
-            Core *newE = r->get_element_in_this_position(newC);
             if (oldE != NULL)
                 oldCh = oldE->get_display();
-            if (newE != NULL)
-                newCh = newE->get_display();
 
             mvwaddch(wroom, oldC.y, oldC.x, oldCh); // vecchia posizione
             mvwaddch(wroom, newC.y, newC.x, newCh); // nuova posizione
@@ -53,6 +57,7 @@ void GameInterface::handle_events()
             this->render_playerstat(); // è qui solo temporaneamente per i test
             this->render_legend();
             this->render_moblist();
+            this->render_inventory();
 
             delete t;
             break;
@@ -68,9 +73,10 @@ void GameInterface::handle_events()
                 ch = el->get_display();
 
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
-            wrefresh(wroom);
+            wnoutrefresh(wroom);
             this->render_moblist();
 
+            t->destroy();
             delete t;
             break;
         }
@@ -92,10 +98,21 @@ void GameInterface::handle_events()
             delete t;
             break;
         }
+        case CONSUMABLE_USED:
+        {
+            ConsumableUsedE *t = (ConsumableUsedE *)e;
+
+            this->render_inventory();
+
+            delete t;
+            break;
+        }
         default:
             break;
         }
     }
+    // wrefresh(debug);
+    newEvents = true;
 }
 
 void GameInterface::print_doors(door *doors[])
@@ -156,7 +173,8 @@ void GameInterface::render_room()
     while (list != NULL)
     {
         Core *c = (Core *)list->element;
-        mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
+        if (c->get_x() < ROOM_WIDTH - 1 && c->get_y() < ROOM_HEIGHT - 1)
+            mvwaddch(wroom, c->get_y(), c->get_x(), c->get_display());
         list = list->next;
     }
 
@@ -167,19 +185,21 @@ void GameInterface::render_room()
     while (list != NULL)
     {
         Wall *c = (Wall *)list->element;
-        wmove(wroom, c->get_y(), c->get_x());
+        if (c->get_x() < ROOM_WIDTH - 1 && c->get_y() < ROOM_HEIGHT - 1)
+        {
+            wmove(wroom, c->get_y(), c->get_x());
 
-        if (c->get_alignment())                                        // linea verticale
-            wvline(wroom, c->get_display(), c->get_line_lenght() + 1); // stampo la testa + il corpo
-        else                                                           // linea orizzontale
-            whline(wroom, c->get_display(), c->get_line_lenght() + 1);
-
+            if (c->get_alignment())                                        // linea verticale
+                wvline(wroom, c->get_display(), c->get_line_lenght() + 1); // stampo la testa + il corpo
+            else                                                           // linea orizzontale
+                whline(wroom, c->get_display(), c->get_line_lenght() + 1);
+        }
         list = list->next;
     }
     wrefresh(wroom);
 }
 
-void GameInterface::render_playerstat() // TODO: implementare la stampa dei punti
+void GameInterface::render_playerstat()
 {
     // estraggo il player
     Player *player = (Player *)r->p;
@@ -192,8 +212,8 @@ void GameInterface::render_playerstat() // TODO: implementare la stampa dei punt
         emptyHeart = '-'; // cuore vuoto
 
     int nFullHeart = player->get_health() / 2,
-        nHalfHeart = player->get_health() - nFullHeart * 2,                     // get_health è dispari allora è 1 se è pari è 0
-        nEmptyHeart = (player->get_max_health() / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
+        nHalfHeart = player->get_health() - nFullHeart * 2,                           // get_health è dispari allora è 1 se è pari è 0
+        nEmptyHeart = ((player->get_max_health() + 1) / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
 
     // stampo il nome
     char name[10];
@@ -213,13 +233,16 @@ void GameInterface::render_playerstat() // TODO: implementare la stampa dei punt
         waddch(playerstat, emptyHeart);
 
     // stampo i punti
-    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", 6); // cosa sono i punti?
+    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", player->get_score());
 
     wrefresh(playerstat);
 }
 
 void GameInterface::render_legend()
 {
+    werase(legend);
+    box(legend, 0, 0);
+
     mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
     wmove(legend, 1, start_x);
@@ -265,6 +288,9 @@ void GameInterface::render_legend()
 
 void GameInterface::render_moblist()
 {
+    werase(moblist);
+    box(moblist, 0, 0);
+
     int line = 2, col = 2, gap = 4;
     char fullHeart = '0', // cuore intero
         halfHeart = 'O';  // mezzo cuore
@@ -325,4 +351,53 @@ void GameInterface::render_moblist()
     }
     mvwprintw(moblist, 0, 1, "Nemici");
     wrefresh(moblist);
+}
+
+void GameInterface::render_inventory()
+{
+    werase(inventory);
+    box(inventory, 0, 0);
+    // stampare gli slot dell'inventario, che sono player_inventory_slots
+    int start_x = 2, curr_x = start_x, start_y = 2, curr_y = start_y, spacing = 2;
+    struct inventory p_inv = r->p->get_inventory();
+    Potion p = r->p->get_inventory().pots;
+    Key k = r->p->get_inventory().keys;
+
+    // stampo il simbolo delle pozioni colorato
+    wattron(inventory, COLOR_PAIR(p.get_level()));
+    mvwaddch(inventory, start_y, start_x, p.get_display());
+    wattroff(inventory, COLOR_PAIR(p.get_level()));
+
+    // stampo il resto della riga
+    wprintw(inventory, ":%d    %c:%d", p.get_n_utilizzi(), k.get_display(), k.get_n_utilizzi());
+
+    start_y += 2;
+    // stampa l'inventario
+    for (int i = 0; i < player_inventory_slots; i++)
+    {
+        Item *curr = r->p->get_inventory().items[i];
+        if (curr != NULL)
+        {
+            wattron(inventory, COLOR_PAIR(curr->get_level()));
+            mvwaddch(inventory, start_y, curr_x, curr->get_display());
+            wattroff(inventory, COLOR_PAIR(curr->get_level()));
+        }
+        else
+            mvwaddch(inventory, start_y, curr_x, '_');
+        // TODO: 20 sarebbe la lateral_width
+        if (curr_x + spacing + 2 >= 20) //+2 uno è il bordo e l'altro è per il padding
+        {
+            start_y += spacing - 1;
+            curr_x = start_x - spacing;
+        }
+
+        curr_x += spacing;
+    }
+
+    getyx(inventory, curr_y, curr_x);
+    if (r->p->get_inventory().items[0] != NULL)
+        mvwprintw(inventory, curr_y + 3, start_x, "%s", r->p->get_inventory().items[0]->get_description());
+
+    mvwprintw(inventory, 0, 1, "Inventario");
+    wrefresh(inventory);
 }

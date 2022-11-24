@@ -37,3 +37,7 @@
 compile_flags.txt
 open.bat
 personal/*
+
+*.log
+errors
+core.*

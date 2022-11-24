@@ -11,7 +11,6 @@ class List {
         List();
 // inizializza la lista con una sequenza di nodi già esistente (fa una copia dell struttura, non dei dati puntati)
         List(node *head);
-        ~List();
         node *head;
         void push(void *);
         void *pop();

@@ -12,15 +12,16 @@
 // evento una entità s'è mossa
 class EntityMoveE : public RoomEvent {
     public:
-        EntityMoveE(coords old_pos, coords new_pos);
+        EntityMoveE(coords old_pos, coords new_pos, char entity_display);
         coords data[2];
+        char ed;
 };
 
 // evento una entità è stata eliminata
 class EntityKilledE : public RoomEvent {
     public:
         EntityKilledE(Entity *e);
-        ~EntityKilledE();
+        void destroy();
         Entity *data;
 };
 
@@ -42,4 +43,10 @@ class EntityDamagedE : public RoomEvent {
     public: 
         EntityDamagedE(Entity *e);
         Entity *data;
+};
+
+// evento è stato usato un consumabile, tipo pozza o chiave
+class ConsumableUsedE : public RoomEvent {
+    public: 
+        ConsumableUsedE();
 };

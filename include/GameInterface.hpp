@@ -11,7 +11,9 @@ class GameInterface
 {
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
+    WINDOW *debug; // schermo temporaneo per i messaggi di debug
     Room *r;
+    bool newEvents;
 
 public:
     GameInterface() = default;

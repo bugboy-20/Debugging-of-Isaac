@@ -26,9 +26,6 @@ List::List(node *head)
     }
 }
 
-List::~List() {
-    destroy();
-}
 
 void List::push(void *e) {
     node *nw_head = new node;
@@ -57,6 +54,12 @@ bool List::delete_element(void *e) {
     node *cn; //current node
     node *tmp;
 
+    if(head->element==e) {
+        tmp=head;
+        this->head=head->next;
+        delete tmp;
+        return true;
+    }
     for(cn=head; cn->next!=NULL; cn=cn->next) {
         if(cn->next->element == e) {
             tmp=cn->next;

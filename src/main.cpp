@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <iostream>
 #include <ctime>
+#include "time_handle.h"
 #include "Map.h"
 #include "Player.hpp"
 #include "Room.hpp"
@@ -10,7 +11,7 @@
 #include "Wall.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
-#include "GameMenu.hpp"
+#include "ItemOnGround.hpp"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -23,6 +24,9 @@
 using namespace std;
 
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
+#define utom(x) (1000 * x) // from micro to milli
+//#define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
+int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
@@ -33,30 +37,21 @@ void game_loop();
 map *dummy_map;
 
 char n[10] = "gino";
-char n1[10] = "perino";
-char n2[10] = "rubedo";
-char n3[10] = "albedo";
-char n4[10] = "jasmine";
-
-char desc[20] = "giocatore";
-char desc1[20] = "goblin";
-char desc2[20] = "mago";
-char desc3[20] = "ladro";
-char desc4[20] = "napoletano";
 char desc5[20] = "sasso";
-char desc6[20] = "muro di pietra";
+char desc1[20] = "spada";
 
 Zombie *z = new Zombie({45, 15});
-
-Hostile *villan = new Hostile(3, n1, 8, 5, {40, 15}, '*', desc1);
-Hostile *villan1 = new Hostile(3, n2, 3, 5, {60, 7}, '=', desc2);
-Hostile *villan2 = new Hostile(3, n3, 7, 5, {20, 10}, '$', desc3);
-Hostile *villan3 = new Hostile(3, n4, 10, 5, {22, 4}, ')', desc4);
+Slime *slime = new Slime({40, 15});
+Scheletro *scheleton = new Scheletro({60, 7});
+Goblin *goblin = new Goblin({20, 10});
+Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
+Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
+ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
-Player *player = new Player(10, 10, NULL, NULL, n, 6, 5, {20, 15}, '@', desc);
+Player *player = new Player({20, 15}, n, 10);
 
 Screen schermo;
 int main()
@@ -69,15 +64,17 @@ int main()
 
     // init della mappa
     dummy_map = init_map(player);
+    player->add_item(spada);
 
 
     // aggiungo elementi alla stanza
-    dummy_map->current_room->add_entity(villan);
-    dummy_map->current_room->add_entity(villan1);
-    dummy_map->current_room->add_entity(villan2);
-    dummy_map->current_room->add_entity(villan3);
+    dummy_map->current_room->add_entity(slime);
+    dummy_map->current_room->add_entity(scheleton);
+    dummy_map->current_room->add_entity(goblin);
+    dummy_map->current_room->add_entity(fantasma);
     dummy_map->current_room->add_entity(z);
     dummy_map->current_room->add_Core(rock);
+    dummy_map->current_room->add_Core(s);
     dummy_map->current_room->add_wall(w2);
     // dummy_map->current_room->add_wall(w1);
 
@@ -124,24 +121,26 @@ void menu(Screen& schermo) {
 
 void game_loop() {
     schermo.start_gameinterface();
-    time_t inizio_frame, fine_frame;
+    timeval inizio_frame, fine_frame;
     while (!game_over(*player))
     {
-        inizio_frame = time(0);
+        // il secondo parametro è la timezone, non importa usare quella giusta basta che sia uguale ovunque
+        time_now(inizio_frame);
 
         controller(player);
 
-        //do_room(dummy_map->current_room);
+        do_room(dummy_map->current_room);
         schermo.gi.set_room(dummy_map->current_room);
         schermo.gi.handle_events();
 
-        fine_frame = time(0);
+        time_now(fine_frame);
 #ifdef _WIN32
-        Sleep(FRAMETIME - (fine_frame - inizio_frame));
+        Sleep(sleep_time(inizio_frame, fine_frame));
 #else
-        usleep(1000 * (FRAMETIME - (fine_frame - inizio_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
+        usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
+
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
@@ -168,6 +167,21 @@ void controller(Player *player)
         case 'q':
             exit_game();
             break;
+        case KEY_UP:
+            bullet_creation(player, UP);
+            break;
+        case KEY_DOWN:
+            bullet_creation(player, DOWN);
+            break;
+        case KEY_RIGHT:
+            bullet_creation(player, RIGHT);
+            break;
+        case KEY_LEFT:
+            bullet_creation(player, LEFT);
+            break;
+        case 'h':
+            player->use_potion(dummy_map->current_room);
+            break;
         default:
             break;
             // ...
@@ -180,4 +194,12 @@ void exit_game()
     schermo.stop_screen();
     // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
+}
+
+int sleep_time(timeval start, timeval end)
+{
+    time_t te = time_elapsed(start, end);
+    if (te > FRAMETIME)
+        return 0;
+    return FRAMETIME - te;
 }

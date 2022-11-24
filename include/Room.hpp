@@ -25,8 +25,17 @@ struct door
 {
     int position; // es LEFT_DOOR o RIGHT_DOOR
     Room *next_room;
+    bool locked;
 };
 
+// restituisce la porta alle coordinate date
+// -1 se la posizione non è di alcuna porta
+int door_in_this_position(coords);
+
+// restituisce le coordinate di una porta
+// è un array di dimensione 2
+coords *door_position(door_pos);
+coords *door_position2(door_pos pos);
 class Room {
     public:
          /* inizializzazione con lista di elementi

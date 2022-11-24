@@ -1,21 +1,31 @@
 #include <cstddef>
+#include <iostream>
 #include <string.h>
 #include "physics.h"
 #include "Events.hpp"
 #include "Hostile.hpp"
 #include "Map.h"
+#include "time_handle.h"
+
+List bullets = List();
+
 bool collision(int x, int y, Room& r)
 {
     bool flag1, flag2, flag3;
-    coords pos;
-
-    pos.x = x;
-    pos.y = y;
-    flag1 = wall_collision(pos, r);
-    flag2 = general_collision(pos, r);
-    door_collision(pos, r);
+    flag1 = wall_collision({x, y}, r);
+    flag2 = entity_collision({x, y}, r);
+    if(player_in_door(x, y, r)) door_collision({x, y}, r);
     if(flag1 || flag2) return true;
     else return false;
+}
+
+bool player_in_door(int x, int y, Room& r){
+    bool flag = (r.p->get_x() == x - 1 && r.p->get_y() == y) 
+                || (r.p->get_x() == x + 1 && r.p->get_y() == y)
+                || (r.p->get_x() == x && r.p->get_y() == y - 1) 
+                || (r.p->get_x() == x && r.p->get_y() == y + 1) ;
+    
+    return flag;
 }
 
 bool wall_collision(coords pos, Room& r)
@@ -27,39 +37,211 @@ bool wall_collision(coords pos, Room& r)
     else return false;
 }
 
-bool general_collision(coords pos, Room& r){
-    if(r.get_element_in_this_position(pos) == NULL){
+bool entity_collision(coords pos, Room& r){
+    if(r.get_element_in_this_position(pos) == NULL || r.get_element_in_this_position(pos)->is_crossable()){
         return false;
     }else{
         return true;
     }
 }
 
-void door_collision(coords pos, Room& r)
+void door_collision(coords p, Room& r)
 {
-    if(pos.x == 0 && pos.y == (ROOM_HEIGHT/2) || pos.x == 0 && pos.y == (ROOM_HEIGHT/2) - 1){  
-        next_room_position(r, LEFT_DOOR);
-    }else if(pos.x == ROOM_WIDTH-1 && pos.y == (ROOM_HEIGHT/2) || pos.x ==  ROOM_WIDTH-1 && pos.y == (ROOM_HEIGHT/2) - 1){
-        next_room_position(r, RIGHT_DOOR);
-    }else if(pos.x == ROOM_WIDTH/2 && pos.y == 0 || pos.x ==  (ROOM_WIDTH/2) - 1 && pos.y == 0){
-        next_room_position(r, UPPER_DOOR);
-    }else if(pos.x == ROOM_WIDTH/2 && pos.y == (ROOM_HEIGHT-1) || pos.x ==  (ROOM_WIDTH/2) - 1 && pos.y == (ROOM_HEIGHT-1)){
-        next_room_position(r, LOWER_DOOR);
+    if(p.x == 0 && p.y == (ROOM_HEIGHT/2) || p.x == 0 && p.y == (ROOM_HEIGHT/2) - 1){  
+
+        if(next_room_position(r, LEFT_DOOR))  repos_player_in_new_room(p, r, LEFT_DOOR, RIGHT_DOOR);
+           
+    }else if(p.x == ROOM_WIDTH-1 && p.y == (ROOM_HEIGHT/2) || p.x ==  ROOM_WIDTH-1 && p.y == (ROOM_HEIGHT/2) - 1){
+           
+        if(next_room_position(r, RIGHT_DOOR))  repos_player_in_new_room(p, r, RIGHT_DOOR, LEFT_DOOR);
+
+    }else if(p.x == ROOM_WIDTH/2 && p.y == 0 || p.x ==  (ROOM_WIDTH/2) - 1 && p.y == 0){
+
+        if(next_room_position(r, UPPER_DOOR))  repos_player_in_new_room(p, r, UPPER_DOOR, LOWER_DOOR);
+
+    }else if(p.x == ROOM_WIDTH/2 && p.y == (ROOM_HEIGHT-1) || p.x ==  (ROOM_WIDTH/2) - 1 && p.y == (ROOM_HEIGHT-1)){
+            
+        if(next_room_position(r, LOWER_DOOR))  repos_player_in_new_room(p, r, LOWER_DOOR, UPPER_DOOR);
+
     }
 }
 
-void next_room_position(Room& r, enum door_pos p){
-    if(r.next_room(p) != NULL){
-        //change_room(r.next_room(p));
+void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_pos p1){
+    coords old_pos, new_pos;
+    if(pos.x == door_position(p)[0].x &&  pos.y == door_position(p)[0].y){
+        old_pos = door_position(p)[0];
+        new_pos = door_position2(p1)[0];
     }else{
-        add_room(&r, p);
-        //change_room(r.next_room(p));
+        old_pos = door_position(p)[1];
+        new_pos = door_position2(p1)[1];
     }
-    r.add_event(new RoomChangedE());
+    r.next_room(p)->p->reposition(new_pos);
+    // r.next_room(p)->add_event(new EntityMoveE(old_pos, new_pos, r.next_room(p)->p->get_display()));
 }
 
+bool next_room_position(Room& r, enum door_pos p){
+    if(r.door[p]!=NULL) {
+        if(r.door[p]->next_room != NULL){
+            change_room(r.next_room(p));
+        }else{
+            change_room(add_room(&r, p));
+        }
+        bullets.destroy();
+        return true;
+    }else return false;
+}
 
-void do_room(Room *r){return ;}; // fa cose sulla stanza
+void bullet_creation(Entity *e, enum direction direction){
+    timeval now;
+    time_now(now);
+    if(time_elapsed(e->get_last_shot(), now) >= e->get_attack_speed()){
+        Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
+        b->set_direction(direction);
+        bullets.push(b);
+        time_now(now);
+        e->set_last_shot(now);
+    }
+}
+
+void player_damage(Room& r, Bullet *b){
+    r.p->set_health(r.p->get_health() - b->get_damage());
+    r.add_event(new PlayerHealthChangedE(r.p));
+}
+
+void entity_damage(Room& r, Bullet *b, Entity *e){
+    e->set_health(e->get_health() - r.p->get_damage());   
+    if(e->get_health() <= 0){
+        r.delete_room_menber(e);
+        r.add_event(new EntityKilledE(e));
+    }else r.add_event(new EntityDamagedE(e));
+}
+
+void destroy_bullet(Room& r, Bullet *b){
+    r.add_event(new EntityKilledE(b));
+    bullets.delete_element(b); 
+}
+
+enum direction enemy_shot_direction(Room& r, Hostile *e){
+    bool enemy_range_down = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()));
+    bool enemy_range_up = (r.p->get_x() == e->get_x() && (r.p->get_y() >= e->get_y() - e->get_trigger_radius()) && (r.p->get_y() <= e->get_y()));
+    bool enemy_range_right = (r.p->get_y() == e->get_y() && (r.p->get_x() <= e->get_x() + e->get_trigger_radius()+ 2) && (r.p->get_x() >= e->get_x()));
+    bool enemy_range_left = (r.p->get_y() == e->get_y() && (r.p->get_x() >= e->get_x() - e->get_trigger_radius() - 2) && (r.p->get_x() <= e->get_x()));
+    
+    if(enemy_range_down) return DOWN;
+    else if(enemy_range_up) return UP;
+    else if(enemy_range_right) return RIGHT;
+    else if(enemy_range_left) return LEFT;
+    return NULLO;
+}
+
+bool enemy_in_range(Room& r, Hostile *e){
+    bool enemy_in_range = (r.p->get_x() == e->get_x() && (r.p->get_y() <= e->get_y() + e->get_trigger_radius()) && (r.p->get_y() >= e->get_y()))
+    || (r.p->get_x() == e->get_x() && (r.p->get_y() >= e->get_y() - e->get_trigger_radius()) && (r.p->get_y() <= e->get_y()))
+    || (r.p->get_y() == e->get_y() && (r.p->get_x() <= e->get_x() + e->get_trigger_radius()+ 2) && (r.p->get_x() >= e->get_x()))
+    || (r.p->get_y() == e->get_y() && (r.p->get_x() >= e->get_x() - e->get_trigger_radius() - 2) && (r.p->get_x() <= e->get_x()));
+    
+    return enemy_in_range;
+}
+
+void shoot_in_direction(Room& r, Bullet *b){
+    if(b->get_direction() >= 0 && b->get_direction() <= 3){
+        switch(b->get_direction()){
+            case DOWN:
+                if(!(b->move_down(&r))){
+                    if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                        player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x(), b->get_y() + 1};
+                        if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
+                    }
+                    destroy_bullet(r, b);                                                     
+                }
+                break;
+            case UP:
+                if(!(b->move_up(&r))){
+                    if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
+                        player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x(), b->get_y() - 1};
+                        if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
+                    }      
+                    destroy_bullet(r, b);                                                      
+                }
+                break;
+            case RIGHT:
+                if(!(b->move_right(&r))){
+                    if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
+                        player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x() + 1, b->get_y()};
+                        if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
+                    }       
+                    destroy_bullet(r, b);                                                  
+                }
+                break;
+            case LEFT:
+                if(!(b->move_left(&r))){
+                    if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
+                        player_damage(r, b);
+                    }else{
+                        coords bpos = {b->get_x() - 1, b->get_y()};
+                            if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
+                            entity_damage(r, b, (Hostile*)r.get_element_in_this_position(bpos));
+                        }
+                    }         
+                    destroy_bullet(r, b);                                                         
+                }
+                break;
+        } 
+    }
+}
+
+bool is_entity(Room& r, Entity *entity){
+    List entities = r.get_entities(false);
+    node *tmp = entities.head;
+    bool flag = false;
+    while(tmp != NULL){
+        Hostile *e = (Hostile*) tmp->element;
+        if(e == entity) flag = true;
+        tmp = tmp->next;  
+    }
+    return flag;
+}
+
+void bullets_push(Room& r){
+    List entities = r.get_entities(false);
+    node *tmp = entities.head;
+    while(tmp != NULL){
+        Hostile *e = (Hostile*) tmp->element;
+        if(enemy_in_range(r, e)){
+            direction temp = enemy_shot_direction(r, e);
+            if(temp != NULLO)
+                bullet_creation(e, temp);
+        }
+        tmp = tmp->next;  
+    }
+}
+
+void bullet_movement(Room& r){
+    node *tmp_bullets = bullets.head;        
+    while(tmp_bullets != NULL){
+        Bullet *b = (Bullet*) tmp_bullets->element;
+        node *successivo = tmp_bullets->next;
+        shoot_in_direction(r, b);
+        tmp_bullets = successivo;      
+    } 
+}
+
+void do_room(Room *r){ // fa cose sulla stanza
+    bullets_push(*r);
+    bullet_movement(*r);
+}; 
 
 bool game_over(Player p)
 {

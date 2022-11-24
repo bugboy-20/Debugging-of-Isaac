@@ -1,14 +1,16 @@
 #pragma once
-
 #include "Entity.hpp"
 
 class Hostile : public Entity
 {
 protected:
     int trigger_radius;
+    int health_scaling;
+    int damage_scaling;
 
 public:
-    Hostile(int trigger_radius, char name[10], int health, int damage, coords pos, char display, char description[]);
+    Hostile(coords pos, char display, char description[], char name[10], stats, int trigger_radius, int level, int health_scaling, int damage_scaling);
+    Hostile(coords pos, char display, char description[], char name[10], stats, int trigger_radius); // used for non scaling mob.
 
     int get_trigger_radius();
 };

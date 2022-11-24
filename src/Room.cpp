@@ -10,6 +10,88 @@
 #include "RoomEvent.hpp"
 #include "Wall.hpp"
 #include "geometry.h"
+
+int door_in_this_position(coords p) {
+    if(p.x == 0 && p.y == (ROOM_HEIGHT/2) || p.x == 0 && p.y == (ROOM_HEIGHT/2) - 1)
+        return LEFT_DOOR;
+    else if(p.x == ROOM_WIDTH-1 && p.y == (ROOM_HEIGHT/2) || p.x ==  ROOM_WIDTH-1 && p.y == (ROOM_HEIGHT/2) - 1)
+        return RIGHT_DOOR;
+    else if(p.x == ROOM_WIDTH/2 && p.y == 0 || p.x ==  (ROOM_WIDTH/2) - 1 && p.y == 0)
+        return UPPER_DOOR;
+    else if(p.x == ROOM_WIDTH/2 && p.y == (ROOM_HEIGHT-1) || p.x ==  (ROOM_WIDTH/2) - 1 && p.y == (ROOM_HEIGHT-1))
+        return LOWER_DOOR;
+    else
+        return -1;
+
+}
+
+/*
+int door_in_this_position(coords p) {
+    coords *door;
+    for (int i=0; i<4; i++) {
+        door = door_position((door_pos) i);
+        if(door == NULL)
+            continue;
+        else if (p == door[0] || p == door[1])
+            return i;
+    }
+    return -1;
+}
+*/
+
+coords *door_position(door_pos pos) {
+    coords *dp = new coords[2];
+    switch (pos) {
+        case LEFT_DOOR:
+            dp[0] = {0,ROOM_HEIGHT/2};
+            dp[1] = {0,ROOM_HEIGHT/2-1};
+            break;
+        case RIGHT_DOOR:
+            dp[0] = {ROOM_WIDTH-1,ROOM_HEIGHT/2};
+            dp[1] = {ROOM_WIDTH-1,ROOM_HEIGHT/2-1};
+            break;
+        case UPPER_DOOR:
+            dp[0] = {ROOM_WIDTH/2,0};
+            dp[1] = {ROOM_WIDTH/2-1,0};
+            break;
+        case LOWER_DOOR:
+            dp[0] = {ROOM_WIDTH/2,ROOM_HEIGHT-1};
+            dp[1] = {ROOM_WIDTH/2-1,ROOM_HEIGHT-1};
+            break;
+        default:
+            return NULL;
+    }
+
+    return dp;
+}
+
+coords *door_position2(door_pos pos) {
+    coords *dp = new coords[2];
+    switch (pos) {
+        case LEFT_DOOR:
+            dp[0] = {1,ROOM_HEIGHT/2};
+            dp[1] = {1,ROOM_HEIGHT/2-1};
+            break;
+        case RIGHT_DOOR:
+            dp[0] = {ROOM_WIDTH-2,ROOM_HEIGHT/2};
+            dp[1] = {ROOM_WIDTH-2,ROOM_HEIGHT/2-1};
+            break;
+        case UPPER_DOOR:
+            dp[0] = {ROOM_WIDTH/2,1};
+            dp[1] = {ROOM_WIDTH/2-1,1};
+            break;
+        case LOWER_DOOR:
+            dp[0] = {ROOM_WIDTH/2,ROOM_HEIGHT-2};
+            dp[1] = {ROOM_WIDTH/2-1,ROOM_HEIGHT-2};
+            break;
+        default:
+            return NULL;
+    }
+
+    return dp;
+}
+
+
 Room::Room(int id, List walls, List entities, List cores) : Room(id, walls)
 {
 
@@ -144,7 +226,7 @@ Room *Room::next_room(enum door_pos p) {
     if (this->door[p] != NULL)
         return this->door[p]->next_room;
     else {
-        fprintf(stderr, "Errore: si è tentato di entrare per una porta inesistente");
+        //fprintf(stderr, "Errore: si è tentato di entrare per una porta inesistente\n");
         exit(EXIT_FAILURE);
     }
 }
