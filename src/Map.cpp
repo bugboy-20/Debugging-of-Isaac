@@ -4,6 +4,7 @@
 #include <ctime>
 #include <iostream>
 #include "Core.hpp"
+#include "Entity.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "List.hpp"
@@ -12,13 +13,16 @@
 #include "Map.h"
 #include "Player.hpp"
 #include "Room.hpp"
+#include "physics.h"
 
-#define ROOM_TYPES 4 // numero di varianti di stanze disponibili
+#define ROOM_TYPES 5 // numero di varianti di stanze disponibili
 static struct map game_map;
 static int difficulty;
 
 Room *room1();
 Room *random_room();
+
+Room *add_hostiles(Room* r);
 
 static int id=0; // generazione di un ID unico per ogni stanza
 int new_id() {
@@ -288,7 +292,7 @@ Room *room4() {
 
 
 
-#define return_room_N(N) case N: return room ## N(); break;
+#define return_room_N(N) case N: return add_hostiles( room ## N()); break;
 
 Room *random_room() {
     switch (rand()%ROOM_TYPES) {
@@ -297,8 +301,26 @@ Room *random_room() {
         return_room_N(2);
         return_room_N(3);
         return_room_N(4);
-        //return_room_N(2);
         default:
             return new Room(new_id());
     }
+}
+
+
+
+Room *add_hostiles(Room* r) {
+    int x,y,lv;
+    for(int i=difficulty; i<0;) {
+        do {
+            x=rand()%ROOM_WIDTH;
+            y=rand()%ROOM_HEIGHT;
+        } while(collision(x, y, *r));
+
+        lv=rand()%i;
+        i-=lv;
+
+        Hostile *h = new Zombie({x,y},lv);
+        r->add_entity(h);
+    }
+    return r;
 }
