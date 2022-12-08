@@ -94,7 +94,6 @@ coords *door_position2(door_pos pos) {
 
 Room::Room(int id, List walls, List entities, List cores) : Room(id, walls)
 {
-
     this->entities = List(entities.head);
     this->core = List(cores.head);
 }
@@ -178,6 +177,10 @@ void Room::add_wall(Wall *e) {
     this->walls.push(e);
 }
 
+void Room::add_items_on_ground(ItemOnGround *i) {
+    this->items_on_ground.push(i);
+}
+
 void Room::delete_room_menber(Core *m)
 {
     if (entities.delete_element(m))
@@ -192,7 +195,10 @@ List Room::get_room_member(bool walls_too)
 {
     List l = get_entities(true);
     List c = List(core.head);
+    List i = get_items_on_ground();
+
     l.append(c);
+    l.append(i);
     if (walls_too) {
         List w = List(walls.head);
         l.append(w);
@@ -212,6 +218,11 @@ List Room::get_walls()
 {
     return List(walls.head);
 }
+
+List Room::get_items_on_ground() {
+    return List(items_on_ground.head);
+}
+
 
 void Room::add_event(RoomEvent *e)
 {
