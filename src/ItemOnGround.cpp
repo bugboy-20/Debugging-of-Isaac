@@ -5,7 +5,4 @@ ItemOnGround::ItemOnGround(coords pos, char display, char description[], Item *i
     this->item = i;
 };
 
-ItemOnGround::ItemOnGround(coords pos, Item *i) : Core(pos, i->get_display(), i->get_description())
-{
-    this->item = i;
-};
+ItemOnGround::ItemOnGround(coords pos, Item *i) : ItemOnGround(pos, i->get_display(), i->get_description(), i){};
