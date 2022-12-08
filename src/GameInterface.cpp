@@ -98,9 +98,9 @@ void GameInterface::handle_events()
             delete t;
             break;
         }
-        case CONSUMABLE_USED:
+        case INVENTORY_CHANGED:
         {
-            ConsumableUsedE *t = (ConsumableUsedE *)e;
+            InventoryChangedE *t = (InventoryChangedE *)e;
 
             this->render_inventory();
 

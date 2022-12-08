@@ -45,8 +45,8 @@ class EntityDamagedE : public RoomEvent {
         Entity *data;
 };
 
-// evento è stato usato un consumabile, tipo pozza o chiave
-class ConsumableUsedE : public RoomEvent {
+// evento è stato modificato l'inventario, tipo usato pozza o aggiunto oggetto
+class InventoryChangedE : public RoomEvent {
     public: 
-        ConsumableUsedE();
+        InventoryChangedE();
 };

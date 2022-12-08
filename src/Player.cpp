@@ -100,7 +100,7 @@ void Player::add_potion(Room *r, Potion *p)
         inv.pots.set_level(lvl);
     inv.pots.add_utilizzi(p->get_n_utilizzi());
     delete p;
-    r->add_event(new ConsumableUsedE());
+    r->add_event(new InventoryChangedE());
 }
 
 void Player::use_potion(Room *room)
@@ -110,21 +110,21 @@ void Player::use_potion(Room *room)
     int cura = this->inv.pots.use();
     change_health(cura);
     room->add_event(new PlayerHealthChangedE(this));
-    room->add_event(new ConsumableUsedE());
+    room->add_event(new InventoryChangedE());
 }
 
 void Player::add_key(Room *r, Key *key)
 {
     this->inv.keys.add_utilizzi(key->get_n_utilizzi());
     delete key;
-    r->add_event(new ConsumableUsedE());
+    r->add_event(new InventoryChangedE());
 }
 
 bool Player::use_key(Room *room)
 {
     bool used = this->inv.keys.use();
     if (used)
-        room->add_event(new ConsumableUsedE());
+        room->add_event(new InventoryChangedE());
     return used;
 }
 void Player::add_stats(stats s)
