@@ -50,35 +50,37 @@ inventory Player::get_inventory()
     return this->inv;
 }
 
-void Player::add_item(int slot, Item *i)
+void Player::add_item(Room *r, int slot, Item *i)
 {
     if (slot >= player_inventory_slots)
         return;
     this->inv.items[slot] = i;
     this->inv.item_n += 1;
     add_stats(i->get_stats());
+    r->add_event(new InventoryChangedE());
 }
 
-void Player::add_item(Item *i)
+void Player::add_item(Room *r, Item *i)
 {
     int slot = inv.item_n;
     while (inv.items[slot] != NULL)
         slot += 1;
 
-    add_item(slot, i);
+    add_item(r, slot, i);
 }
 
-Item *Player::remove_item(int slot)
+Item *Player::remove_item(Room *r, int slot)
 {
     if (inv.items[slot] == NULL)
         return NULL;
     add_stats(inv.items[slot]->get_stats(true));
     Item *temp = inv.items[slot];
     inv.items[slot] = NULL;
+    r->add_event(new InventoryChangedE());
     return temp;
 }
 
-Item *Player::remove_item(Item *item)
+Item *Player::remove_item(Room *r, Item *item)
 {
     int slot = -1;
     for (int i = 0; i < player_inventory_slots; i++)
@@ -90,7 +92,7 @@ Item *Player::remove_item(Item *item)
 
     if (slot == -1)
         return NULL;
-    return remove_item(slot);
+    return remove_item(r, slot);
 }
 
 void Player::add_potion(Room *r, Potion *p)
