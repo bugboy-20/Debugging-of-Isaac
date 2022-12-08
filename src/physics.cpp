@@ -95,17 +95,17 @@ void bullet_creation(Entity *e, enum direction direction){
     timeval now;
     time_now(now);
     if(time_elapsed(e->get_last_shot(), now) >= e->get_attack_speed()){
-        Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
+        /*Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
         b->set_direction(direction);
         bullets.push(b);
         time_now(now);
-        e->set_last_shot(now);
+        e->set_last_shot(now);*/
     }
 }
 
 void player_damage(Room& r, Bullet *b){
-    r.p->set_health(r.p->get_health() - b->get_damage());
-    r.add_event(new PlayerHealthChangedE(r.p));
+    //r.p->set_health(r.p->get_health() - b->get_damage());
+    //r.add_event(new PlayerHealthChangedE(r.p));
 }
 
 void entity_damage(Room& r, Bullet *b, Entity *e){
@@ -241,7 +241,68 @@ void bullet_movement(Room& r){
 void do_room(Room *r){ // fa cose sulla stanza
     bullets_push(*r);
     bullet_movement(*r);
+    entities_movement(*r);
 }; 
+
+void entities_movement(Room &r){
+    List entities = r.get_entities(false);
+    node *tmp = entities.head;
+
+    while(tmp != NULL){
+        Hostile *e = (Hostile*) tmp->element;
+        timeval now;
+        time_now(now);
+        if(time_elapsed(e->get_last_move(), now) >= e->get_movement_speed()){ 
+            /*Qui bisogna decidere se richiamare move_in_random_direction() 
+            o move_in_player_direction() in base all'intelligenza dell'hostile e*/
+            move_in_random_direction(r, e);
+            time_now(now);
+            e->set_last_move(now);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void move_in_random_direction(Room &r, Hostile *e){
+    int move = rand() % 4;
+    switch (move){
+    case 0:
+        e->move_right(&r);
+        break;
+    case 1:
+        e->move_left(&r);
+        break;
+    case 2:
+        e->move_up(&r);
+        break;
+    case 3:
+        e->move_down(&r);
+        break;
+    default:
+        break;
+    }
+}
+
+void move_in_player_direction(Room &r, Hostile *e){
+    bool flag = enemy_in_range(r, e);
+    if(e->get_x() < r.p->get_x() && !flag){
+        if(!e->move_right(&r) && !flag){
+            if(!e->move_down(&r) && !flag) e->move_up(&r);
+        }
+    }else if(e->get_x() > r.p->get_x() && !flag){
+        if(!e->move_left(&r) && !flag){
+            if(!e->move_up(&r) && !flag) e->move_down(&r);
+        }
+    }else if(e->get_y() > r.p->get_y() && !flag){
+        if(!e->move_up(&r) && !flag){
+            if(!e->move_right(&r) && !flag) e->move_left(&r);     
+        }
+    }else if(e->get_y() < r.p->get_y() && !flag){
+        if(!e->move_down(&r) && !flag){
+            if(!e->move_right(&r) && !flag) e->move_left(&r);
+        }
+    }
+}
 
 bool game_over(Player p)
 {

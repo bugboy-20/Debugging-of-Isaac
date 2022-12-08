@@ -73,6 +73,15 @@ void bullet_movement(Room& r);
 // fa cose sulla stanza
 void do_room(Room *r); 
 
+//Funzione che sceglie il movimento del nemico in base alla sua intelligenza
+void entities_movement(Room &r);
+
+//Funzione che fa muovere un nemico verso il player
+void move_in_player_direction(Room &r, Hostile *e);
+
+//Funzione che fa muovere un nemico in maniera casuale
+void move_in_random_direction(Room &r, Hostile *e);
+
 /*Funzione che controlla se il player ha finito la vita per
 dichiarare l'eventyale game_over*/
 bool game_over(Player p);
