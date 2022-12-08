@@ -95,17 +95,17 @@ void bullet_creation(Entity *e, enum direction direction){
     timeval now;
     time_now(now);
     if(time_elapsed(e->get_last_shot(), now) >= e->get_attack_speed()){
-        /*Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
+        Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
         b->set_direction(direction);
         bullets.push(b);
         time_now(now);
-        e->set_last_shot(now);*/
+        e->set_last_shot(now);
     }
 }
 
 void player_damage(Room& r, Bullet *b){
-    //r.p->set_health(r.p->get_health() - b->get_damage());
-    //r.add_event(new PlayerHealthChangedE(r.p));
+    r.p->set_health(r.p->get_health() - b->get_damage());
+    r.add_event(new PlayerHealthChangedE(r.p));
 }
 
 void entity_damage(Room& r, Bullet *b, Entity *e){
