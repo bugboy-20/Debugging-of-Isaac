@@ -75,3 +75,4 @@ void Entity::set_last_move(timeval lm) { this->last_move = lm; }
 
 int Entity::get_movement_speed() { return this->movement_speed; }
 void Entity::set_movement_speed(int ms) { this->movement_speed = ms; }
+int Entity::get_range() { return this->range; }

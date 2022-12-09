@@ -47,4 +47,5 @@ public:
     timeval get_last_move();
     void set_last_move(timeval lm);
     int get_damage();
+    int get_range();
 };

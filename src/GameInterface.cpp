@@ -109,7 +109,7 @@ void GameInterface::handle_events()
         }
         case ITEM_PICKED:
         {
-           ItemPickedE *t = (ItemPickedE *)e;
+            ItemPickedE *t = (ItemPickedE *)e;
 
             char ch = ' ';
             Core *el = r->get_element_in_this_position({t->data->get_x(), t->data->get_y()});
@@ -120,10 +120,11 @@ void GameInterface::handle_events()
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
             wnoutrefresh(wroom);
             this->render_inventory();
+            this->render_playerstat();
 
             t->destroy();
             delete t;
-            break; 
+            break;
         }
         default:
             break;
@@ -413,8 +414,16 @@ void GameInterface::render_inventory()
     }
 
     getyx(inventory, curr_y, curr_x);
-    if (r->p->get_inventory().items[0] != NULL)
-        mvwprintw(inventory, curr_y + 3, start_x, "%s", r->p->get_inventory().items[0]->get_description());
+    curr_y += 3;
+    mvwprintw(inventory, curr_y, start_x, "%s: %d", "damage", r->p->get_damage());
+    curr_y += 1;
+    mvwprintw(inventory, curr_y, start_x, "%s: %d", "health", r->p->get_max_health());
+    curr_y += 1;
+    mvwprintw(inventory, curr_y, start_x, "%s: %d", "as", 1000 / r->p->get_attack_speed());
+    curr_y += 1;
+    mvwprintw(inventory, curr_y, start_x, "%s: %d", "ms", 1000 / r->p->get_movement_speed());
+    curr_y += 1;
+    mvwprintw(inventory, curr_y, start_x, "%s: %d", "range", r->p->get_range());
 
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
