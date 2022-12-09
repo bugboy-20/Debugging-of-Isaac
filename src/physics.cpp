@@ -306,7 +306,7 @@ void collect_item_on_ground(Room &r){
     while(items_tmp != NULL){
         ItemOnGround *i = (ItemOnGround*)items_tmp->element;
         if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y()){
-            r.p->add_item(&r, i->get_item());
+            r.p->add_item(i->get_item());
             r.add_event(new InventoryChangedE);
             r.delete_room_menber(i);
             r.add_event(new ItemPickedE(i));

@@ -64,7 +64,7 @@ int main()
 
     // init della mappa
     dummy_map = init_map(player);
-    player->add_item(dummy_map->current_room, spada);
+    player->add_item(spada);
 
     // aggiungo elementi alla stanza
     dummy_map->current_room->add_entity(slime);

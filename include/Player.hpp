@@ -31,14 +31,14 @@ public:
 
     inventory get_inventory();
     // inserisce un item in uno slot preciso
-    void add_item(Room *, int slot, Item *);
+    void add_item(int slot, Item *);
     // inserisce un item nel primo slot libero
-    void add_item(Room *, Item *);
+    void add_item(Item *);
 
     // rimuove l'item nello slot indicato, se è presente
-    Item *remove_item(Room *, int slot);
+    Item *remove_item(int slot);
     // rimuove l'item se è presente
-    Item *remove_item(Room *, Item *);
+    Item *remove_item(Item *);
 
     // se la pozione passata come paramentro è di livello superiore faccio l'upgrade,
     // aggiungo il numero di utilizzi della pozione a quello del player
