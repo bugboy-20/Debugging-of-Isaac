@@ -158,6 +158,13 @@ Core *Room::get_element_in_this_position(coords p)
         if (w->is_wall(p))
             return (Core *)currentNode->element;
     }
+
+    for (currentNode = this->items_on_ground.head; currentNode != NULL; currentNode = currentNode->next)
+    {
+        core_elm = (Core *) currentNode->element;
+        if (core_elm->get_x() == p.x && core_elm->get_y() == p.y)
+            return (Core *) currentNode->element;
+    }
     return NULL;
 }
 
@@ -186,6 +193,8 @@ void Room::delete_room_menber(Core *m)
     if (entities.delete_element(m))
         return;
     else if (core.delete_element(m))
+        return;
+    else if(items_on_ground.delete_element(m))
         return;
     else
         walls.delete_element(m);

@@ -73,7 +73,7 @@ int main()
     dummy_map->current_room->add_entity(fantasma);
     dummy_map->current_room->add_entity(z);
     dummy_map->current_room->add_Core(rock);
-    dummy_map->current_room->add_Core(s);
+    dummy_map->current_room->add_items_on_ground(s);
     dummy_map->current_room->add_wall(w2);
     // dummy_map->current_room->add_wall(w1);
 

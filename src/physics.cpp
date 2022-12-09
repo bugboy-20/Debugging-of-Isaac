@@ -6,7 +6,8 @@
 #include "Hostile.hpp"
 #include "Map.h"
 #include "time_handle.h"
-
+#include "ItemOnGround.hpp"
+using namespace std;
 List bullets = List();
 
 bool collision(int x, int y, Room& r)
@@ -238,12 +239,6 @@ void bullet_movement(Room& r){
     } 
 }
 
-void do_room(Room *r){ // fa cose sulla stanza
-    bullets_push(*r);
-    bullet_movement(*r);
-    entities_movement(*r);
-}; 
-
 void entities_movement(Room &r){
     List entities = r.get_entities(false);
     node *tmp = entities.head;
@@ -303,6 +298,29 @@ void move_in_player_direction(Room &r, Hostile *e){
         }
     }
 }
+
+void collect_item_on_ground(Room &r){
+    List items_on_ground = r.get_items_on_ground();
+    node *items_tmp = items_on_ground.head;
+
+    while(items_tmp != NULL){
+        ItemOnGround *i = (ItemOnGround*)items_tmp->element;
+        if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y()){
+            r.p->add_item(&r, i->get_item());
+            r.add_event(new InventoryChangedE);
+            r.delete_room_menber(i);
+            r.add_event(new ItemPickedE(i));
+        }
+        items_tmp = items_tmp->next;
+    }
+}
+
+void do_room(Room *r){ // fa cose sulla stanza
+    bullets_push(*r);
+    bullet_movement(*r);
+    entities_movement(*r);
+    collect_item_on_ground(*r);
+}; 
 
 bool game_over(Player p)
 {

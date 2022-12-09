@@ -107,6 +107,24 @@ void GameInterface::handle_events()
             delete t;
             break;
         }
+        case ITEM_PICKED:
+        {
+           ItemPickedE *t = (ItemPickedE *)e;
+
+            char ch = ' ';
+            Core *el = r->get_element_in_this_position({t->data->get_x(), t->data->get_y()});
+
+            if (el != NULL)
+                ch = el->get_display();
+
+            mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
+            wnoutrefresh(wroom);
+            this->render_inventory();
+
+            t->destroy();
+            delete t;
+            break; 
+        }
         default:
             break;
         }
