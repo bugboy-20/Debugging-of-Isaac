@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include "RoomEvent.hpp"
 #include "geometry.h"
+#include "ItemOnGround.hpp"
 
 /*
  * collezione di tutti gli eventi
@@ -49,4 +50,11 @@ class EntityDamagedE : public RoomEvent {
 class InventoryChangedE : public RoomEvent {
     public: 
         InventoryChangedE();
+};
+
+class ItemPickedE : public RoomEvent {
+    public:
+        ItemPickedE(ItemOnGround *i);
+        void destroy();
+        ItemOnGround *data;
 };

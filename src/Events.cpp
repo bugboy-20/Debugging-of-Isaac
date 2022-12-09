@@ -32,3 +32,11 @@ EntityDamagedE::EntityDamagedE(Entity *e) : RoomEvent(ENTITY_DAMAGED) {
 
 // INVENTORY_CHANGED
 InventoryChangedE::InventoryChangedE() : RoomEvent(INVENTORY_CHANGED) {}
+
+ItemPickedE::ItemPickedE(ItemOnGround *i) : RoomEvent(ITEM_PICKED) {
+    this->data = i;
+}
+
+void ItemPickedE::destroy() {
+    delete this->data;
+}
