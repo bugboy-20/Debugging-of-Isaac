@@ -4,13 +4,14 @@
 #include "Wall.hpp"
 #include <cstring>
 
-GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDOW *moblist, WINDOW *inv)
+GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDOW *moblist, WINDOW *inv, interface_coords c)
 {
     this->wroom = wroom;
     this->playerstat = pstat;
     this->legend = legend;
     this->moblist = moblist;
     this->inventory = inv;
+    this->i_coords = c;
     newEvents = true;
     debug = newwin(50, 30, 0, 130);
     wrefresh(debug);
@@ -403,8 +404,7 @@ void GameInterface::render_inventory()
         }
         else
             mvwaddch(inventory, start_y, curr_x, '_');
-        // TODO: 20 sarebbe la lateral_width
-        if (curr_x + spacing + 2 >= 20) //+2 uno è il bordo e l'altro è per il padding
+        if (curr_x + spacing + 2 >= i_coords.lateral_width) //+2 uno è il bordo e l'altro è per il padding
         {
             start_y += spacing - 1;
             curr_x = start_x - spacing;

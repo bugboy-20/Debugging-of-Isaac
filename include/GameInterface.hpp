@@ -7,17 +7,32 @@
 #endif
 #include "Room.hpp"
 
+struct interface_coords
+{
+    int lateral_width,
+        lower_height,
+        playerstat_height,
+        legend_height,
+        inventory_height,
+        moblist_width,
+        start_x,
+        start_y,
+        lateral_start_x,
+        lower_start_y;
+};
+
 class GameInterface
 {
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
     WINDOW *debug; // schermo temporaneo per i messaggi di debug
     Room *r;
+    interface_coords i_coords;
     bool newEvents;
 
 public:
     GameInterface() = default;
-    GameInterface(WINDOW *, WINDOW *, WINDOW *, WINDOW *, WINDOW *);
+    GameInterface(WINDOW *, WINDOW *, WINDOW *, WINDOW *, WINDOW *, interface_coords);
 
     // aggiorna il puntatore locale con quello della room da visualizzare
     void set_room(Room *r);

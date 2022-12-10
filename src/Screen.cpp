@@ -100,7 +100,17 @@ void Screen::start_gameinterface()
     wnoutrefresh(inventory);
     doupdate();
 
-    this->gi = GameInterface(wroom, playerstat, legend, moblist, inventory);
+    this->gi = GameInterface(wroom, playerstat, legend, moblist, inventory,
+                             {lateral_width,
+                              lower_height,
+                              playerstat_height,
+                              legend_height,
+                              inventory_height,
+                              moblist_width,
+                              start_x,
+                              start_y,
+                              lateral_start_x,
+                              lower_start_y});
 }
 
 // void Screen::do_screen(Room *r)
