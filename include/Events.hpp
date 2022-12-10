@@ -58,3 +58,9 @@ class ItemPickedE : public RoomEvent {
         void destroy();
         ItemOnGround *data;
 };
+
+class ItemDroppedE : public RoomEvent {
+    public:
+        ItemDroppedE(coords pos);
+        coords data;
+};

@@ -1,4 +1,6 @@
 #include "Events.hpp"
+#include "RoomEvent.hpp"
+#include "geometry.h"
 
 // ENTITY_MOVE
 EntityMoveE::EntityMoveE(coords old_pos, coords new_pos, char e) : RoomEvent(ENTITY_MOVE) {
@@ -39,4 +41,9 @@ ItemPickedE::ItemPickedE(ItemOnGround *i) : RoomEvent(ITEM_PICKED) {
 
 void ItemPickedE::destroy() {
     delete this->data;
+}
+
+
+ItemDroppedE::ItemDroppedE(coords c) : RoomEvent(ITEM_DROPPED){
+    this->data=c;
 }

@@ -8,7 +8,8 @@ enum event_type {
     ROOM_CHANGED,
     PLAYER_HEALTH_CHANGED,
     INVENTORY_CHANGED,
-    ITEM_PICKED
+    ITEM_PICKED,
+    ITEM_DROPPED
 };
 
 // Classe per gestire gli eventi. 

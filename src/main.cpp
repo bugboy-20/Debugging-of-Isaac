@@ -150,12 +150,13 @@ void controller(Player *player)
     do
     {
         key = getch();
-        if(key - 48 >= 0 && key - 48 <= player_inventory_slots){
-            int slot = key - 48;
+        if(key - '0' >= 0 && key - '0' <= player_inventory_slots){
+            int slot = key - '0';
             if(player->get_inventory().items[slot] != NULL){
                 drop_item(*dummy_map->current_room, slot);
                 dummy_map->current_room->add_event(new RoomChangedE());
             }  
+            continue;
         }
         switch (key)
         {
