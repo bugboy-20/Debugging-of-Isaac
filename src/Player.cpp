@@ -61,7 +61,7 @@ void Player::add_item(int slot, Item *i)
 
 void Player::add_item(Item *i)
 {
-    int slot = inv.item_n;
+    int slot = 0;
     while (inv.items[slot] != NULL)
         slot += 1;
 

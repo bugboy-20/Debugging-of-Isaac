@@ -315,6 +315,30 @@ void collect_item_on_ground(Room &r){
     }
 }
 
+void drop_item(Room& r, int slot){
+    Weapon *spada = new Weapon(weapon, '\\', r.p->get_inventory().items[slot]->get_description(), lvl5);
+    int block = 0, count = 0, max_blocks = 8;
+    coords block_around_player[max_blocks]={
+        {r.p->get_x(), r.p->get_y() - 1},
+        {r.p->get_x(), r.p->get_y() + 1},
+        {r.p->get_x() + 1, r.p->get_y()},
+        {r.p->get_x() - 1, r.p->get_y()},
+        {r.p->get_x() + 1, r.p->get_y() - 1},
+        {r.p->get_x() - 1, r.p->get_y() - 1},
+        {r.p->get_x() + 1, r.p->get_y() + 1},
+        {r.p->get_x() - 1, r.p->get_y() + 1}
+    };
+    while(count < max_blocks){
+        if(r.get_element_in_this_position(block_around_player[count]) == NULL && !wall_collision(block_around_player[count], r)){
+            ItemOnGround *s = new ItemOnGround(block_around_player[count], spada);
+            r.add_items_on_ground(s);
+            r.p->remove_item(slot);
+            break;
+        }
+        count++;
+    }
+}
+
 void do_room(Room *r){ // fa cose sulla stanza
     bullets_push(*r);
     bullet_movement(*r);

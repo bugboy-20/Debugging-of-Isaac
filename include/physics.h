@@ -70,9 +70,6 @@ void bullets_push(Room& r);
 /*Funzione che gestisce i proiettili in movimento*/
 void bullet_movement(Room& r);
 
-// fa cose sulla stanza
-void do_room(Room *r); 
-
 //Funzione che sceglie il movimento del nemico in base alla sua intelligenza
 void entities_movement(Room &r);
 
@@ -81,6 +78,15 @@ void move_in_player_direction(Room &r, Hostile *e);
 
 //Funzione che fa muovere un nemico in maniera casuale
 void move_in_random_direction(Room &r, Hostile *e);
+
+//Funzione per raccogliere gli item da terra
+void collect_item_on_ground(Room &r);
+
+//Funzione per rilasciare gli item dall'inventario
+void drop_item(Room& r, int slot);
+
+// fa cose sulla stanza
+void do_room(Room *r); 
 
 /*Funzione che controlla se il player ha finito la vita per
 dichiarare l'eventyale game_over*/

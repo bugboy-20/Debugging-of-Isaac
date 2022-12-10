@@ -12,6 +12,7 @@
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "ItemOnGround.hpp"
+#include "Events.hpp"
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -149,6 +150,13 @@ void controller(Player *player)
     do
     {
         key = getch();
+        if(key - 48 >= 0 && key - 48 <= player_inventory_slots){
+            int slot = key - 48;
+            if(player->get_inventory().items[slot] != NULL){
+                drop_item(*dummy_map->current_room, slot);
+                dummy_map->current_room->add_event(new RoomChangedE());
+            }  
+        }
         switch (key)
         {
         case 'w':
