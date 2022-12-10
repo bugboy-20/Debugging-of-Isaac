@@ -335,7 +335,7 @@ void drop_item(Room& r, int slot){
             ItemOnGround *i = new ItemOnGround(block_around_player[block], spada);
             r.p->remove_item(slot);
             r.add_items_on_ground(i);
-            r.add_event(new RoomChangedE());
+            r.add_event(new ItemDroppedE({i->get_x(), i->get_y()}));
             break;
         }
         block++;

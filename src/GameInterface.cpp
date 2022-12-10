@@ -127,6 +127,23 @@ void GameInterface::handle_events()
             delete t;
             break;
         }
+        case ITEM_DROPPED:
+        {
+            ItemDroppedE *t = (ItemDroppedE *)e;
+
+            char ch = ' ';
+            Core *i = r->get_element_in_this_position(t->data);
+            if (i != NULL)
+                ch = i->get_display();
+
+            mvwaddch(wroom, t->data.y, t->data.x, ch);
+            wnoutrefresh(wroom);
+            this->render_inventory();
+            this->render_playerstat();
+
+            delete t;
+            break;
+        }
         default:
             break;
         }
