@@ -11,6 +11,7 @@
 #define Zombie_ms 150
 #define Zombie_range 10
 #define Zombie_tr 3
+#define Zombie_sm 0
 
 #define Scheletro_s "scheletro"
 // char Scheletro_name[STR_LENGTH] = "Scheletro";
@@ -22,6 +23,7 @@
 #define Scheletro_ms 150
 #define Scheletro_range 10
 #define Scheletro_tr 3
+#define Scheletro_sm 0
 
 #define Goblin_s "goblin"
 // char Goblin_name[STR_LENGTH] = "Goblin";
@@ -33,6 +35,7 @@
 #define Goblin_ms 150
 #define Goblin_range 10
 #define Goblin_tr 3
+#define Goblin_sm 0
 
 #define Fantasma_s "fantasma"
 // char Fantasma_name[STR_LENGTH] = "Fantasma";
@@ -44,6 +47,7 @@
 #define Fantasma_ms 150
 #define Fantasma_range 10
 #define Fantasma_tr 3
+#define Fantasma_sm 0
 
 #define Slime_s "slime"
 // char Slime_name[STR_LENGTH] = "Slime";
@@ -55,6 +59,7 @@
 #define Slime_ms 150
 #define Slime_range 10
 #define Slime_tr 3
+#define Slime_sm 0
 
 #define player_s "giocatore"
 #define player_base_damage 3

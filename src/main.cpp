@@ -154,7 +154,6 @@ void controller(Player *player)
             int slot = key - '0';
             if(player->get_inventory().items[slot] != NULL){
                 drop_item(*dummy_map->current_room, slot);
-                dummy_map->current_room->add_event(new RoomChangedE());
             }  
             continue;
         }

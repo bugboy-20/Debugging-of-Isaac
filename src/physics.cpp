@@ -242,15 +242,16 @@ void bullet_movement(Room& r){
 void entities_movement(Room &r){
     List entities = r.get_entities(false);
     node *tmp = entities.head;
+    int low_smartness = 0;
 
     while(tmp != NULL){
         Hostile *e = (Hostile*) tmp->element;
         timeval now;
         time_now(now);
         if(time_elapsed(e->get_last_move(), now) >= e->get_movement_speed()){ 
-            /*Qui bisogna decidere se richiamare move_in_random_direction() 
-            o move_in_player_direction() in base all'intelligenza dell'hostile e*/
-            move_in_random_direction(r, e);
+            if(e->get_smartness() == low_smartness){
+                move_in_random_direction(r, e);
+            }else move_in_player_direction(r, e);
             time_now(now);
             e->set_last_move(now);
         }
@@ -309,7 +310,7 @@ void collect_item_on_ground(Room &r){
             r.p->add_item(i->get_item());
             r.add_event(new InventoryChangedE);
             r.delete_room_menber(i);
-            r.add_event(new ItemPickedE(i));
+            r.add_event(new RoomChangedE());
         }
         items_tmp = items_tmp->next;
     }
@@ -317,7 +318,7 @@ void collect_item_on_ground(Room &r){
 
 void drop_item(Room& r, int slot){
     Weapon *spada = new Weapon(weapon, '\\', r.p->get_inventory().items[slot]->get_description(), lvl5);
-    int block = 0, count = 0, max_blocks = 8;
+    int block = 0, max_blocks = 8;
     coords block_around_player[max_blocks]={
         {r.p->get_x(), r.p->get_y() - 1},
         {r.p->get_x(), r.p->get_y() + 1},
@@ -328,14 +329,16 @@ void drop_item(Room& r, int slot){
         {r.p->get_x() + 1, r.p->get_y() + 1},
         {r.p->get_x() - 1, r.p->get_y() + 1}
     };
-    while(count < max_blocks){
-        if(r.get_element_in_this_position(block_around_player[count]) == NULL && !wall_collision(block_around_player[count], r)){
-            ItemOnGround *s = new ItemOnGround(block_around_player[count], spada);
-            r.add_items_on_ground(s);
+
+    while(block < max_blocks){
+        if(r.get_element_in_this_position(block_around_player[block]) == NULL && !wall_collision(block_around_player[block], r)){
+            ItemOnGround *i = new ItemOnGround(block_around_player[block], spada);
             r.p->remove_item(slot);
+            r.add_items_on_ground(i);
+            r.add_event(new RoomChangedE());
             break;
         }
-        count++;
+        block++;
     }
 }
 
