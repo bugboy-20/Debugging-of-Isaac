@@ -33,7 +33,7 @@ public:
     /**
      * Inizializza le window e disegna i bordi per ognuna
      */
-    void start_gameinterface();
+    void start_gameinterface(Room *);
 
     /**
      * Aggiorna lo schermo in base agli eventi che avvenuti

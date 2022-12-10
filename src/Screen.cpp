@@ -65,7 +65,7 @@ void Screen::start_gamemenu()
     this->gm = GameMenu(game_menu, stdscr_width / 2, stdscr_height / 2);
 }
 
-void Screen::start_gameinterface()
+void Screen::start_gameinterface(Room *r)
 {
     // attivo il nodelay
     nodelay(stdscr, TRUE);
@@ -111,6 +111,12 @@ void Screen::start_gameinterface()
                               start_y,
                               lateral_start_x,
                               lower_start_y});
+    this->gi.set_room(r);
+    this->gi.render_room();
+    this->gi.render_inventory();
+    this->gi.render_legend();
+    this->gi.render_moblist();
+    this->gi.render_playerstat();
 }
 
 // void Screen::do_screen(Room *r)

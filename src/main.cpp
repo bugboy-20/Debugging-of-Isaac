@@ -120,7 +120,7 @@ void menu(Screen& schermo) {
 }
 
 void game_loop() {
-    schermo.start_gameinterface();
+    schermo.start_gameinterface(dummy_map->current_room);
     timeval inizio_frame, fine_frame;
     while (!game_over(*player))
     {

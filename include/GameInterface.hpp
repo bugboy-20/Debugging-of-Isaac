@@ -30,6 +30,14 @@ private:
     interface_coords i_coords;
     bool newEvents;
 
+    // metodi di utilità
+    /**
+     * Stampa le porte
+     *
+     * @param doors array di porte da stampare
+     */
+    void print_doors(door *doors[]);
+
 public:
     GameInterface() = default;
     GameInterface(WINDOW *, WINDOW *, WINDOW *, WINDOW *, WINDOW *, interface_coords);
@@ -84,12 +92,4 @@ public:
      *
      */
     void render_inventory();
-
-    // metodi di utilità
-    /**
-     * Stampa le porte
-     *
-     * @param doors array di porte da stampare
-     */
-    void print_doors(door *doors[]);
 };

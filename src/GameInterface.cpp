@@ -54,8 +54,7 @@ void GameInterface::handle_events()
         {
             RoomChangedE *t = (RoomChangedE *)e;
 
-            this->render_room();       // stampo la stanza per la prima volta
-            this->render_playerstat(); // è qui solo temporaneamente per i test
+            this->render_room(); // stampo la stanza per la prima volta
             this->render_legend();
             this->render_moblist();
             this->render_inventory();
