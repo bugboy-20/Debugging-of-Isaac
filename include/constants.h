@@ -66,7 +66,8 @@
 #define player_inventory_slots 5
 #define player_display '@'
 
-#define door_display ' '
+#define open_door_display ' '
+#define locked_door_display '+'
 #define h_wall_display '-'
 #define v_wall_display '|'
 

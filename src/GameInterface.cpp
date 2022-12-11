@@ -2,6 +2,7 @@
 
 #include "Events.hpp"
 #include "Wall.hpp"
+#include "constants.h"
 #include <cstring>
 
 GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDOW *moblist, WINDOW *inv, interface_coords c)
@@ -153,13 +154,15 @@ void GameInterface::handle_events()
 
 void GameInterface::print_doors(door *doors[])
 {
-    char door = ' ';
-
     for (int i = 0; i < 4; i++)
     {
         if (doors[i] != NULL)
         {
-            int yLoc1, xLoc1, yLoc2, xLoc2;
+            char door = open_door_display;
+            if (doors[i]->locked)
+                door = locked_door_display;
+            int yLoc1,
+                xLoc1, yLoc2, xLoc2;
 
             switch ((*doors[i]).position)
             {
