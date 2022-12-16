@@ -26,14 +26,16 @@ using namespace std;
 
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
 #define utom(x) (1000 * x) // from micro to milli
-//#define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
+// #define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
 int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
 
-void menu(Screen&); //apre il menu
+// true se deve essere eseguito un altro menù
+bool menu(Screen &); // apre il menu
 void game_loop();
+void controls(Screen &); // apre l'interfaccia dei controlli
 
 map *dummy_map;
 
@@ -61,7 +63,11 @@ int main()
     schermo = Screen();
 
     // apro il menu
-    menu(schermo);
+    bool again;
+    do
+    {
+        again = menu(schermo);
+    } while (again);
 
     // init della mappa
     dummy_map = init_map(player);
@@ -82,7 +88,8 @@ int main()
     exit_game();
 }
 
-void menu(Screen& schermo) {
+bool menu(Screen &schermo)
+{
     schermo.start_gamemenu();
     int selected_menu, key;
 
@@ -96,30 +103,47 @@ void menu(Screen& schermo) {
             selected_menu = schermo.gm.get_selected_item();
             break;
         }
-        else if (key == KEY_UP || key == 'w')
-            schermo.gm.select_next_item();
         else if (key == KEY_DOWN || key == 's')
+            schermo.gm.select_next_item();
+        else if (key == KEY_UP || key == 'w')
             schermo.gm.select_prev_item();
     } while (true);
     schermo.gm.clean();
 
+    bool again = false;
     switch (selected_menu)
     {
-        case NEW_GAME:
-            // game loop
-            break;
+    case NEW_GAME:
+        // game loop
+        break;
 
-        case EXIT_GAME:
-            exit_game();
-            break;
+    case CONTROLS:
+        controls(schermo);
+        again = true;
+        break;
 
-        default:
-            exit_game(); // qualcosa è andato storto meglio uscire
-            break;
+    case EXIT_GAME:
+        exit_game();
+        break;
+
+    default:
+        exit_game(); // qualcosa è andato storto meglio uscire
+        break;
     }
+    return again;
 }
 
-void game_loop() {
+void controls(Screen &schermo)
+{
+    schermo.start_gamecontrols();
+    int key = '0'; // random key giusto per farlo entrare nel ciclo la prima volta
+    while (getch() != 'q')
+        ;
+    schermo.gc.clean();
+}
+
+void game_loop()
+{
     schermo.start_gameinterface(dummy_map->current_room);
     timeval inizio_frame, fine_frame;
     while (!game_over(*player))
@@ -140,7 +164,6 @@ void game_loop() {
         usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
-
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
@@ -150,28 +173,30 @@ void controller(Player *player)
     do
     {
         key = getch();
-        if(key - '0' >= 0 && key - '0' <= player_inventory_slots){
+        if (key - '0' >= 0 && key - '0' <= player_inventory_slots)
+        {
             int slot = key - '0';
-            if(player->get_inventory().items[slot] != NULL){
+            if (player->get_inventory().items[slot] != NULL)
+            {
                 drop_item(*dummy_map->current_room, slot);
-            }  
+            }
             continue;
         }
         switch (key)
         {
-        case 'w':
+        case up_button:
             player->move_up(dummy_map->current_room);
             break;
-        case 'a':
+        case left_button:
             player->move_left(dummy_map->current_room);
             break;
-        case 'd':
+        case right_button:
             player->move_right(dummy_map->current_room);
             break;
-        case 's':
+        case down_button:
             player->move_down(dummy_map->current_room);
             break;
-        case 'q':
+        case quit_button:
             exit_game();
             break;
         case KEY_UP:
@@ -186,7 +211,7 @@ void controller(Player *player)
         case KEY_LEFT:
             bullet_creation(player, LEFT);
             break;
-        case 'h':
+        case heal_button:
             player->use_potion(dummy_map->current_room);
             break;
         default:

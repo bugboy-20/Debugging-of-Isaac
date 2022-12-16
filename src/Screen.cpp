@@ -14,6 +14,7 @@ Screen::Screen()
     curs_set(0);          // rende invisibile il cursore
     keypad(stdscr, true); // permette l'utilizzo del arrow_key
     // nodelay(stdscr, TRUE); // il nodelay viene attivato sono nel gioco
+    getmaxyx(stdscr, stdscr_height, stdscr_width);
 
     /* initialize colors */
     if (!has_colors())
@@ -57,7 +58,6 @@ Screen::Screen()
 void Screen::start_gamemenu()
 {
     // init windows
-    getmaxyx(stdscr, stdscr_height, stdscr_width);
     game_menu = newwin(stdscr_height / 2, stdscr_width / 2, stdscr_height / 4, stdscr_width / 4);
     // box(game_menu, 0, 0);
     wrefresh(game_menu);
@@ -119,6 +119,12 @@ void Screen::start_gameinterface(Room *r)
     this->gi.render_playerstat();
 }
 
+void Screen::start_gamecontrols()
+{
+    controls = newwin(stdscr_height / 2, stdscr_width / 3, stdscr_height / 4, stdscr_width / 3);
+    wrefresh(controls);
+    this->gc = GameControls(controls);
+}
 // void Screen::do_screen(Room *r)
 // {
 //     this->gi.set_room(r);

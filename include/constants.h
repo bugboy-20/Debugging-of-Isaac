@@ -82,6 +82,7 @@
 #define left_button 'a'
 #define right_button 'd'
 #define quit_button 'q'
+#define heal_button 'h'
 
 #define weapon_damage 2
 #define armor_health 2

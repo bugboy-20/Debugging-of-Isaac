@@ -8,11 +8,12 @@
 
 #include "GameMenu.hpp"
 #include "GameInterface.hpp"
+#include "GameControls.hpp"
 
 class Screen
 {
 private:
-    WINDOW *wroom, *playerstat, *legend, *moblist, *inventory, *game_menu;
+    WINDOW *wroom, *playerstat, *legend, *moblist, *inventory, *game_menu, *controls;
 
     int stdscr_width, stdscr_height;
 
@@ -23,6 +24,7 @@ public:
      */
     GameMenu gm;
     GameInterface gi;
+    GameControls gc;
 
     Screen();
 
@@ -34,6 +36,11 @@ public:
      * Inizializza le window e disegna i bordi per ognuna
      */
     void start_gameinterface(Room *);
+
+    /**
+     * inizializza l'interfaccia dei comandi
+     */
+    void start_gamecontrols();
 
     /**
      * Aggiorna lo schermo in base agli eventi che avvenuti

@@ -9,6 +9,7 @@
 enum menu_elem
 {
     NEW_GAME,
+    CONTROLS,
     EXIT_GAME,
 };
 
