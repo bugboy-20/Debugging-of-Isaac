@@ -96,8 +96,7 @@ void bullet_creation(Entity *e, enum direction direction){
     timeval now;
     time_now(now);
     if(time_elapsed(e->get_last_shot(), now) >= e->get_attack_speed()){
-        Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage());
-        b->set_direction(direction);
+        Bullet *b = new Bullet({e->get_x(), e->get_y()}, e->get_damage(), direction, e->get_range());
         bullets.push(b);
         time_now(now);
         e->set_last_shot(now);

@@ -18,7 +18,7 @@ protected:
 
 public:
     // di default ha range infinito
-    Bullet(coords pos, int damage, direction direction = NULLO, int range = 10000);
+    Bullet(coords pos, int damage, direction direction, int range = 10000);
 
     int get_direction();
     void set_direction(enum direction direction);
