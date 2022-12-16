@@ -70,11 +70,11 @@ void Screen::start_gameinterface(Room *r)
     // attivo il nodelay
     nodelay(stdscr, TRUE);
 
-    int lateral_width = 20,
+    int lateral_width = 22,
         lower_height = 10,
-        playerstat_height = 4,
-        legend_height = (ROOM_HEIGHT + lower_height - playerstat_height) / 2,
-        inventory_height = ROOM_HEIGHT + lower_height - playerstat_height - legend_height,
+        playerstat_height = 9,
+        inventory_height = 6,
+        legend_height = ROOM_HEIGHT + lower_height - playerstat_height - inventory_height,
         moblist_width = ROOM_WIDTH,
         start_x = 1,
         start_y = 0,

@@ -272,7 +272,17 @@ void GameInterface::render_playerstat()
         waddch(playerstat, emptyHeart);
 
     // stampo i punti
-    mvwprintw(playerstat, 2, start_x, "%s: %d", "punti", player->get_score());
+    mvwprintw(playerstat, 3, start_x, "%s: %d", "punti", player->get_score());
+
+    // stampo le statistiche
+    int curr_y = 4;
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "danno", r->p->get_damage());
+    curr_y += 1;
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "vel. attacco", 1000 / r->p->get_attack_speed());
+    curr_y += 1;
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "velocita`", 1000 / r->p->get_movement_speed());
+    curr_y += 1;
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "gittata", r->p->get_range());
 
     wrefresh(playerstat);
 }
@@ -431,19 +441,6 @@ void GameInterface::render_inventory()
 
         curr_x += spacing;
     }
-
-    getyx(inventory, curr_y, curr_x);
-    curr_y += 3;
-    mvwprintw(inventory, curr_y, start_x, "%s: %d", "damage", r->p->get_damage());
-    curr_y += 1;
-    mvwprintw(inventory, curr_y, start_x, "%s: %d", "health", r->p->get_max_health());
-    curr_y += 1;
-    mvwprintw(inventory, curr_y, start_x, "%s: %d", "as", 1000 / r->p->get_attack_speed());
-    curr_y += 1;
-    mvwprintw(inventory, curr_y, start_x, "%s: %d", "ms", 1000 / r->p->get_movement_speed());
-    curr_y += 1;
-    mvwprintw(inventory, curr_y, start_x, "%s: %d", "range", r->p->get_range());
-
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
 }
