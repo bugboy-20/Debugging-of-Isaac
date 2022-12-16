@@ -173,9 +173,9 @@ void controller(Player *player)
     do
     {
         key = getch();
-        if (key - '0' >= 0 && key - '0' <= player_inventory_slots)
+        if (key - '0' >= 1 && key - '0' <= player_inventory_slots)
         {
-            int slot = key - '0';
+            int slot = key - '0' - 1;
             if (player->get_inventory().items[slot] != NULL)
             {
                 drop_item(*dummy_map->current_room, slot);
