@@ -54,37 +54,43 @@ Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
 Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
-Player *player = new Player({20, 15}, n, 10);
+Player *player;
 
 Screen schermo;
 int main()
 {
-    // init schermo
-    schermo = Screen();
-
-    // apro il menu
-    bool again;
+    int key;
     do
     {
-        again = menu(schermo);
-    } while (again);
+        // init schermo e player
+        schermo = Screen();
+        player = new Player({20, 15}, n, 10);
 
-    // init della mappa
-    dummy_map = init_map(player);
-    player->add_item(spada);
+        // apro il menu
+        bool again;
+        do
+        {
+            again = menu(schermo);
+        } while (again);
 
-    // aggiungo elementi alla stanza
-    dummy_map->current_room->add_entity(slime);
-    dummy_map->current_room->add_entity(scheleton);
-    dummy_map->current_room->add_entity(goblin);
-    dummy_map->current_room->add_entity(fantasma);
-    dummy_map->current_room->add_entity(z);
-    dummy_map->current_room->add_Core(rock);
-    dummy_map->current_room->add_items_on_ground(s);
-    dummy_map->current_room->add_wall(w2);
-    // dummy_map->current_room->add_wall(w1);
+        // init della mappa
+        dummy_map = init_map(player);
+        player->add_item(spada);
 
-    game_loop();
+        // aggiungo elementi alla stanza
+        dummy_map->current_room->add_entity(slime);
+        dummy_map->current_room->add_entity(scheleton);
+        dummy_map->current_room->add_entity(goblin);
+        dummy_map->current_room->add_entity(fantasma);
+        dummy_map->current_room->add_entity(z);
+        dummy_map->current_room->add_Core(rock);
+        dummy_map->current_room->add_items_on_ground(s);
+        dummy_map->current_room->add_wall(w2);
+        // dummy_map->current_room->add_wall(w1);
+
+        game_loop();
+        key = schermo.print_game_over();
+    } while (key != quit_button);
     exit_game();
 }
 
@@ -213,6 +219,9 @@ void controller(Player *player)
             break;
         case heal_button:
             player->use_potion(dummy_map->current_room);
+            break;
+        case 'p': // tasto suicidio
+            player->set_health(0);
             break;
         default:
             break;

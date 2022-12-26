@@ -50,6 +50,10 @@ public:
     // void do_screen(Room *r);
 
     /**
+     * restituisce il tasto premuto mentre si visualizzava la schermata di game over
+     */
+    int print_game_over();
+    /**
      * Termina lo schermo
      */
     void stop_screen();

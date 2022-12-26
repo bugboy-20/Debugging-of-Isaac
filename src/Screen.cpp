@@ -2,6 +2,11 @@
 
 #include <iostream>
 #include <locale.h>
+#ifdef _WIN32 // sleep fn
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 
 #define rgbtc(c) (int)(c / (51 / 200.0)) // trasforma un valore rgb 0-255 in scala 0-1000
 #define DEFAULT 0
@@ -14,6 +19,7 @@ Screen::Screen()
     curs_set(0);          // rende invisibile il cursore
     keypad(stdscr, true); // permette l'utilizzo del arrow_key
     // nodelay(stdscr, TRUE); // il nodelay viene attivato sono nel gioco
+    clear();
     getmaxyx(stdscr, stdscr_height, stdscr_width);
 
     /* initialize colors */
@@ -131,12 +137,87 @@ void Screen::start_gamecontrols()
 //     this->gi.handle_events();
 // }
 
+int Screen::print_game_over()
+{
+    wclear(inventory);
+    wclear(legend);
+    wclear(moblist);
+    wclear(wroom);
+    wclear(playerstat);
+
+    wnoutrefresh(inventory);
+    wnoutrefresh(legend);
+    wnoutrefresh(moblist);
+    wnoutrefresh(wroom);
+    wnoutrefresh(playerstat);
+    doupdate();
+
+    /*
+ _______    _______    _______    _______
+(  ____ \  (  ___  )  (       )  (  ____ \
+| (    \/  | (   ) |  | () () |  | (    \/
+| |        | (___) |  | || || |  | (__
+| | ____   |  ___  |  | |(_)| |  |  __)
+| | \_  )  | (   ) |  | |   | |  | (
+| (___) |  | )   ( |  | )   ( |  | (____/\
+(_______)  |/     \|  |/     \|  (_______/
+
+ _______               _______    _______
+(  ___  )  |\     /|  (  ____ \  (  ____ )
+| (   ) |  | )   ( |  | (    \/  | (    )|
+| |   | |  | |   | |  | (__      | (____)|
+| |   | |  ( (   ) )  |  __)     |     __)
+| |   | |   \ \_/ /   | (        | (\ (
+| (___) |    \   /    | (____/\  | ) \ \__
+(_______)     \_/     (_______/  |/   \__/
+*/
+
+    int text_height = 17, text_width = 42, current_y = (stdscr_height - text_height) / 2 - 3, current_x = (stdscr_width - text_width) / 2;
+    nodelay(stdscr, FALSE);
+    mvprintw(current_y, current_x, "%s", " _______    _______    _______    _______ ");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "(  ____ \\  (  ___  )  (       )  (  ____ \\");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| (    \\/  | (   ) |  | () () |  | (    \\/");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| |        | (___) |  | || || |  | (__    ");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| | ____   |  ___  |  | |(_)| |  |  __)   ");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| | \\_  )  | (   ) |  | |   | |  | (      ");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| (___) |  | )   ( |  | )   ( |  | (____/\\");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "(_______)  |/     \\|  |/     \\|  (_______/");
+    current_y += 2;
+    // mvprintw(current_y, current_y, "%s", "                                          ");
+    mvprintw(current_y, current_x, "%s", " _______               _______    _______ ");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "(  ___  )  |\\     /|  (  ____ \\  (  ____ )");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| (   ) |  | )   ( |  | (    \\/  | (    )|");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| |   | |  | |   | |  | (__      | (____)|");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| |   | |  ( (   ) )  |  __)     |     __)");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| |   | |   \\ \\_/ /   | (        | (\\ (   ");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "| (___) |    \\   /    | (____/\\  | ) \\ \\__");
+    current_y += 1;
+    mvprintw(current_y, current_x, "%s", "(_______)     \\_/     (_______/  |/   \\__/");
+    mvprintw(stdscr_height - 5, 0, "%s %c %s", "Premi un tasto per ricominciare oppure premi", quit_button, "per uscire...");
+    refresh();
+    // #ifdef _WIN32
+    //     Sleep(2000);
+    // #else
+    //     usleep(utom(2000));
+    // #endif
+    int key = getch();
+    return key;
+}
+
 void Screen::stop_screen()
 {
-    // delwin(wroom);
-    // delwin(playerstat);
-    // delwin(legend);
-    // delwin(moblist);
-    // delwin(inventory);
     endwin();
 }
