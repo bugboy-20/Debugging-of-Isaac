@@ -22,19 +22,19 @@ Entity::Entity(coords pos, char display, char description[], char name[10], stat
     this->range = s.range;
 }
 
-bool Entity::move_up(Room *room) { return move(room, 0, -1); }
-bool Entity::move_down(Room *room) { return move(room, 0, 1); }
-bool Entity::move_left(Room *room) { return move(room, -1, 0); }
-bool Entity::move_right(Room *Room) { return move(Room, 1, 0); }
+move_outcome Entity::move_up(Room *room) { return move(room, 0, -1); }
+move_outcome Entity::move_down(Room *room) { return move(room, 0, 1); }
+move_outcome Entity::move_left(Room *room) { return move(room, -1, 0); }
+move_outcome Entity::move_right(Room *Room) { return move(Room, 1, 0); }
 
-bool Entity::move(Room *r, int x, int y)
+move_outcome Entity::move(Room *r, int x, int y)
 {
     coords n_pos = {this->pos.x + x, this->pos.y + y};
     timeval now;
     time_now(now);
     // se non posso muovermi termino e ritorno che non ho avuto collisione
     if (time_elapsed(last_move, now) < movement_speed)
-        return true;
+        return TIMEOUT;
     // se posso muovermi controllo se collido con qualcosa
     if (!collision(this->pos.x + x, this->pos.y + y, *r))
     {
@@ -42,10 +42,10 @@ bool Entity::move(Room *r, int x, int y)
         this->pos.x += x;
         this->pos.y += y;
         this->last_move = now;
-        return true;
+        return MOVEMENT;
     }
     else
-        return false;
+        return COLLISION;
 }
 
 void Entity::reposition(coords p) { this->pos = p; }

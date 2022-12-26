@@ -16,15 +16,15 @@ protected:
     enum direction d;
     int space_travelled;
 
+    move_outcome move(Room *r, int x, int y);
+
 public:
-    // di default ha range infinito
-    Bullet(coords pos, int damage, direction direction, int range = 10000);
+    Bullet(coords pos, int damage, direction direction, int range);
 
     int get_direction();
     void set_direction(enum direction direction);
-    bool move(Room *r, int x, int y);
-    bool move_up(Room *room);
-    bool move_down(Room *room);
-    bool move_left(Room *room);
-    bool move_right(Room *room);
+    move_outcome move_up(Room *room);
+    move_outcome move_down(Room *room);
+    move_outcome move_left(Room *room);
+    move_outcome move_right(Room *room);
 };

@@ -3,6 +3,12 @@
 #include "time_handle.h"
 
 class Room;
+enum move_outcome
+{
+    COLLISION,
+    MOVEMENT,
+    TIMEOUT
+};
 
 class Entity : public Core
 {
@@ -16,15 +22,19 @@ protected:
     int movement_speed;
     int range;
 
-    // restituisce true se non ha fatto collsione
-    bool move(Room *r, int x, int y);
+    /**
+     * restituisce COLLISION se ha provato a muoversi in un pixel occupato,
+     * MOVEMENT se si è mosso
+     * TIMEOUT se non può ancora muoversi
+     */
+    move_outcome move(Room *r, int x, int y);
 
 public:
     Entity(coords pos, char display, char description[], char name[10], stats);
-    bool move_up(Room *room);
-    bool move_down(Room *room);
-    bool move_left(Room *room);
-    bool move_right(Room *room);
+    move_outcome move_up(Room *room);
+    move_outcome move_down(Room *room);
+    move_outcome move_left(Room *room);
+    move_outcome move_right(Room *room);
 
     /* riposiziona l'entità alle cordinate specificate
     utile per quando cambia stanza
