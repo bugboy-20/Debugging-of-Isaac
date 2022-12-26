@@ -31,6 +31,7 @@ int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
 void exit_game(); // permette di uscire
+void reset_game(); // reset del game
 
 // true se deve essere eseguito un altro menù
 bool menu(Screen &); // apre il menu
@@ -170,6 +171,7 @@ void game_loop()
         usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
+    delete player;
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
