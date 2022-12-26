@@ -28,6 +28,7 @@ public:
     int get_score();
     void set_health(int health);
     void change_health(int health);
+    void set_score(int score);
 
     inventory get_inventory();
     // inserisce un item in uno slot preciso

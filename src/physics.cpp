@@ -111,6 +111,8 @@ void player_damage(Room& r, Bullet *b){
 void entity_damage(Room& r, Bullet *b, Entity *e){
     e->set_health(e->get_health() - r.p->get_damage());   
     if(e->get_health() <= 0){
+        r.p->set_score(e->get_damage() + r.p->get_max_health());
+        r.add_event(new ScoreChangedE(r.p));
         r.delete_room_menber(e);
         r.add_event(new EntityKilledE(e));
     }else r.add_event(new EntityDamagedE(e));

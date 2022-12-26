@@ -45,6 +45,11 @@ void Player::change_health(int h)
         this->health += h;
 }
 
+void Player::set_score(int score)
+{
+    this->score += score;
+}
+
 inventory Player::get_inventory()
 {
     return this->inv;
