@@ -99,6 +99,14 @@ void GameInterface::handle_events()
             delete t;
             break;
         }
+        case SCORE_CHANGED:
+        {
+            ScoreChangedE *t = (ScoreChangedE *)e;
+
+            mvwprintw(playerstat, 3, 1, "%s: %d", "punti", t->data->get_score());
+            delete t;
+            break;
+        }
         case INVENTORY_CHANGED:
         {
             InventoryChangedE *t = (InventoryChangedE *)e;
