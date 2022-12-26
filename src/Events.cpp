@@ -43,7 +43,10 @@ void ItemPickedE::destroy() {
     delete this->data;
 }
 
-
 ItemDroppedE::ItemDroppedE(coords c) : RoomEvent(ITEM_DROPPED){
     this->data=c;
+}
+
+ScoreChangedE::ScoreChangedE(Player *p) : RoomEvent(SCORE_CHANGED) {
+    this->data = p;
 }

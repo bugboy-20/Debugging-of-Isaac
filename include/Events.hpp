@@ -64,3 +64,9 @@ class ItemDroppedE : public RoomEvent {
         ItemDroppedE(coords pos);
         coords data;
 };
+
+class ScoreChangedE : public RoomEvent {
+    public:
+        ScoreChangedE(Player *p);
+        Player *data;
+};
