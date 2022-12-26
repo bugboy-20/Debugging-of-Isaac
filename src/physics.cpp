@@ -147,7 +147,8 @@ void shoot_in_direction(Room& r, Bullet *b){
     if(b->get_direction() >= 0 && b->get_direction() <= 3){
         switch(b->get_direction()){
             case DOWN:
-                if(!(b->move_down(&r))){
+            {
+                if(b->move_down(&r) == COLLISION){
                     if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
                         player_damage(r, b);
                     }else{
@@ -159,8 +160,9 @@ void shoot_in_direction(Room& r, Bullet *b){
                     destroy_bullet(r, b);                                                     
                 }
                 break;
+            }
             case UP:
-                if(!(b->move_up(&r))){
+                if(b->move_up(&r) == COLLISION){
                     if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
                         player_damage(r, b);
                     }else{
@@ -173,7 +175,7 @@ void shoot_in_direction(Room& r, Bullet *b){
                 }
                 break;
             case RIGHT:
-                if(!(b->move_right(&r))){
+                if(b->move_right(&r) == COLLISION){
                     if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
                         player_damage(r, b);
                     }else{
@@ -186,7 +188,7 @@ void shoot_in_direction(Room& r, Bullet *b){
                 }
                 break;
             case LEFT:
-                if(!(b->move_left(&r))){
+                if(b->move_left(&r) == COLLISION){
                     if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
                         player_damage(r, b);
                     }else{
@@ -281,20 +283,20 @@ void move_in_random_direction(Room &r, Hostile *e){
 void move_in_player_direction(Room &r, Hostile *e){
     bool flag = enemy_in_range(r, e);
     if(e->get_x() < r.p->get_x() && !flag){
-        if(!e->move_right(&r) && !flag){
-            if(!e->move_down(&r) && !flag) e->move_up(&r);
+        if(e->move_right(&r) == COLLISION && !flag){
+            if(e->move_down(&r) == COLLISION && !flag) e->move_up(&r);
         }
     }else if(e->get_x() > r.p->get_x() && !flag){
-        if(!e->move_left(&r) && !flag){
-            if(!e->move_up(&r) && !flag) e->move_down(&r);
+        if(e->move_left(&r) == COLLISION && !flag){
+            if(e->move_up(&r) == COLLISION && !flag) e->move_down(&r);
         }
     }else if(e->get_y() > r.p->get_y() && !flag){
-        if(!e->move_up(&r) && !flag){
-            if(!e->move_right(&r) && !flag) e->move_left(&r);     
+        if(e->move_up(&r) == COLLISION && !flag){
+            if(e->move_right(&r) == COLLISION && !flag) e->move_left(&r);     
         }
     }else if(e->get_y() < r.p->get_y() && !flag){
-        if(!e->move_down(&r) && !flag){
-            if(!e->move_right(&r) && !flag) e->move_left(&r);
+        if(e->move_down(&r) == COLLISION && !flag){
+            if(e->move_right(&r) == COLLISION && !flag) e->move_left(&r);
         }
     }
 }
