@@ -13,7 +13,8 @@ struct map
 
 // inizializza la mappa, restituisce un puntatore alla mappa il cui uso è facoltativo.
 // inizializza la mappa inserendo il player in una stanza vuota
-map *init_map(Player *p);
+// level deve essere >= 1
+map *init_map(Player *p, int level);
 
 // cambia la stanza in cui il personaggio si trova in quella passata per indirizzo dalla funzione
 void change_room(Room *new_room);

@@ -28,9 +28,11 @@ static int id=0; // generazione di un ID unico per ogni stanza
 int new_id() {
     return id++;
 }
-struct map *init_map(Player *p)
+struct map *init_map(Player *p, int level)
 {
     srand(time(0));
+
+    difficulty=(level-1)*1000; // TODO bilanciare
 
     Room *ptr_start_room = new Room(new_id());
     for (int i=0; i<4; i++) {
@@ -69,7 +71,6 @@ void change_room(Room *new_room)
 
 
 
-//TODO: far si che le stanze non siano sempre vuote
 //TODO: aggiungere consistenza e non violare le leggi di Euclide e del buon senso
 Room *add_room(Room *r, enum door_pos p) {
     int i=0;
@@ -78,7 +79,21 @@ Room *add_room(Room *r, enum door_pos p) {
 
     d->next_room=new_room;
 
-    switch (d->position) {
+    //LINKING
+
+    i = (d->position + 2) % 4;
+    /*
+     *  Essendo gli enum valori interi position ha valore tra 0 e 3
+     *
+     *      U
+     *  Le      R
+     *      Lo
+     *
+     *  immaginando le porte nella posizione data dall'enum si nota che rappresentano un anello, per cui possiamo ricondurci ad una soluzione in algebra modulare.
+     *
+     *  VECCHIO CODICE:
+     */
+    /*switch (d->position) {
         case UPPER_DOOR:
             i=LOWER_DOOR;
             break;
@@ -91,15 +106,20 @@ Room *add_room(Room *r, enum door_pos p) {
         case LEFT_DOOR:
             i=RIGHT_DOOR;
             break;
-    }
+    }*/
 
+    /* CODICE MORTO?
     if (new_room == NULL)
         new_room->door[i]=new door;
-
+    */
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
     new_room->door[i]->locked=false;
 
+    // INDIRECT LINKING
+
+
+    //for(int d_pos=i; 
 
 
     return new_room;

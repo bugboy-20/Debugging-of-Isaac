@@ -75,7 +75,7 @@ int main()
         } while (again);
 
         // init della mappa
-        dummy_map = init_map(player);
+        dummy_map = init_map(player,1);
         player->add_item(spada);
 
         // aggiungo elementi alla stanza
