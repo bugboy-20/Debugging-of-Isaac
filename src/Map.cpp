@@ -19,9 +19,7 @@
 static struct map game_map;
 static int difficulty;
 
-Room *room1();
 Room *random_room();
-
 Room *add_hostiles(Room* r);
 
 static int id=0; // generazione di un ID unico per ogni stanza
@@ -32,7 +30,8 @@ struct map *init_map(Player *p, int level)
 {
     srand(time(0));
 
-    difficulty=(level-1)*1000; // TODO bilanciare
+    //difficulty=(level-1)*1000; // TODO bilanciare
+    difficulty=level;
 
     Room *ptr_start_room = new Room(new_id());
     for (int i=0; i<4; i++) {
@@ -62,6 +61,7 @@ void change_room(Room *new_room)
         //cambio stanza attuale
         game_map.current_room=new_room;
         new_room->add_event(new RoomChangedE());
+        difficulty=game_map.current_room->p->get_score()/10;
     }
     else {
         fprintf(stderr, "si è cercato di accedere ad una stanza nulla\n");
@@ -118,8 +118,8 @@ Room *add_room(Room *r, enum door_pos p) {
 
     // INDIRECT LINKING
 
-
-    //for(int d_pos=i; 
+//TODO
+    //for(int d_pos=i;
 
 
     return new_room;
@@ -142,7 +142,7 @@ Room *room0() {
 
     for (int i=0; i<4; i++) {
         r->door[i]=new door;
-        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3
         r->door[i]->next_room=NULL;
         r->door[i]->locked=false;
     }
@@ -185,7 +185,7 @@ Room *room1() {
 
     for (int i=0; i<4; i++) {
         r->door[i]=new door;
-        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3
         r->door[i]->next_room=NULL;
         r->door[i]->locked=false;
     }
@@ -198,7 +198,7 @@ Room *room1() {
  *   _____  _____
  *  |   |        |
  *  |            |
- *      |      
+ *      |
  *  |   |        |
  *  |___|_  _____|
  */
@@ -230,7 +230,7 @@ Room *room2() {
 
     for (int i=0; i<4; i++) {
         r->door[i]=new door;
-        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3 
+        r->door[i]->position=i; // UPPER_DOOR ecc. hanno un valore intero tra 0 e 3
         r->door[i]->next_room=NULL;
         r->door[i]->locked=false;
     }
@@ -330,16 +330,23 @@ Room *random_room() {
 
 Room *add_hostiles(Room* r) {
     int x,y,lv;
-    for(int i=difficulty; i<0;) {
-        do {
+    for(int i=difficulty; i>0;) {
+        fprintf(stderr,"sjklad");
+
+ //       do {
             x=rand()%ROOM_WIDTH;
             y=rand()%ROOM_HEIGHT;
-        } while(collision(x, y, *r));
+            fprintf(stderr, "pup");
+   //     } while(collision(x, y, *r));*/
 
+        fprintf(stderr,"sasd");
         lv=rand()%i;
-        i-=lv;
+        i-=lv+1; //entità di livello 0 (virtualmente) potrebbero essere generate infinitamente
 
         Hostile *h = new Zombie({x,y},lv);
+
+        fprintf(stderr,"nuovo zombie droppato (%d,%d,%d)",h->get_x(),h->get_y(),lv);
+
         r->add_entity(h);
     }
     return r;
