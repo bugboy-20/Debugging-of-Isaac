@@ -259,3 +259,27 @@ void Room::prinmt_room_menmb()
         std::cout << ((Entity *)member->element)->get_display() << std::endl;
     }
 }
+
+
+void Room::empty() {
+#define list_destroy(list,type) for (;;) { \
+        type *e = ( type *) list.pop(); \
+        if (e==NULL) \
+            break; \
+        delete e; \
+    } \
+
+    list_destroy(this->core, Core);
+
+    list_destroy(this->entities,Entity);
+    list_destroy(this->walls,Wall);
+    list_destroy(this->items_on_ground,ItemOnGround);
+
+    for(;;) {
+        RoomEvent *e = (RoomEvent*) this->events.dequeue();
+        if (e == NULL)
+            break;
+        delete e;
+    }
+
+}

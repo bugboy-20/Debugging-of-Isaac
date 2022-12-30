@@ -23,3 +23,6 @@ void change_room(Room *new_room);
 // in input vuole la stanza e la posizione della porta dove va aggiunta la stanza
 //      questa so che ha una forma strana ma mi sembrava più difficile da usare male
 Room *add_room(Room *r, enum door_pos p);
+
+//porta la mappa allo stato {NULL,NULL} e dealloca le stanze
+void destroy_map(map);

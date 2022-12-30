@@ -351,3 +351,41 @@ Room *add_hostiles(Room* r) {
     }
     return r;
 }
+
+
+
+
+
+void destroy_map(map m) {
+    door *d;
+    int porta_reciproca;
+    /*
+     * Esegue una visita in profondità, ogni volta che accede ad una nuova stanza 
+     *
+     * per prima cosa elimina i puntatori entranti affinchè sucessivamente non si vengano a creare loop o errori di segmentazione
+     */
+    for(int i=0; i<4; i++) {
+        d = m.current_room->door[i];
+        if (d==NULL || d->next_room == NULL)
+            continue;
+        porta_reciproca = (d->position + 2) % 4;
+        d->next_room->door[porta_reciproca]=NULL;
+    }
+
+    // svuota la stanza
+    m.current_room->empty();
+
+    // ripeto ricorsivamente su tutte le stanze adiacienti [ancora esistenti e non scollegate]
+    // l'assenza di nuove stanze da raggiungere è il caso base 
+    for (int i=0; i<4; i++) {
+        d=m.current_room->door[i];
+        if (d!=NULL && d->next_room !=NULL) {
+            destroy_map({d->next_room, m.rooms});
+            delete d;
+            m.current_room->door[i]=NULL;
+        }
+    }
+
+    // elimino la stanza
+    delete m.current_room;
+}

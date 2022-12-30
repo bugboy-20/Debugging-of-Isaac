@@ -91,6 +91,9 @@ class Room {
         //debug
         void prinmt_room_menmb();
 
+        //svuota la stanza
+        void empty();
+
     private:
         int id;
         List entities;

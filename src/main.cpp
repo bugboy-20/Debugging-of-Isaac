@@ -91,6 +91,11 @@ int main()
 
         game_loop();
         key = schermo.print_game_over();
+        destroy_map(*dummy_map);
+        *dummy_map = {NULL,NULL};
+        delete player;
+        schermo.stop_screen();
+
     } while (key != quit_button);
     exit_game();
 }
@@ -151,8 +156,9 @@ void controls(Screen &schermo)
 
 void game_loop()
 {
-    schermo.start_gameinterface(dummy_map->current_room);
     timeval inizio_frame, fine_frame;
+
+    schermo.start_gameinterface(dummy_map->current_room);
     while (!game_over(*player))
     {
         // il secondo parametro è la timezone, non importa usare quella giusta basta che sia uguale ovunque
@@ -171,7 +177,6 @@ void game_loop()
         usleep(utom(sleep_time(inizio_frame, fine_frame))); // usleep specifica quanti micro secondi sospendere l'esecuzione
 #endif
     }
-    delete player;
 }
 
 // https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
