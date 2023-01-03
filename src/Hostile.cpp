@@ -13,7 +13,7 @@ Hostile::Hostile(coords pos,
 {
     this->smartness = smartness;
     this->health += level * health_scaling;
-    this->damage += damage * damage_scaling;
+    this->damage += level * damage_scaling;
     this->trigger_radius = trigger_radius;
     this->drop = d;
 }
@@ -29,4 +29,9 @@ Hostile::Hostile(
 
 int Hostile::get_trigger_radius() { return this->trigger_radius; }
 int Hostile::get_smartness() { return this->smartness; }
-Item *Hostile::get_drop() { return this->drop; }
+Item *Hostile::get_drop()
+{
+    Item *i = this->drop;
+    this->drop = NULL;
+    return i;
+}
