@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Core.hpp"
 #include "Entity.hpp"
+#include "Equipment.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 #include "List.hpp"
@@ -16,13 +17,17 @@
 #include "physics.h"
 
 #define ROOM_TYPES 5 // numero di varianti di stanze disponibili
+#define BOSS_FREQ 100 // vedi next_boss_room
 static struct map game_map;
 static int difficulty;
 
 Room *random_room();
+Room *boss_room();
 Room *add_hostiles(Room* r);
 
 static int id=0; // generazione di un ID unico per ogni stanza
+static bool next_boss_room = false; // ogni BOSS_FREQ punti la prossima stanza generata è una boss_room
+
 int new_id() {
     return id++;
 }
@@ -61,6 +66,9 @@ void change_room(Room *new_room)
         //cambio stanza attuale
         game_map.current_room=new_room;
         new_room->add_event(new RoomChangedE());
+        
+        if(game_map.current_room->p->get_score()/BOSS_FREQ > difficulty*10)
+            next_boss_room=true;
         difficulty=game_map.current_room->p->get_score()/10;
     }
     else {
@@ -75,7 +83,7 @@ void change_room(Room *new_room)
 Room *add_room(Room *r, enum door_pos p) {
     int i=0;
     door *d = r->door[p];
-    Room *new_room = random_room();
+    Room *new_room = next_boss_room ? boss_room() : random_room();
 
     d->next_room=new_room;
 
@@ -90,28 +98,7 @@ Room *add_room(Room *r, enum door_pos p) {
      *      Lo
      *
      *  immaginando le porte nella posizione data dall'enum si nota che rappresentano un anello, per cui possiamo ricondurci ad una soluzione in algebra modulare.
-     *
-     *  VECCHIO CODICE:
      */
-    /*switch (d->position) {
-        case UPPER_DOOR:
-            i=LOWER_DOOR;
-            break;
-        case RIGHT_DOOR:
-            i=LEFT_DOOR;
-            break;
-        case LOWER_DOOR:
-            i=UPPER_DOOR;
-            break;
-        case LEFT_DOOR:
-            i=RIGHT_DOOR;
-            break;
-    }*/
-
-    /* CODICE MORTO?
-    if (new_room == NULL)
-        new_room->door[i]=new door;
-    */
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
     new_room->door[i]->locked=false;
@@ -124,6 +111,31 @@ Room *add_room(Room *r, enum door_pos p) {
 
     return new_room;
 
+}
+
+Room *boss_room() {
+    Room *r = new Room(new_id());
+    //nessuna porta, è una stanza "foglia"
+    //TODO  infilarci i boss
+
+    int lv = 1; //TODO
+    Item *i;
+    switch (rand()%5) {
+        case 0:
+            i = new Weapon(0,'/',"spada-pistola",lv)
+        case 1:
+            i = new Armor(0,'T',"armatura di mia zia",lv)
+        case 2:
+            i = new Boots(0,'L',"Scarpine di Diego",lv)
+        case 3:
+            i = new Crosshair(0,'X',"Occhio di Lucertola",lv)
+        case 4:
+            i = new Booster(0,'>',"Sppee",lv)
+    }
+
+    Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X',"stocazzo", "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, )
+
+    return r;
 }
 
 // I calcoli sono stati eseguiti su carta, quindi fidatevi
