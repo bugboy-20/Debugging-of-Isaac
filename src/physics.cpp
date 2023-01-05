@@ -103,7 +103,7 @@ void bullet_creation(Entity *e, enum direction direction){
     }
 }
 
-void player_damage(Room& r, Bullet *b){
+void damage_player(Room& r, Bullet *b){
     r.p->set_health(r.p->get_health() - b->get_damage());
     r.add_event(new PlayerHealthChangedE(r.p));
 }
@@ -157,7 +157,7 @@ void shoot_in_direction(Room& r, Bullet *b){
             {
                 if(b->move_down(&r) == COLLISION){
                     if((b->get_y() + 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                        player_damage(r, b);
+                        damage_player(r, b);
                     }else{
                         coords bpos = {b->get_x(), b->get_y() + 1};
                         if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
@@ -171,7 +171,7 @@ void shoot_in_direction(Room& r, Bullet *b){
             case UP:
                 if(b->move_up(&r) == COLLISION){
                     if((b->get_y() - 1 == r.p->get_y() && b->get_x() == r.p->get_x())){
-                        player_damage(r, b);
+                        damage_player(r, b);
                     }else{
                         coords bpos = {b->get_x(), b->get_y() - 1};
                         if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
@@ -184,7 +184,7 @@ void shoot_in_direction(Room& r, Bullet *b){
             case RIGHT:
                 if(b->move_right(&r) == COLLISION){
                     if((b->get_x() + 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
-                        player_damage(r, b);
+                        damage_player(r, b);
                     }else{
                         coords bpos = {b->get_x() + 1, b->get_y()};
                         if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){
@@ -197,7 +197,7 @@ void shoot_in_direction(Room& r, Bullet *b){
             case LEFT:
                 if(b->move_left(&r) == COLLISION){
                     if((b->get_x() - 1 == r.p->get_x() && b->get_y() == r.p->get_y())){
-                        player_damage(r, b);
+                        damage_player(r, b);
                     }else{
                         coords bpos = {b->get_x() - 1, b->get_y()};
                             if(r.get_element_in_this_position(bpos) != NULL && !r.get_element_in_this_position(bpos)->is_crossable() && is_entity(r, (Entity*)r.get_element_in_this_position(bpos))){

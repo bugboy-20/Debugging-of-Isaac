@@ -36,7 +36,7 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
 
 /*Funzione che si occupa di gestire il danno subito dal player,
 sottraendo la corretta quantità di punti di vita*/
-void player_damage(Room& r, Bullet *b);
+void damage_player(Room& r, Bullet *b);
 
 /*Funzione che si occupa di gestire il danno subito dai nemici,
 sottraendo la corretta quantità di punti di vita*/
