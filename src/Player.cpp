@@ -4,23 +4,18 @@
 #include "Room.hpp"
 #include <cstddef>
 
-Player::Player(
-    coords pos,
-    int max_health) : Player(pos, player_display, player_base_damage, max_health) {}
+Player::Player(coords pos) : Player(pos, player_display) {}
 
 Player::Player(
     coords pos,
-    char display,
-    int damage,
-    int max_health) : Entity(pos, display, player_s, {damage, max_health, 1000, 20, 10})
+    char display) : Entity(pos, display, player_s, {player_damage, player_health, player_as, player_ms, player_range})
 {
-    this->inv = {{}, 0, Potion(), Key()};
+    this->inv = {{}, 0, Potion(10), Key(1)};
     for (int i = 0; i < player_inventory_slots; i++)
         this->inv.items[i] = NULL;
 
-    this->max_health = max_health;
+    this->max_health = player_health;
     this->score = 0;
-    // this->movement_speed = 250;
 }
 
 int Player::get_max_health() { return this->max_health; }

@@ -3,8 +3,7 @@
 
 enum item_id
 {
-    weapon,
-    armor,
+    item,
     potions,
     keys
 };
@@ -50,6 +49,7 @@ class Potion : public Consumable
 {
 public:
     Potion();
+    Potion(int n_util);
     // restituisce la quantità di vita curata
     int use();
 };
@@ -60,6 +60,7 @@ class Key : public Consumable
 {
 public:
     Key();
+    Key(int n_util);
 };
 
 // una Weapon è un item che aumenta il danno,

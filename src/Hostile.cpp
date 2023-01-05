@@ -5,14 +5,14 @@ Hostile::Hostile(coords pos,
                  const char description[STR_LENGTH],
                  stats s,
                  int trigger_radius,
-                 int level,
                  int smartness,
+                 int level,
                  int health_scaling,
                  int damage_scaling, Item *d) : Entity(pos, display, description, s)
 {
     this->smartness = smartness;
-    this->health += level * health_scaling;
-    this->damage += level * damage_scaling;
+    this->health += (level - 1) * health_scaling;
+    this->damage += (level - 1) * damage_scaling;
     this->trigger_radius = trigger_radius;
     this->drop = d;
 }

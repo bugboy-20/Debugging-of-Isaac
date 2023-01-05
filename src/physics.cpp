@@ -325,7 +325,7 @@ void collect_item_on_ground(Room &r){
 }
 
 void drop_item(Room& r, int slot){
-    Weapon *spada = new Weapon(weapon, '\\', r.p->get_inventory().items[slot]->get_description(), lvl5);
+    Weapon *spada = new Weapon(item, '\\', r.p->get_inventory().items[slot]->get_description(), lvl5);
     int block = 0, max_blocks = 8;
     coords block_around_player[max_blocks]={
         {r.p->get_x(), r.p->get_y() - 1},

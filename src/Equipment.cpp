@@ -61,12 +61,8 @@ bool Consumable::use()
     return true;
 }
 
-char potion_desc[STR_LENGTH] = potion_d;
-Potion::Potion() : Consumable(potions, '+', potion_desc)
-{
-    level = 1;
-    n_utilizzi = 10;
-}
+Potion::Potion() : Consumable(potions, potion_display, potion_d) {}
+Potion::Potion(int n_util) : Consumable(potions, potion_display, potion_d, n_util) {}
 int Potion::use()
 {
     bool is_used = Consumable::use();
@@ -76,11 +72,8 @@ int Potion::use()
     return 0;
 }
 
-char key_desc[STR_LENGTH] = key_d;
-Key::Key() : Consumable(keys, 'k', key_desc)
-{
-    n_utilizzi = 0;
-}
+Key::Key() : Consumable(keys, key_display, key_d) {}
+Key::Key(int n_util) : Consumable(keys, key_display, key_d, n_util) {}
 
 Weapon::Weapon(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
 {

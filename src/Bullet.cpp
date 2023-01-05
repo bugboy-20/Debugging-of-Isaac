@@ -3,7 +3,7 @@
 #include "constants.h"
 #include "Events.hpp"
 
-Bullet::Bullet(coords pos, int damage, direction direction, int range) : Entity(pos, bullet_display, bullet_d, {damage, 5000, 0, 150, range})
+Bullet::Bullet(coords pos, int damage, direction direction, int range) : Entity(pos, bullet_display, bullet_d, {damage, 5000, 0, 180, range})
 {
     this->d = direction;
     this->space_travelled = 0;

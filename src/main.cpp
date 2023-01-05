@@ -44,14 +44,14 @@ char desc5[20] = "sasso";
 char desc1[20] = "spada";
 
 Zombie *z = new Zombie({45, 15});
-Slime *slime = new Slime({40, 15});
+Ragno *ragno = new Ragno({40, 15});
 Scheletro *scheleton = new Scheletro({60, 7});
 Goblin *goblin = new Goblin({20, 10});
 Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
-Weapon *spada = new Weapon(weapon, '\\', desc1, lvl5);
+Weapon *spada = new Weapon(item, '\\', desc1, lvl5);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
 Player *player;
@@ -64,7 +64,7 @@ int main()
     {
         // init schermo e player
         schermo = Screen();
-        player = new Player({20, 15}, 10);
+        player = new Player({20, 15});
 
         // apro il menu
         bool again;
@@ -78,7 +78,7 @@ int main()
         player->add_item(spada);
 
         // aggiungo elementi alla stanza
-        dummy_map->current_room->add_entity(slime);
+        dummy_map->current_room->add_entity(ragno);
         dummy_map->current_room->add_entity(scheleton);
         dummy_map->current_room->add_entity(goblin);
         dummy_map->current_room->add_entity(fantasma);
