@@ -70,16 +70,53 @@ void change_room(Room *new_room)
         if(game_map.current_room->p->get_score()/BOSS_FREQ > difficulty*10)
             next_boss_room=true;
         difficulty=game_map.current_room->p->get_score()/10;
+
     }
-    else {
-        fprintf(stderr, "si è cercato di accedere ad una stanza nulla\n");
+}
+
+void create_loop(Room *starting_room, int direction, bool clockwise=true) {
+    /*
+     * viene effettuata una visita scegliendo sempre la porta che si trova a destra (o sinistra) di quella da cui si è entranti
+     * se la visita ad anello passa per 3 stanze allora l'ultima porta deve portare alla stanza di partenza
+     * +---------+---------+
+     * |         |         |
+     * |         |         |
+     * |    ^  --+->  |    |
+     * |    |    |    |    |
+     * +----+----+----+----+
+     * |    |    |    |    |
+     * |       <-+-   v    |
+     * |         |         |
+     * |         |         |
+     * +---------+---------+
+     */
+    Room *r_ptr=starting_room;
+    int next_door,i;
+    for(i=0; i<3;i++) {
+        if(clockwise)
+            next_door=(direction+i)%4;
+        else
+            next_door=(direction-i+4)%4;
+
+
+        if (r_ptr->door[next_door] == NULL || r_ptr->door[next_door]->next_room == NULL)
+            return;
+
+        r_ptr = r_ptr->door[next_door]->next_room;
     }
+
+    if(clockwise)
+        next_door=(direction+i)%4;
+    else
+        next_door=(direction-i+4)%4;
+    if(r_ptr->door[next_door]==NULL)
+        return;
+
+    r_ptr->door[next_door]->next_room=starting_room;
+    starting_room->door[(next_door +2) % 4]->next_room = r_ptr;
 
 }
 
-
-
-//TODO: aggiungere consistenza e non violare le leggi di Euclide e del buon senso
 Room *add_room(Room *r, enum door_pos p) {
     int i=0;
     door *d = r->door[p];
@@ -104,9 +141,14 @@ Room *add_room(Room *r, enum door_pos p) {
     new_room->door[i]->locked=false;
 
     // INDIRECT LINKING
-
-//TODO
-    //for(int d_pos=i;
+    /*
+     * questa parte si occupa di fare in modo che Player movendosi ad anello si ritrovi nella stanza di partenza.
+     * create_loop loop fa una visita in senso orario ed antiorario per ogni porta
+     */
+    for(int iter=0; iter<4; iter++) {
+        create_loop(new_room, i, true);
+        create_loop(new_room, i, false);
+    }
 
 
     return new_room;
@@ -122,26 +164,25 @@ Room *boss_room() {
     Item *i;
     switch (rand()%5) {
         case 0:
-            i = new Weapon(0,'/',"spada-pistola",lv)
+            i = new Weapon(0,'/',"spada-pistola",lv);
         case 1:
-            i = new Armor(0,'T',"armatura di mia zia",lv)
+            i = new Armor(0,'T',"armatura di mia zia",lv);
         case 2:
-            i = new Boots(0,'L',"Scarpine di Diego",lv)
+            i = new Boots(0,'L',"Scarpine di Diego",lv);
         case 3:
-            i = new Crosshair(0,'X',"Occhio di Lucertola",lv)
+            i = new Crosshair(0,'X',"Occhio di Lucertola",lv);
         case 4:
-            i = new Booster(0,'>',"Sppee",lv)
+            i = new Booster(0,'>',"Sppee",lv);
     }
 
-    Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X',"stocazzo", "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, )
+    Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X',"stocazzo", "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
 
     return r;
 }
 
 // I calcoli sono stati eseguiti su carta, quindi fidatevi
 
-/*
- *   _____  _____
+/*   _____  _____
  *  |            |
  *  |            |
  *
@@ -343,21 +384,17 @@ Room *random_room() {
 Room *add_hostiles(Room* r) {
     int x,y,lv;
     for(int i=difficulty; i>0;) {
-        fprintf(stderr,"sjklad");
 
  //       do {
             x=rand()%ROOM_WIDTH;
             y=rand()%ROOM_HEIGHT;
-            fprintf(stderr, "pup");
    //     } while(collision(x, y, *r));*/
 
-        fprintf(stderr,"sasd");
         lv=rand()%i;
         i-=lv+1; //entità di livello 0 (virtualmente) potrebbero essere generate infinitamente
 
         Hostile *h = new Zombie({x,y},lv);
 
-        fprintf(stderr,"nuovo zombie droppato (%d,%d,%d)",h->get_x(),h->get_y(),lv);
 
         r->add_entity(h);
     }
