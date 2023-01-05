@@ -325,8 +325,7 @@ void collect_item_on_ground(Room &r){
 }
 
 void drop_item(Room& r, int slot){
-    Weapon *weapon = new Weapon(item, r.p->get_inventory().items[slot]->get_display(), r.p->get_inventory().items[slot]->get_description(), lvl5);
-    int block = 0, max_blocks = 8;
+        int block = 0, max_blocks = 8;
     coords block_around_player[max_blocks]={
         {r.p->get_x(), r.p->get_y() - 1},
         {r.p->get_x(), r.p->get_y() + 1},
@@ -340,10 +339,10 @@ void drop_item(Room& r, int slot){
 
     while(block < max_blocks){
         if(r.get_element_in_this_position(block_around_player[block]) == NULL && !wall_collision(block_around_player[block], r)){
-            ItemOnGround *i = new ItemOnGround(block_around_player[block], weapon);
-            r.p->remove_item(slot);
+            Item *removed_item = r.p->remove_item(slot);
+            ItemOnGround *i = new ItemOnGround(block_around_player[block], removed_item);
             r.add_items_on_ground(i);
-            r.add_event(new ItemDroppedE({i->get_x(), i->get_y()}));
+            r.add_event(new ItemDroppedE(block_around_player[block]));
             break;
         }
         block++;
