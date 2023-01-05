@@ -22,8 +22,8 @@ protected:
     void add_stats(stats s);
 
 public:
-    Player(coords pos, char name[10], int max_health);
-    Player(coords pos, char display, char description[], char name[10], int damage, int max_health);
+    Player(coords pos, int max_health);
+    Player(coords pos, char display, int damage, int max_health);
     int get_max_health();
     int get_score();
     void set_health(int health);

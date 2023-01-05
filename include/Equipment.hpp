@@ -19,13 +19,13 @@ protected:
     stats item_stats;
 
 public:
-    Item(int id, char display, char desc[], int level = 1);
+    Item(int id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_level();
     int get_id();
     char get_display();
     char *get_description();
-    void get_description(char[20]);
+    void get_description(char[STR_LENGTH]);
     // se il parametro è false resituisce le stats, altrimenti le restituisce negate
     stats get_stats(bool negate = false);
 };
@@ -36,7 +36,7 @@ protected:
     int n_utilizzi;
 
 public:
-    Consumable(int id, char display, char desc[], int n_utilizzi = 0);
+    Consumable(int id, char display, const char desc[STR_LENGTH], int n_utilizzi = 0);
 
     void set_level(int);
     int get_n_utilizzi();
@@ -70,7 +70,7 @@ class Weapon : public Item
     // in pratica ogni livello il danno aumenta di 2
 
 public:
-    Weapon(int id, char display, char desc[], int level = 1);
+    Weapon(int id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_damage();
 };
@@ -83,7 +83,7 @@ class Armor : public Item
     // in pratica ogni livello la vita aumenta di 3
 
 public:
-    Armor(int id, char display, char desc[], int level = 1);
+    Armor(int id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_health();
 };
@@ -93,7 +93,7 @@ class Boots : public Item
 {
     // ogni livello aumenta di 30
 public:
-    Boots(int id, char display, char desc[], int level = 1);
+    Boots(int id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_move_speed();
 };
@@ -103,7 +103,7 @@ class Crosshair : public Item
 {
     // ogni livello aumenta di 15
 public:
-    Crosshair(int id, char display, char desc[], int level = 1);
+    Crosshair(int id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_range();
 };
@@ -113,7 +113,7 @@ class Booster : public Item
 {
     // ogni livello aumenta di 90
 public:
-    Booster(int id, char display, char desc[], int level = 1);
+    Booster(int id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_attack_speed();
 };

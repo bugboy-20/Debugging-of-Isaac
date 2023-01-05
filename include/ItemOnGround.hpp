@@ -9,6 +9,6 @@ protected:
 
 public:
     ItemOnGround(coords pos, Item *);
-    ItemOnGround(coords pos, char display, char description[], Item *);
-    Item* get_item();
+    ItemOnGround(coords pos, char display, const char description[], Item *);
+    Item *get_item();
 };

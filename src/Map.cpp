@@ -175,7 +175,7 @@ Room *boss_room() {
             i = new Booster(0,'>',"Sppee",lv);
     }
 
-    Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X',"stocazzo", "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
+    Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X', "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
 
     return r;
 }

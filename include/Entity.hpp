@@ -13,7 +13,6 @@ enum move_outcome
 class Entity : public Core
 {
 protected:
-    char name[10];
     int health;
     int damage;
     int attack_speed; // tempo in millisecondi
@@ -30,7 +29,7 @@ protected:
     move_outcome move(Room *r, int x, int y);
 
 public:
-    Entity(coords pos, char display, char description[], char name[10], stats);
+    Entity(coords pos, char display, const char description[STR_LENGTH], stats);
     move_outcome move_up(Room *room);
     move_outcome move_down(Room *room);
     move_outcome move_left(Room *room);
@@ -42,8 +41,6 @@ public:
     void reposition(coords);
     /*virtual*/ void action();
 
-    char *get_name();
-    void get_name(char[10]);
     int get_health();
     void set_health(int health);
     // somma il paramentro alla vita attuale

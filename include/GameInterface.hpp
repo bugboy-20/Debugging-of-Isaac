@@ -37,6 +37,7 @@ private:
      * @param doors array di porte da stampare
      */
     void print_doors(door *doors[]);
+    chtype improve_char(char);
 
 public:
     GameInterface() = default;

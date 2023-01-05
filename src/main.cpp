@@ -40,7 +40,6 @@ void controls(Screen &); // apre l'interfaccia dei controlli
 
 map *dummy_map;
 
-char n[10] = "gino";
 char desc5[20] = "sasso";
 char desc1[20] = "spada";
 
@@ -65,7 +64,7 @@ int main()
     {
         // init schermo e player
         schermo = Screen();
-        player = new Player({20, 15}, n, 10);
+        player = new Player({20, 15}, 10);
 
         // apro il menu
         bool again;

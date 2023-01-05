@@ -5,9 +5,8 @@
 #include <cstring>
 #include <iostream>
 
-Entity::Entity(coords pos, char display, char description[], char name[10], stats s) : Core(pos, display, description)
+Entity::Entity(coords pos, char display, const char description[STR_LENGTH], stats s) : Core(pos, display, description)
 {
-    strcpy(this->name, name);
     this->health = s.health;
     this->damage = s.damage;
 
@@ -55,14 +54,6 @@ int Entity::get_damage() { return damage; }
 int Entity::get_health() { return this->health; }
 void Entity::set_health(int health) { this->health = health; }
 void Entity::change_health(int h) { this->health += h; }
-
-char *Entity::get_name()
-{
-    char *nome = new char[10];
-    strcpy(nome, name);
-    return nome;
-}
-void Entity::get_name(char n[10]) { strcpy(n, this->name); }
 
 timeval Entity::get_last_shot() { return this->last_shot; }
 void Entity::set_last_shot(timeval ls) { this->last_shot = ls; }

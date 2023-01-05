@@ -5,8 +5,7 @@
 #define mc(n, c) n##_##c
 
 #define mob(name)                              \
-    char name##_string[STR_LENGTH] = name##_s; \
-    name::name(coords pos, int level) : Hostile(pos, mc(name, display), mc(name, string), mc(name, string), {mc(name, damage), mc(name, health), mc(name, as), mc(name, ms), mc(name, range)}, mc(name, tr), mc(name, sm)) {}
+    name::name(coords pos, int level) : Hostile(pos, mc(name, display), mc(name, s), {mc(name, damage), mc(name, health), mc(name, as), mc(name, ms), mc(name, range)}, mc(name, tr), mc(name, sm)) {}
 
 mob(Zombie);
 mob(Scheletro);

@@ -4,19 +4,15 @@
 #include "Room.hpp"
 #include <cstddef>
 
-char player_desc[20] = player_s;
 Player::Player(
     coords pos,
-    char name[10],
-    int max_health) : Player(pos, player_display, player_desc, name, player_base_damage, max_health) {}
+    int max_health) : Player(pos, player_display, player_base_damage, max_health) {}
 
 Player::Player(
     coords pos,
     char display,
-    char description[20],
-    char name[10],
     int damage,
-    int max_health) : Entity(pos, display, description, name, {damage, max_health, 1000, 250, 10})
+    int max_health) : Entity(pos, display, player_s, {damage, max_health, 1000, 20, 10})
 {
     this->inv = {{}, 0, Potion(), Key()};
     for (int i = 0; i < player_inventory_slots; i++)

@@ -2,8 +2,6 @@
 #define STR_LENGTH 20
 
 #define Zombie_s "zombie"
-// char Zombie_name[STR_LENGTH] = "Zombie";
-// char Zombie_desc[STR_LENGTH] = "zombie";
 #define Zombie_display 'z'
 #define Zombie_health 4
 #define Zombie_damage 1
@@ -14,8 +12,6 @@
 #define Zombie_sm 0
 
 #define Scheletro_s "scheletro"
-// char Scheletro_name[STR_LENGTH] = "Scheletro";
-// char Scheletro_desc[STR_LENGTH] = "scheletro";
 #define Scheletro_display 's'
 #define Scheletro_health 2
 #define Scheletro_damage 2
@@ -26,8 +22,6 @@
 #define Scheletro_sm 0
 
 #define Goblin_s "goblin"
-// char Goblin_name[STR_LENGTH] = "Goblin";
-// char Goblin_desc[STR_LENGTH] = "goblin";
 #define Goblin_display 'g'
 #define Goblin_health 1
 #define Goblin_damage 4
@@ -38,8 +32,6 @@
 #define Goblin_sm 0
 
 #define Fantasma_s "fantasma"
-// char Fantasma_name[STR_LENGTH] = "Fantasma";
-// char Fantasma_desc[STR_LENGTH] = "fantasma";
 #define Fantasma_display 'f'
 #define Fantasma_health 6
 #define Fantasma_damage 1
@@ -50,8 +42,6 @@
 #define Fantasma_sm 0
 
 #define Slime_s "slime"
-// char Slime_name[STR_LENGTH] = "Slime";
-// char Slime_desc[STR_LENGTH] = "slime";
 #define Slime_display 'l'
 #define Slime_health 7
 #define Slime_damage 2
@@ -71,10 +61,7 @@
 #define h_wall_display '-'
 #define v_wall_display '|'
 
-#define bullet_n "bullet"
 #define bullet_d "bullet_desc"
-// char bullet_name[10] = "bullet";
-// char bullet_desc[20] = "bullet_desc";
 #define bullet_display '.'
 
 #define up_button 'w'

@@ -38,11 +38,11 @@ void GameInterface::handle_events()
         {
             EntityMoveE *t = (EntityMoveE *)e;
             coords oldC = t->data[0], newC = t->data[1];
-            char oldCh = ' ', newCh = t->ed;
+            chtype oldCh = ' ', newCh = improve_char(t->ed);
 
             Core *oldE = r->get_element_in_this_position(oldC);
             if (oldE != NULL)
-                oldCh = oldE->get_display();
+                oldCh = improve_char(oldE->get_display());
 
             mvwaddch(wroom, oldC.y, oldC.x, oldCh); // vecchia posizione
             mvwaddch(wroom, newC.y, newC.x, newCh); // nuova posizione
@@ -67,11 +67,11 @@ void GameInterface::handle_events()
         {
             EntityKilledE *t = (EntityKilledE *)e;
 
-            char ch = ' ';
+            chtype ch = ' ';
             Core *el = r->get_element_in_this_position({t->data->get_x(), t->data->get_y()});
 
             if (el != NULL)
-                ch = el->get_display();
+                ch = improve_char(el->get_display());
 
             mvwaddch(wroom, t->data->get_y(), t->data->get_x(), ch);
             wnoutrefresh(wroom);
@@ -236,10 +236,10 @@ void GameInterface::render_room()
         {
             wmove(wroom, c->get_y(), c->get_x());
 
-            if (c->get_alignment())                                        // linea verticale
-                wvline(wroom, c->get_display(), c->get_line_lenght() + 1); // stampo la testa + il corpo
-            else                                                           // linea orizzontale
-                whline(wroom, c->get_display(), c->get_line_lenght() + 1);
+            if (c->get_alignment())                                                      // linea verticale
+                wvline(wroom, improve_char(c->get_display()), c->get_line_lenght() + 1); // stampo la testa + il corpo
+            else                                                                         // linea orizzontale
+                whline(wroom, improve_char(c->get_display()), c->get_line_lenght() + 1);
         }
         list = list->next;
     }
@@ -261,11 +261,6 @@ void GameInterface::render_playerstat()
     int nFullHeart = player->get_health() / 2,
         nHalfHeart = player->get_health() - nFullHeart * 2,                           // get_health è dispari allora è 1 se è pari è 0
         nEmptyHeart = ((player->get_max_health() + 1) / 2) - nFullHeart - nHalfHeart; // tutto ciò che non è cuori pieni o mezzi, sono cuori vuoti
-
-    // stampo il nome
-    char name[10];
-    player->get_name(name);
-    mvwprintw(playerstat, 0, start_x, "%s", name);
 
     // stampo la vita
     wmove(playerstat, 1, start_x);
@@ -292,6 +287,7 @@ void GameInterface::render_playerstat()
     curr_y += 1;
     mvwprintw(playerstat, curr_y, start_x, "%s: %d", "gittata", r->p->get_range());
 
+    mvwprintw(playerstat, 0, 1, "Statistiche");
     wrefresh(playerstat);
 }
 
@@ -300,7 +296,6 @@ void GameInterface::render_legend()
     werase(legend);
     box(legend, 0, 0);
 
-    mvwprintw(legend, 0, 1, "Legenda");
     int start_x = 2;
     wmove(legend, 1, start_x);
 
@@ -315,6 +310,10 @@ void GameInterface::render_legend()
         Core *c = (Core *)list->element;
         bool nw = true;
         char display = c->get_display();
+
+        // eccezioni per i caratteri considerati uguali
+        if (display == h_wall_display)
+            display = v_wall_display;
 
         for (int i = 0; i < p; i++) // controllo se questo carattere è già stato inserito nella legenda
         {
@@ -332,7 +331,7 @@ void GameInterface::render_legend()
             getyx(legend, y, x);
             wmove(legend, y + 1, start_x);
 
-            char desc[20];
+            char desc[STR_LENGTH];
             c->get_description(desc);
             wprintw(legend, "%c : %s", display, desc);
         }
@@ -340,6 +339,7 @@ void GameInterface::render_legend()
         list = list->next;
     }
 
+    mvwprintw(legend, 0, 1, "Legenda");
     wrefresh(legend);
 }
 
@@ -369,9 +369,9 @@ void GameInterface::render_moblist()
 
         getyx(moblist, start_y, start_x); // salvo la posizione del cursore prima di scrivere la prima riga
 
-        char name[10];
-        c->get_name(name);
-        if (start_x + strlen(name) + 4 >= ROOM_WIDTH || start_x + nFullHeart + nHalfHeart >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
+        char desc[STR_LENGTH];
+        c->get_description(desc);
+        if (start_x + strlen(desc) + 4 >= ROOM_WIDTH || start_x + nFullHeart + nHalfHeart >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
         {                                                                                                // se il nome o la barra della vita non ci sta
 
             line += 3; // mi sposto sotto
@@ -379,7 +379,7 @@ void GameInterface::render_moblist()
         }
         else
         {
-            wprintw(moblist, "%c : %s", c->get_display(), name); // stampo la prima riga
+            wprintw(moblist, "%c : %s", c->get_display(), desc); // stampo la prima riga
             getyx(moblist, end_y, end_x);                        // salvo la posizione del cursore dopo aver scritto la prima riga
             wmove(moblist, start_y + 1, start_x);                // mi muovo nella riga sotto
 
@@ -451,4 +451,17 @@ void GameInterface::render_inventory()
     }
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
+}
+
+chtype GameInterface::improve_char(char ch)
+{
+    chtype improved_ch = ch;
+    if (improved_ch == v_wall_display)
+        improved_ch = ACS_VLINE;
+    else if (improved_ch == h_wall_display)
+        improved_ch = ACS_HLINE;
+    else if (improved_ch == bullet_display)
+        improved_ch = ACS_BULLET;
+
+    return improved_ch;
 }
