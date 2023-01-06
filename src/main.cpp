@@ -30,7 +30,7 @@ using namespace std;
 int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
-void exit_game(); // permette di uscire
+void exit_game();  // permette di uscire
 void reset_game(); // reset del game
 
 // true se deve essere eseguito un altro menù
@@ -41,7 +41,7 @@ void controls(Screen &); // apre l'interfaccia dei controlli
 map *dummy_map;
 
 char desc5[20] = "sasso";
-char desc1[20] = "spada";
+char desc1[20] = "mirirono";
 
 Zombie *z = new Zombie({45, 15});
 Ragno *ragno = new Ragno({40, 15});
@@ -51,7 +51,9 @@ Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
-Weapon *spada = new Weapon(item, '\\', desc1, lvl5);
+Booster *veloce = new Booster(item, 'L', desc1, lvl2);
+Weapon *spada = new Weapon(item, '\\', desc1, 8);
+Armor *cotta = new Armor(item, 'H', desc1, lvl7);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
 Player *player;
@@ -74,8 +76,9 @@ int main()
         } while (again);
 
         // init della mappa
-        dummy_map = init_map(player,1);
-        player->add_item(spada);
+        dummy_map = init_map(player, 1);
+        player->add_item(veloce);
+        player->add_item(cotta);
 
         // aggiungo elementi alla stanza
         dummy_map->current_room->add_entity(ragno);
@@ -91,7 +94,7 @@ int main()
         game_loop();
         key = schermo.print_game_over();
         destroy_map(*dummy_map);
-        *dummy_map = {NULL,NULL};
+        *dummy_map = {NULL, NULL};
         delete player;
         schermo.stop_screen();
 

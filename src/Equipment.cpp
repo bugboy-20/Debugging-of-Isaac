@@ -7,7 +7,7 @@ Item::Item(int id, char display, const char desc[STR_LENGTH], int level)
     this->display = display;
     strcpy(this->description, desc);
     this->level = level;
-    this->item_stats = {0, 0, 0, 0, 0};
+    this->item_stats = {0, 0, 1, 1, 0};
 }
 
 int Item::get_level() { return this->level; }
@@ -28,8 +28,8 @@ stats Item::get_stats(bool negate)
     {
         s.damage *= -1;
         s.health *= -1;
-        s.attack_speed *= -1;
-        s.movement_speed *= -1;
+        s.attack_speed = 1 / s.attack_speed;
+        s.movement_speed = 1 / s.movement_speed;
         s.range *= -1;
     }
 
@@ -89,7 +89,7 @@ int Armor::get_health() { return this->item_stats.health; }
 
 Boots::Boots(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
 {
-    this->item_stats.movement_speed = -1 * boots_speed + (level - 1) * 30; // è negativo perchè the lower the better
+    this->item_stats.movement_speed = boots_speed + (level - 1); // esprime quante volte al secondo si muove
 }
 int Boots::get_move_speed() { return this->item_stats.movement_speed; }
 
@@ -101,6 +101,6 @@ int Crosshair::get_range() { return this->item_stats.range; }
 
 Booster::Booster(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
 {
-    this->item_stats.attack_speed = -1 * booster_speed + (level - 1) * 90; // the lower the better
+    this->item_stats.attack_speed = booster_speed + (level - 1) * 0.5;
 }
 int Booster::get_attack_speed() { return this->item_stats.attack_speed; }

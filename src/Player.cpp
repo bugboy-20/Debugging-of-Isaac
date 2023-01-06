@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "Room.hpp"
 #include <cstddef>
+#include <iostream>
 
 Player::Player(coords pos) : Player(pos, player_display) {}
 
@@ -128,7 +129,9 @@ void Player::add_stats(stats s)
     this->damage += s.damage;
     this->health += s.health;
     this->max_health += s.health;
-    this->attack_speed += s.attack_speed;
-    this->movement_speed += s.movement_speed;
+    this->attack_speed /= s.attack_speed;
+    this->movement_speed /= s.movement_speed;
+    std::cerr << this->movement_speed << std::endl
+              << std::endl;
     this->range += s.range;
 }

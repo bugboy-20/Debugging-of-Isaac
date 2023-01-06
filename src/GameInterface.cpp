@@ -425,9 +425,14 @@ void GameInterface::render_inventory()
     Key k = r->p->get_inventory().keys;
 
     // stampo il simbolo delle pozioni colorato
-    wattron(inventory, COLOR_PAIR(p.get_level()));
+    int curr_lvl = p.get_level();
+    if (curr_lvl > 7)
+        curr_lvl = 7;
+    if (curr_lvl < 1)
+        curr_lvl = 1;
+    wattron(inventory, COLOR_PAIR(curr_lvl));
     mvwaddch(inventory, start_y, start_x, p.get_display());
-    wattroff(inventory, COLOR_PAIR(p.get_level()));
+    wattroff(inventory, COLOR_PAIR(curr_lvl));
 
     // stampo il resto della riga
     wprintw(inventory, ":%d    %c:%d", p.get_n_utilizzi(), k.get_display(), k.get_n_utilizzi());
@@ -439,9 +444,14 @@ void GameInterface::render_inventory()
         Item *curr = r->p->get_inventory().items[i];
         if (curr != NULL)
         {
-            wattron(inventory, COLOR_PAIR(curr->get_level()));
+            curr_lvl = curr->get_level();
+            if (curr_lvl > 7)
+                curr_lvl = 7;
+            if (curr_lvl < 1)
+                curr_lvl = 1;
+            wattron(inventory, COLOR_PAIR(curr_lvl));
             mvwaddch(inventory, start_y, curr_x, curr->get_display());
-            wattroff(inventory, COLOR_PAIR(curr->get_level()));
+            wattroff(inventory, COLOR_PAIR(curr_lvl));
         }
         else
             mvwaddch(inventory, start_y, curr_x, '_');

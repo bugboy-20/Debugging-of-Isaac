@@ -111,9 +111,9 @@
 
 #define weapon_damage 2
 #define armor_health 2
-#define boots_speed 15
+#define boots_speed 2
 #define crosshair_range 15
-#define booster_speed 100
+#define booster_speed 2
 
 #define potion_d "pozione"
 #define potion_display '+'
@@ -135,7 +135,7 @@ struct stats
 {
     int damage;
     int health;
-    int attack_speed;
-    int movement_speed;
+    double attack_speed;
+    double movement_speed;
     int range;
 };
