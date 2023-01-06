@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #include "Entity.hpp"
 #include "Equipment.hpp"
 
