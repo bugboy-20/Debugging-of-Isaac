@@ -314,8 +314,17 @@ void collect_item_on_ground(Room &r){
 
     while(items_tmp != NULL){
         ItemOnGround *i = (ItemOnGround*)items_tmp->element;
-        if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y()){
+        if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y() && i->get_item()->get_id() == 0){
             r.p->add_item(i->get_item());
+            r.add_event(new InventoryChangedE);
+            r.delete_room_menber(i);
+            r.add_event(new ItemPickedE(i));
+        }else if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y() && i->get_item()->get_id() == 1){
+            r.p->add_potion(&r,(Potion*) i);
+            r.delete_room_menber(i);
+            r.add_event(new ItemPickedE(i));
+        }else if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y() && i->get_item()->get_id() == 2){
+            r.p->add_key(&r, (Key*) i);
             r.delete_room_menber(i);
             r.add_event(new ItemPickedE(i));
         }
