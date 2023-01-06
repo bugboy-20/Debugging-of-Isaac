@@ -10,8 +10,7 @@
 using namespace std;
 List bullets = List();
 
-bool collision(int x, int y, Room& r)
-{
+bool collision(int x, int y, Room& r){
     bool flag1, flag2, flag3;
     flag1 = wall_collision({x, y}, r);
     flag2 = entity_collision({x, y}, r);
@@ -20,7 +19,8 @@ bool collision(int x, int y, Room& r)
     else return false;
 }
 
-bool player_in_door(int x, int y, Room& r){
+bool player_in_door(int x, int y, Room& r)
+{
     bool flag = (r.p->get_x() == x - 1 && r.p->get_y() == y) 
                 || (r.p->get_x() == x + 1 && r.p->get_y() == y)
                 || (r.p->get_x() == x && r.p->get_y() == y - 1) 
@@ -81,21 +81,22 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
 }
 
 bool next_room_position(Room& r, enum door_pos p){
-    if(r.door[p]->locked && !r.p->use_key(&r)){
+    if (r.door[p] == NULL)
         return false;
-    }else{
-        if(r.door[p]!=NULL){
-            if(r.door[p]->next_room != NULL){
-                change_room(r.next_room(p));
-            }else{
-                change_room(add_room(&r, p));
-            }
-        bullets.destroy();
-        return true;
-        }else return false;
-    }
+    if (r.door[p]->locked)
+        if (r.p->use_key(&r)){ // se la porta è sbloccata non devo usare la chiave
+            r.door[p]->locked = 0;
+        } else return false;
+           
+        
 
-    
+    if (r.door[p]->next_room != NULL)
+        change_room(r.next_room(p));
+    else
+        change_room(add_room(&r, p));
+
+    bullets.destroy();
+    return true;
 }
 
 void bullet_creation(Entity *e, enum direction direction){
@@ -321,22 +322,24 @@ void collect_item_on_ground(Room &r){
     while(items_tmp != NULL){
         ItemOnGround *i = (ItemOnGround*)items_tmp->element;
         bool flag = r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y();
-        if(flag && i->get_item()->get_id() == 0){
+        if(flag && i->get_item()->get_id() == item){
             r.p->add_item(i->get_item());
             r.add_event(new InventoryChangedE);     
-        }else if(flag && i->get_item()->get_id() == 1){
+        }else if(flag && i->get_item()->get_id() == potions){
             r.p->add_potion(&r,(Potion*) i);
-        }else if(flag && i->get_item()->get_id() == 2){
+        }else if(flag && i->get_item()->get_id() == keys){
             r.p->add_key(&r, (Key*) i);
         }
-        r.delete_room_menber(i);
-        r.add_event(new ItemPickedE(i));
+        if(flag){
+            r.delete_room_menber(i);
+            r.add_event(new ItemPickedE(i));
+        }
         items_tmp = items_tmp->next;
     }
 }
 
 void drop_item(Room& r, int slot){
-        int block = 0, max_blocks = 8;
+    int block = 0, max_blocks = 8;
     coords block_around_player[max_blocks]={
         {r.p->get_x(), r.p->get_y() - 1},
         {r.p->get_x(), r.p->get_y() + 1},
