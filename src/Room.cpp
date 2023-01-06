@@ -135,7 +135,7 @@ Core *Room::get_element_in_this_position(coords p)
     node *currentNode;
     Core *core_elm;
 
-    if (this->p->get_x() == p.x && this->p->get_y() == p.y)
+    if (this->p != NULL && this->p->get_x() == p.x && this->p->get_y() == p.y)
         return (Core *)this->p;
 
     for (currentNode = this->entities.head; currentNode != NULL; currentNode = currentNode->next)
