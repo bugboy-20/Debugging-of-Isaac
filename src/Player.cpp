@@ -131,7 +131,5 @@ void Player::add_stats(stats s)
     this->max_health += s.health;
     this->attack_speed /= s.attack_speed;
     this->movement_speed /= s.movement_speed;
-    std::cerr << this->movement_speed << std::endl
-              << std::endl;
     this->range += s.range;
 }

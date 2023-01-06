@@ -1,7 +1,7 @@
 #include "Equipment.hpp"
 #include <cstring>
 
-Item::Item(int id, char display, const char desc[STR_LENGTH], int level)
+Item::Item(item_id id, char display, const char desc[STR_LENGTH], int level)
 {
     this->id = id;
     this->display = display;
@@ -45,7 +45,7 @@ stats Item::get_stats(bool negate)
 6- Bacca magica (no ammo)
 */
 
-Consumable::Consumable(int id, char display, const char desc[STR_LENGTH], int n) : Item(id, display, desc)
+Consumable::Consumable(item_id id, char display, const char desc[STR_LENGTH], int n) : Item(id, display, desc)
 {
     n_utilizzi = n;
 }
@@ -75,31 +75,31 @@ int Potion::use()
 Key::Key() : Consumable(keys, key_display, key_d) {}
 Key::Key(int n_util) : Consumable(keys, key_display, key_d, n_util) {}
 
-Weapon::Weapon(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
+Weapon::Weapon(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
     this->item_stats.damage = weapon_damage + (level - 1) * 2;
 }
 int Weapon::get_damage() { return this->item_stats.damage; }
 
-Armor::Armor(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
+Armor::Armor(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
     this->item_stats.health = armor_health + (level - 1) * 3;
 }
 int Armor::get_health() { return this->item_stats.health; }
 
-Boots::Boots(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
+Boots::Boots(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
     this->item_stats.movement_speed = boots_speed + (level - 1); // esprime quante volte al secondo si muove
 }
 int Boots::get_move_speed() { return this->item_stats.movement_speed; }
 
-Crosshair::Crosshair(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
+Crosshair::Crosshair(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
     this->item_stats.range = crosshair_range + (level - 1) * 15;
 }
 int Crosshair::get_range() { return this->item_stats.range; }
 
-Booster::Booster(int id, char display, const char desc[STR_LENGTH], int level) : Item(id, display, desc, level)
+Booster::Booster(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
     this->item_stats.attack_speed = booster_speed + (level - 1) * 0.5;
 }

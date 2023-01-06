@@ -51,9 +51,9 @@ Fantasma *fantasma = new Fantasma({22, 4});
 Core *rock = new Core({35, 7}, 'O', desc5);
 Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
 Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
-Booster *veloce = new Booster(item, 'L', desc1, lvl2);
-Weapon *spada = new Weapon(item, '\\', desc1, 8);
-Armor *cotta = new Armor(item, 'H', desc1, lvl7);
+Booster *veloce = new Booster('L', desc1, lvl2);
+Weapon *spada = new Weapon('\\', desc1, 8);
+Armor *cotta = new Armor('H', desc1, lvl7);
 ItemOnGround *s = new ItemOnGround({5, 5}, spada);
 
 Player *player;

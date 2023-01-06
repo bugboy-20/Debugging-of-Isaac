@@ -11,14 +11,14 @@ enum item_id
 class Item
 {
 protected:
-    int id;
+    item_id id;
     char display;
     char description[STR_LENGTH];
     int level;
     stats item_stats;
 
 public:
-    Item(int id, char display, const char desc[STR_LENGTH], int level = 1);
+    Item(item_id id, char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_level();
     int get_id();
@@ -35,7 +35,7 @@ protected:
     int n_utilizzi;
 
 public:
-    Consumable(int id, char display, const char desc[STR_LENGTH], int n_utilizzi = 0);
+    Consumable(item_id id, char display, const char desc[STR_LENGTH], int n_utilizzi = 0);
 
     void set_level(int);
     int get_n_utilizzi();
@@ -71,7 +71,7 @@ class Weapon : public Item
     // in pratica ogni livello il danno aumenta di 2
 
 public:
-    Weapon(int id, char display, const char desc[STR_LENGTH], int level = 1);
+    Weapon(char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_damage();
 };
@@ -84,7 +84,7 @@ class Armor : public Item
     // in pratica ogni livello la vita aumenta di 3
 
 public:
-    Armor(int id, char display, const char desc[STR_LENGTH], int level = 1);
+    Armor(char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_health();
 };
@@ -94,7 +94,7 @@ class Boots : public Item
 {
     // ogni livello aumenta di 30
 public:
-    Boots(int id, char display, const char desc[STR_LENGTH], int level = 1);
+    Boots(char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_move_speed();
 };
@@ -104,7 +104,7 @@ class Crosshair : public Item
 {
     // ogni livello aumenta di 15
 public:
-    Crosshair(int id, char display, const char desc[STR_LENGTH], int level = 1);
+    Crosshair(char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_range();
 };
@@ -114,7 +114,7 @@ class Booster : public Item
 {
     // ogni livello aumenta di 90
 public:
-    Booster(int id, char display, const char desc[STR_LENGTH], int level = 1);
+    Booster(char display, const char desc[STR_LENGTH], int level = 1);
 
     int get_attack_speed();
 };
