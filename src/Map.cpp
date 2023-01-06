@@ -8,6 +8,7 @@
 #include "Equipment.hpp"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
+#include "ItemOnGround.hpp"
 #include "List.hpp"
 #include "Events.hpp"
 #include "Wall.hpp"
@@ -24,6 +25,7 @@ static int difficulty;
 Room *random_room();
 Room *boss_room();
 Room *add_hostiles(Room* r);
+Room *add_loot(Room *r);
 
 static int id=0; // generazione di un ID unico per ogni stanza
 static bool next_boss_room = false; // ogni BOSS_FREQ punti la prossima stanza generata è una boss_room
@@ -81,11 +83,11 @@ void create_loop(Room *starting_room, int direction, bool clockwise=true) {
      * +---------+---------+
      * |         |         |
      * |         |         |
-     * |    ^  --+->  |    |
+     * |    ^  --+->       |
      * |    |    |    |    |
      * +----+----+----+----+
      * |    |    |    |    |
-     * |       <-+-   v    |
+     * |       <-+--  v    |
      * |         |         |
      * |         |         |
      * +---------+---------+
@@ -365,7 +367,7 @@ Room *room4() {
 
 
 
-#define return_room_N(N) case N: return add_hostiles( room ## N()); break;
+#define return_room_N(N) case N: return add_hostiles( add_loot( room ## N())); break;
 
 Room *random_room() {
     switch (rand()%ROOM_TYPES) {
@@ -380,6 +382,36 @@ Room *random_room() {
 }
 
 
+Room *add_loot(Room *r) {
+
+    const int potion_probabitilty = 50;
+    const int key_probability = 50;
+    int x,y;
+    Potion *p;
+    Key *k;
+    ItemOnGround *i;
+
+    while(rand()%100 < potion_probabitilty) {
+            x=rand()%ROOM_WIDTH;
+            y=rand()%ROOM_HEIGHT;
+
+            p = new Potion();
+            i = new ItemOnGround({x,y},p);
+            r->add_items_on_ground(i);
+    }
+
+    while(rand()%100 < key_probability) {
+            x=rand()%ROOM_WIDTH;
+            y=rand()%ROOM_HEIGHT;
+
+            k = new Key();
+            i = new ItemOnGround({x,y},p);
+            r->add_items_on_ground(i);
+    }
+
+
+    return r;
+}
 
 Room *add_hostiles(Room* r) {
     int x,y,lv;
