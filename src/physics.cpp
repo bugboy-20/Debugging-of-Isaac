@@ -81,6 +81,10 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
 }
 
 bool next_room_position(Room& r, enum door_pos p){
+    if(r.door[p]->locked && r.p->get_inventory().keys.get_n_utilizzi() > 0){
+        r.p->use_key(&r);
+    }else return false;
+
     if(r.door[p]!=NULL) {
         if(r.door[p]->next_room != NULL){
             change_room(r.next_room(p));
