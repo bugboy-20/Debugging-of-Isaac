@@ -316,9 +316,8 @@ void collect_item_on_ground(Room &r){
         ItemOnGround *i = (ItemOnGround*)items_tmp->element;
         if(r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y()){
             r.p->add_item(i->get_item());
-            r.add_event(new InventoryChangedE);
             r.delete_room_menber(i);
-            r.add_event(new RoomChangedE());
+            r.add_event(new ItemPickedE(i));
         }
         items_tmp = items_tmp->next;
     }

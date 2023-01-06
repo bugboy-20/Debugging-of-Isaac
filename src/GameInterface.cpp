@@ -4,6 +4,7 @@
 #include "Wall.hpp"
 #include "constants.h"
 #include <cstring>
+#include <iostream>
 
 GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDOW *moblist, WINDOW *inv, interface_coords c)
 {
@@ -58,7 +59,7 @@ void GameInterface::handle_events()
             this->render_room(); // stampo la stanza per la prima volta
             this->render_legend();
             this->render_moblist();
-            this->render_inventory();
+            // this->render_inventory();
 
             delete t;
             break;
@@ -104,6 +105,7 @@ void GameInterface::handle_events()
             ScoreChangedE *t = (ScoreChangedE *)e;
 
             mvwprintw(playerstat, 3, 1, "%s: %d", "punti", t->data->get_score());
+            wrefresh(playerstat);
             delete t;
             break;
         }
@@ -248,6 +250,8 @@ void GameInterface::render_room()
 
 void GameInterface::render_playerstat()
 {
+    werase(playerstat);
+    box(playerstat, 0, 0);
     // estraggo il player
     Player *player = (Player *)r->p;
     if (player == NULL)
@@ -279,13 +283,13 @@ void GameInterface::render_playerstat()
 
     // stampo le statistiche
     int curr_y = 4;
-    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "danno", r->p->get_damage());
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "danno", player->get_damage());
     curr_y += 1;
-    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "vel. attacco", 1000 / r->p->get_attack_speed());
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "vel. attacco", 1000 / player->get_attack_speed());
     curr_y += 1;
-    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "velocita`", 1000 / r->p->get_movement_speed());
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "velocita`", 1000 / player->get_movement_speed());
     curr_y += 1;
-    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "gittata", r->p->get_range());
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "gittata", player->get_range());
 
     mvwprintw(playerstat, 0, 1, "Statistiche");
     wrefresh(playerstat);

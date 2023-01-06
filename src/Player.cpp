@@ -68,9 +68,9 @@ Item *Player::remove_item(int slot)
 {
     if (inv.items[slot] == NULL)
         return NULL;
-    add_stats(inv.items[slot]->get_stats(true));
     Item *temp = inv.items[slot];
     inv.items[slot] = NULL;
+    add_stats(temp->get_stats(true));
     return temp;
 }
 
@@ -129,4 +129,6 @@ void Player::add_stats(stats s)
     this->health += s.health;
     this->max_health += s.health;
     this->attack_speed += s.attack_speed;
+    this->movement_speed += s.movement_speed;
+    this->range += s.range;
 }
