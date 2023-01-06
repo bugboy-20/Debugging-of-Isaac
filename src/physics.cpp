@@ -85,11 +85,9 @@ bool next_room_position(Room& r, enum door_pos p){
         return false;
     if (r.door[p]->locked)
         if (r.p->use_key(&r)){ // se la porta è sbloccata non devo usare la chiave
-            r.door[p]->locked = 0;
+            r.door[p]->locked = false;
         } else return false;
            
-        
-
     if (r.door[p]->next_room != NULL)
         change_room(r.next_room(p));
     else
