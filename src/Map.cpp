@@ -166,15 +166,15 @@ Room *boss_room() {
     Item *i;
     switch (rand()%5) {
         case 0:
-            i = new Weapon(0,'/',"spada-pistola",lv);
+            i = new Weapon('/',"spada-pistola",lv);
         case 1:
-            i = new Armor(0,'T',"armatura di mia zia",lv);
+            i = new Armor('T',"armatura di mia zia",lv);
         case 2:
-            i = new Boots(0,'L',"Scarpine di Diego",lv);
+            i = new Boots('L',"Scarpine di Diego",lv);
         case 3:
-            i = new Crosshair(0,'X',"Occhio di Lucertola",lv);
+            i = new Crosshair('X',"Occhio di Lucertola",lv);
         case 4:
-            i = new Booster(0,'>',"Sppee",lv);
+            i = new Booster('>',"Sppee",lv);
     }
 
     Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X', "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
@@ -405,7 +405,7 @@ Room *add_loot(Room *r) {
             y=rand()%ROOM_HEIGHT;
 
             k = new Key();
-            i = new ItemOnGround({x,y},p);
+            i = new ItemOnGround({x,y},k);
             r->add_items_on_ground(i);
     }
 
