@@ -11,7 +11,7 @@ Player::Player(
     coords pos,
     char display) : Entity(pos, display, player_s, {player_damage, player_health, player_as, player_ms, player_range})
 {
-    this->inv = {{}, 0, Potion(10), Key(1)};
+    this->inv = {{}, 0, Potion(lvl1, 10), Key(1)};
     for (int i = 0; i < player_inventory_slots; i++)
         this->inv.items[i] = NULL;
 

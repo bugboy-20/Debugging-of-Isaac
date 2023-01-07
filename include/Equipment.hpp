@@ -35,7 +35,7 @@ protected:
     int n_utilizzi;
 
 public:
-    Consumable(item_id id, char display, const char desc[STR_LENGTH], int n_utilizzi = 0);
+    Consumable(item_id id, char display, const char desc[STR_LENGTH], int level = 1, int n_utilizzi = 0);
 
     void set_level(int);
     int get_n_utilizzi();
@@ -48,8 +48,7 @@ public:
 class Potion : public Consumable
 {
 public:
-    Potion();
-    Potion(int n_util);
+    Potion(int level = 1, int n_util = 1);
     // restituisce la quantità di vita curata
     int use();
 };
@@ -59,8 +58,7 @@ public:
 class Key : public Consumable
 {
 public:
-    Key();
-    Key(int n_util);
+    Key(int n_util = 1);
 };
 
 // una Weapon è un item che aumenta il danno,

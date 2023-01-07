@@ -45,7 +45,7 @@ stats Item::get_stats(bool negate)
 6- Bacca magica (no ammo)
 */
 
-Consumable::Consumable(item_id id, char display, const char desc[STR_LENGTH], int n) : Item(id, display, desc)
+Consumable::Consumable(item_id id, char display, const char desc[STR_LENGTH], int level, int n) : Item(id, display, desc, level)
 {
     n_utilizzi = n;
 }
@@ -61,8 +61,7 @@ bool Consumable::use()
     return true;
 }
 
-Potion::Potion() : Consumable(potions, potion_display, potion_d) {}
-Potion::Potion(int n_util) : Consumable(potions, potion_display, potion_d, n_util) {}
+Potion::Potion(int level, int n_util) : Consumable(potions, potion_display, potion_d, level, n_util) {}
 int Potion::use()
 {
     bool is_used = Consumable::use();
@@ -72,8 +71,7 @@ int Potion::use()
     return 0;
 }
 
-Key::Key() : Consumable(keys, key_display, key_d) {}
-Key::Key(int n_util) : Consumable(keys, key_display, key_d, n_util) {}
+Key::Key(int n_util) : Consumable(keys, key_display, key_d, lvl1, n_util) {}
 
 Weapon::Weapon(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
