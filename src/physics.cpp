@@ -11,26 +11,28 @@ using namespace std;
 List bullets = List();
 
 bool collision(int x, int y, Room& r){
-    bool flag1, flag2, flag3;
-    flag1 = wall_collision({x, y}, r);
-    flag2 = entity_collision({x, y}, r);
-    if(player_in_door(x, y, r)) door_collision({x, y}, r);
-    if(flag1 || flag2) return true;
-    else return false;
+    coords pos_to_check = {x, y};
+    bool wall_collision_flag = wall_collision(pos_to_check, r), entity_collision_flag = entity_collision(pos_to_check, r);
+
+    if(player_in_door(pos_to_check, r)) 
+        door_collision(pos_to_check, r);
+
+    if(wall_collision_flag || entity_collision_flag) 
+        return true;
+    else 
+        return false;
 }
 
-bool player_in_door(int x, int y, Room& r)
-{
-    bool flag = (r.p->get_x() == x - 1 && r.p->get_y() == y) 
-                || (r.p->get_x() == x + 1 && r.p->get_y() == y)
-                || (r.p->get_x() == x && r.p->get_y() == y - 1) 
-                || (r.p->get_x() == x && r.p->get_y() == y + 1) ;
+bool player_in_door(coords pos, Room& r){
+    bool flag = (r.p->get_x() == pos.x - 1 && r.p->get_y() == pos.y) 
+                || (r.p->get_x() == pos.x + 1 && r.p->get_y() == pos.y)
+                || (r.p->get_x() == pos.x && r.p->get_y() == pos.y - 1) 
+                || (r.p->get_x() == pos.x && r.p->get_y() == pos.y + 1) ;
     
     return flag;
 }
 
-bool wall_collision(coords pos, Room& r)
-{
+bool wall_collision(coords pos, Room& r){
     if(pos.y < 1) return true;
     else if(pos.x < 1) return true;
     else if(pos.y > ROOM_HEIGHT - 2) return true;
@@ -39,15 +41,14 @@ bool wall_collision(coords pos, Room& r)
 }
 
 bool entity_collision(coords pos, Room& r){
-    if(r.get_element_in_this_position(pos) == NULL || r.get_element_in_this_position(pos)->is_crossable()){
+    if(r.get_element_in_this_position(pos) == NULL || r.get_element_in_this_position(pos)->is_crossable())
         return false;
-    }else{
+    else
         return true;
-    }
+    
 }
 
-void door_collision(coords p, Room& r)
-{
+void door_collision(coords p, Room& r){
     if(p.x == 0 && p.y == (ROOM_HEIGHT/2) || p.x == 0 && p.y == (ROOM_HEIGHT/2) - 1){  
 
         if(next_room_position(r, LEFT_DOOR))  repos_player_in_new_room(p, r, LEFT_DOOR, RIGHT_DOOR);
@@ -77,7 +78,6 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
         new_pos = door_position2(p1)[1];
     }
     r.next_room(p)->p->reposition(new_pos);
-    // r.next_room(p)->add_event(new EntityMoveE(old_pos, new_pos, r.next_room(p)->p->get_display()));
 }
 
 bool next_room_position(Room& r, enum door_pos p){
@@ -86,7 +86,7 @@ bool next_room_position(Room& r, enum door_pos p){
     if (r.door[p]->locked)
         if (r.p->use_key(&r)){ // se la porta è sbloccata non devo usare la chiave
             r.door[p]->locked = false;
-        } else return false;
+        }else return false;
            
     if (r.door[p]->next_room != NULL)
         change_room(r.next_room(p));
@@ -156,7 +156,7 @@ bool enemy_in_range(Room& r, Hostile *e){
 }
 
 void shoot_in_direction(Room& r, Bullet *b){
-    if(b->get_direction() >= 0 && b->get_direction() <= 3){
+    if(b->get_direction() >= DOWN && b->get_direction() <= LEFT){
         switch(b->get_direction()){
             case DOWN:
             {

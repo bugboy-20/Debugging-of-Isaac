@@ -9,7 +9,7 @@ bool collision(int x, int y, Room& r);
 
 /*Funzione che controlla che ciò che vuole attraversare una porta
 sia il player, e non altre entità (e.g. un proiettile)*/
-bool player_in_door(int x, int y, Room& r);
+bool player_in_door(coords pos, Room& r);
 
 /*Funzione che si occupa di gestire le collisioni con le mura
 esterne della mappa*/
