@@ -322,11 +322,10 @@ void collect_item_on_ground(Room &r){
         bool flag = r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y();
         if(flag && i->get_item()->get_id() == item){
             r.p->add_item(i->get_item());
-            r.add_event(new InventoryChangedE);     
         }else if(flag && i->get_item()->get_id() == potions){
-            r.p->add_potion(&r,(Potion*) i);
+            r.p->add_potion(&r,(Potion*) i->get_item());
         }else if(flag && i->get_item()->get_id() == keys){
-            r.p->add_key(&r, (Key*) i);
+            r.p->add_key(&r, (Key*) i->get_item());
         }
         if(flag){
             r.delete_room_menber(i);
