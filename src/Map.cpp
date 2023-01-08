@@ -15,6 +15,7 @@
 #include "Map.h"
 #include "Player.hpp"
 #include "Room.hpp"
+#include "geometry.h"
 #include "physics.h"
 
 #define ROOM_TYPES 5 // numero di varianti di stanze disponibili
@@ -382,35 +383,38 @@ Room *random_room() {
     }
 }
 
+coords safe_random_spawn(Room& r) {
+    int x,y;
+    do{
+        x=1 + rand()%(ROOM_WIDTH-1);
+        y=1 + rand()%(ROOM_HEIGHT-1);
+    } while(r.get_element_in_this_position({x,y})!=NULL);
+
+    return {x,y};
+}
 
 Room *add_loot(Room *r) {
 
     const int potion_probabitilty = 50;
     const int key_probability = 50;
-    int x,y;
+    coords c;
     Potion *p;
     Key *k;
     ItemOnGround *i;
 
     while(rand()%100 < potion_probabitilty) {
-        do{
-            x=1 + rand()%(ROOM_WIDTH-1);
-            y=1 + rand()%(ROOM_HEIGHT-1);
-        } while(r->get_element_in_this_position({x,y})!=NULL);
-
+        c = safe_random_spawn(*r);
+        
         p = new Potion();
-        i = new ItemOnGround({x,y},p);
+        i = new ItemOnGround(c,p);
         r->add_items_on_ground(i);
     }
 
     while(rand()%100 < key_probability) {
-        do {
-            x=rand()%ROOM_WIDTH;
-            y=rand()%ROOM_HEIGHT;
-        } while(r->get_element_in_this_position({x,y})!=NULL);
+        c = safe_random_spawn(*r);
 
         k = new Key();
-        i = new ItemOnGround({x,y},k);
+        i = new ItemOnGround(c,k);
         r->add_items_on_ground(i);
     }
 
