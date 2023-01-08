@@ -83,11 +83,13 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
 bool next_room_position(Room& r, enum door_pos p){
     if (r.door[p] == NULL)
         return false;
-    if (r.door[p]->locked)
+    if (r.door[p]->locked){
         if (r.p->use_key(&r)){ // se la porta è sbloccata non devo usare la chiave
             r.door[p]->locked = false;
-        }else return false;
-           
+            r.add_event(new RoomChangedE());
+        }
+        return false;
+    }
     if (r.door[p]->next_room != NULL)
         change_room(r.next_room(p));
     else
