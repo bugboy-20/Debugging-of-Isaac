@@ -26,6 +26,7 @@ Room *random_room();
 Room *boss_room();
 Room *add_hostiles(Room* r);
 Room *add_loot(Room *r);
+Room *close_some_doors(Room *r);
 
 static int id=0; // generazione di un ID unico per ogni stanza
 static bool next_boss_room = false; // ogni BOSS_FREQ punti la prossima stanza generata è una boss_room
@@ -367,7 +368,7 @@ Room *room4() {
 
 
 
-#define return_room_N(N) case N: return add_hostiles( add_loot( room ## N())); break;
+#define return_room_N(N) case N: return close_some_doors(add_hostiles( add_loot( room ## N()))); break;
 
 Room *random_room() {
     switch (rand()%ROOM_TYPES) {
@@ -393,8 +394,8 @@ Room *add_loot(Room *r) {
 
     while(rand()%100 < potion_probabitilty) {
         do{
-            x=rand()%ROOM_WIDTH;
-            y=rand()%ROOM_HEIGHT;
+            x=1 + rand()%(ROOM_WIDTH-1);
+            y=1 + rand()%(ROOM_HEIGHT-1);
         } while(r->get_element_in_this_position({x,y})!=NULL);
 
         p = new Potion();
@@ -436,6 +437,24 @@ Room *add_hostiles(Room* r) {
     return r;
 }
 
+/* questa funzione prende in input una stanza e chiude da 0 a 2 porte */
+Room *close_some_doors(Room *r) {
+
+    int door_closed = rand() % 2;
+    int i=0;
+    door *d;
+
+    while (i<door_closed) {
+        d=r->door[rand()%4];
+        
+        if(d==NULL) //porta non esistente, riprova
+            continue;
+
+        d->locked=true;
+        i++;
+    }
+    return r;
+}
 
 
 
