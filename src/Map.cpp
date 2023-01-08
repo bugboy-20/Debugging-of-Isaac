@@ -392,23 +392,26 @@ Room *add_loot(Room *r) {
     ItemOnGround *i;
 
     while(rand()%100 < potion_probabitilty) {
+        do{
             x=rand()%ROOM_WIDTH;
             y=rand()%ROOM_HEIGHT;
+        } while(r->get_element_in_this_position({x,y})!=NULL);
 
-            p = new Potion();
-            i = new ItemOnGround({x,y},p);
-            r->add_items_on_ground(i);
+        p = new Potion();
+        i = new ItemOnGround({x,y},p);
+        r->add_items_on_ground(i);
     }
 
     while(rand()%100 < key_probability) {
+        do {
             x=rand()%ROOM_WIDTH;
             y=rand()%ROOM_HEIGHT;
+        } while(r->get_element_in_this_position({x,y})!=NULL);
 
-            k = new Key();
-            i = new ItemOnGround({x,y},k);
-            r->add_items_on_ground(i);
+        k = new Key();
+        i = new ItemOnGround({x,y},k);
+        r->add_items_on_ground(i);
     }
-
 
     return r;
 }
@@ -417,10 +420,10 @@ Room *add_hostiles(Room* r) {
     int x,y,lv;
     for(int i=difficulty; i>0;) {
 
- //       do {
+        do {
             x=rand()%ROOM_WIDTH;
             y=rand()%ROOM_HEIGHT;
-   //     } while(collision(x, y, *r));*/
+        } while(r->get_element_in_this_position({x,y})!=NULL);
 
         lv=rand()%i;
         i-=lv+1; //entità di livello 0 (virtualmente) potrebbero essere generate infinitamente

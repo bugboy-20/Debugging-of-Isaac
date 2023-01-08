@@ -54,6 +54,8 @@ bool List::delete_element(void *e) {
     node *cn; //current node
     node *tmp;
 
+    if (head==NULL)
+        return false;
     if(head->element==e) {
         tmp=head;
         this->head=head->next;
