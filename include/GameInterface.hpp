@@ -25,10 +25,8 @@ class GameInterface
 {
 private:
     WINDOW *wroom, *playerstat, *legend, *moblist, *inventory;
-    WINDOW *debug; // schermo temporaneo per i messaggi di debug
     Room *r;
     interface_coords i_coords;
-    bool newEvents;
 
     // metodi di utilità
     /**
@@ -37,6 +35,13 @@ private:
      * @param doors array di porte da stampare
      */
     void print_doors(door *doors[]);
+    /**
+     * prende in input un carattere e se è migliorabile restituisce la versione migliore,
+     * altrimenti lo lascia inalterato
+     * 
+     * @param char carattere da migliorare
+     * @return carattere migliorato oppure lo stesso carattere passato in input
+    */
     chtype improve_char(char);
 
 public:
@@ -62,8 +67,8 @@ public:
      * Stampa il riquadro in cui sono visualizzati punteggio e vita.
      *
      * Funzione che dovrebbe essere chiamata quando:
-     * inizia il gioco, la vita del player aumenta o diminuisce, il player guadagna punti
-     *
+     * inizia il gioco, la vita del player aumenta o diminuisce, il player guadagna punti,
+     * una statistica del player cambia
      */
     void render_playerstat();
 
@@ -71,8 +76,7 @@ public:
      * Stampa una legenda con elementi presenti nella stanza.
      *
      * Funzione che dovrebbe essere chiamata quando:
-     * si cambia stanza
-     *
+     * si cambia stanza, viene droppato un oggetto
      */
     void render_legend();
 
@@ -81,7 +85,6 @@ public:
      *
      * Funzione che dovrebbe essere chiamata quando:
      * si cambia stanza, un hostile prende danno, un hostile muore
-     *
      */
     void render_moblist();
 
@@ -89,8 +92,7 @@ public:
      * Stampa la sezione in cui sono rappresentati gli oggetti raccolti dal giocatore.
      *
      * Funzione che dovrebbe essere chiamata quando:
-     * ancora non lo so
-     *
+     * quando raccolgo un oggetto (sia pozione, che chiave, che item), quando lascio un oggetto
      */
     void render_inventory();
 };

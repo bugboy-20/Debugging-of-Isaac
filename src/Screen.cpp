@@ -127,7 +127,7 @@ void Screen::start_gameinterface(Room *r)
 
 void Screen::start_gamecontrols()
 {
-    controls = newwin(stdscr_height / 2, stdscr_width / 3, stdscr_height / 4, stdscr_width / 3);
+    controls = newwin(stdscr_height, stdscr_width, 0,0);
     wrefresh(controls);
     this->gc = GameControls(controls);
 }

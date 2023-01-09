@@ -136,6 +136,9 @@
 #define locked_door_display '+'
 #define h_wall_display '-'
 #define v_wall_display '|'
+#define full_heart '0'
+#define half_heart 'O'
+#define empty_heart '-'
 
 #define bullet_d "bullet_desc"
 #define bullet_display '.'

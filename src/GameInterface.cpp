@@ -4,7 +4,6 @@
 #include "Wall.hpp"
 #include "constants.h"
 #include <cstring>
-#include <iostream>
 
 GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDOW *moblist, WINDOW *inv, interface_coords c)
 {
@@ -14,25 +13,15 @@ GameInterface::GameInterface(WINDOW *wroom, WINDOW *pstat, WINDOW *legend, WINDO
     this->moblist = moblist;
     this->inventory = inv;
     this->i_coords = c;
-    newEvents = true;
-    debug = newwin(50, 30, 0, 130);
-    wrefresh(debug);
 }
 
 void GameInterface::set_room(Room *r) { this->r = r; }
 
 void GameInterface::handle_events()
 {
-    // wmove(debug, 0, 0);
     RoomEvent *e;
     while ((e = r->get_event()) != NULL)
     {
-        if (newEvents)
-        {
-            newEvents = false;
-            // werase(debug);
-        }
-        // wprintw(debug, "id evento: %d \n", e->id);
         switch (e->id)
         {
         case ENTITY_MOVE:
@@ -59,7 +48,6 @@ void GameInterface::handle_events()
             this->render_room(); // stampo la stanza per la prima volta
             this->render_legend();
             this->render_moblist();
-            // this->render_inventory();
 
             delete t;
             break;
@@ -150,6 +138,7 @@ void GameInterface::handle_events()
             wnoutrefresh(wroom);
             this->render_inventory();
             this->render_playerstat();
+            this->render_legend();
 
             delete t;
             break;
@@ -158,53 +147,8 @@ void GameInterface::handle_events()
             break;
         }
     }
-    // wrefresh(debug);
-    newEvents = true;
 }
 
-void GameInterface::print_doors(door *doors[])
-{
-    for (int i = 0; i < 4; i++)
-    {
-        if (doors[i] != NULL)
-        {
-            char door = open_door_display;
-            if (doors[i]->locked)
-                door = locked_door_display;
-            int yLoc1,
-                xLoc1, yLoc2, xLoc2;
-
-            switch ((*doors[i]).position)
-            {
-            case UPPER_DOOR:
-                yLoc1 = yLoc2 = 0;
-                xLoc1 = (ROOM_WIDTH / 2) - 1;
-                xLoc2 = (ROOM_WIDTH / 2);
-                break;
-            case LOWER_DOOR:
-                yLoc1 = yLoc2 = ROOM_HEIGHT - 1;
-                xLoc1 = (ROOM_WIDTH / 2) - 1;
-                xLoc2 = (ROOM_WIDTH / 2);
-                break;
-            case RIGHT_DOOR:
-                yLoc1 = (ROOM_HEIGHT / 2) - 1;
-                yLoc2 = (ROOM_HEIGHT / 2);
-                xLoc1 = xLoc2 = ROOM_WIDTH - 1;
-                break;
-            case LEFT_DOOR:
-                yLoc1 = (ROOM_HEIGHT / 2) - 1;
-                yLoc2 = (ROOM_HEIGHT / 2);
-                xLoc1 = xLoc2 = 0;
-                break;
-
-            default:
-                break;
-            }
-            mvwaddch(wroom, yLoc1, xLoc1, door);
-            mvwaddch(wroom, yLoc2, xLoc2, door);
-        }
-    }
-}
 
 void GameInterface::render_room()
 {
@@ -258,9 +202,6 @@ void GameInterface::render_playerstat()
         return;
 
     int start_x = 1;
-    char fullHeart = '0', // cuore intero
-        halfHeart = 'O',  // mezzo cuore
-        emptyHeart = '-'; // cuore vuoto
 
     int nFullHeart = player->get_health() / 2,
         nHalfHeart = player->get_health() - nFullHeart * 2,                           // get_health è dispari allora è 1 se è pari è 0
@@ -270,13 +211,13 @@ void GameInterface::render_playerstat()
     wmove(playerstat, 1, start_x);
 
     for (int i = 0; i < nFullHeart; i++)
-        waddch(playerstat, fullHeart);
+        waddch(playerstat, full_heart);
 
     for (int i = 0; i < nHalfHeart; i++)
-        waddch(playerstat, halfHeart);
+        waddch(playerstat, half_heart);
 
     for (int i = 0; i < nEmptyHeart; i++)
-        waddch(playerstat, emptyHeart);
+        waddch(playerstat, empty_heart);
 
     // stampo i punti
     mvwprintw(playerstat, 3, start_x, "%s: %d", "punti", player->get_score());
@@ -353,8 +294,6 @@ void GameInterface::render_moblist()
     box(moblist, 0, 0);
 
     int line = 2, col = 2, gap = 4;
-    char fullHeart = '0', // cuore intero
-        halfHeart = 'O';  // mezzo cuore
 
     wmove(moblist, line, col);
     List entities = r->get_entities(false);
@@ -377,7 +316,6 @@ void GameInterface::render_moblist()
         c->get_description(desc);
         if (start_x + strlen(desc) + 4 >= ROOM_WIDTH || start_x + nFullHeart + nHalfHeart >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
         {                                                                                                // se il nome o la barra della vita non ci sta
-
             line += 3; // mi sposto sotto
             wmove(moblist, line, col);
         }
@@ -388,9 +326,9 @@ void GameInterface::render_moblist()
             wmove(moblist, start_y + 1, start_x);                // mi muovo nella riga sotto
 
             for (int i = 0; i < nFullHeart; i++) // stampo la barra della vita
-                waddch(moblist, fullHeart);
+                waddch(moblist, full_heart);
             for (int i = 0; i < nHalfHeart; i++)
-                waddch(moblist, halfHeart);
+                waddch(moblist, half_heart);
 
             getyx(moblist, end_h_y, end_h_x);
 
@@ -465,6 +403,50 @@ void GameInterface::render_inventory()
     }
     mvwprintw(inventory, 0, 1, "Inventario");
     wrefresh(inventory);
+}
+
+void GameInterface::print_doors(door *doors[])
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (doors[i] != NULL)
+        {
+            char door = open_door_display;
+            if (doors[i]->locked)
+                door = locked_door_display;
+            int yLoc1,
+                xLoc1, yLoc2, xLoc2;
+
+            switch ((*doors[i]).position)
+            {
+            case UPPER_DOOR:
+                yLoc1 = yLoc2 = 0;
+                xLoc1 = (ROOM_WIDTH / 2) - 1;
+                xLoc2 = (ROOM_WIDTH / 2);
+                break;
+            case LOWER_DOOR:
+                yLoc1 = yLoc2 = ROOM_HEIGHT - 1;
+                xLoc1 = (ROOM_WIDTH / 2) - 1;
+                xLoc2 = (ROOM_WIDTH / 2);
+                break;
+            case RIGHT_DOOR:
+                yLoc1 = (ROOM_HEIGHT / 2) - 1;
+                yLoc2 = (ROOM_HEIGHT / 2);
+                xLoc1 = xLoc2 = ROOM_WIDTH - 1;
+                break;
+            case LEFT_DOOR:
+                yLoc1 = (ROOM_HEIGHT / 2) - 1;
+                yLoc2 = (ROOM_HEIGHT / 2);
+                xLoc1 = xLoc2 = 0;
+                break;
+
+            default:
+                break;
+            }
+            mvwaddch(wroom, yLoc1, xLoc1, door);
+            mvwaddch(wroom, yLoc2, xLoc2, door);
+        }
+    }
 }
 
 chtype GameInterface::improve_char(char ch)
