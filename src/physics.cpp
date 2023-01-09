@@ -264,9 +264,14 @@ void entities_movement(Room &r){
         timeval now;
         time_now(now);
         if(time_elapsed(e->get_last_move(), now) >= e->get_movement_speed()){ 
-            if(e->get_smartness() == low_smartness){
-                move_in_random_direction(r, e);
-            }else move_in_player_direction(r, e);
+
+            if(rand()%(MAX_SMARTNESS/5) + e->get_smartness() <= MAX_SMARTNESS/2)
+                move_in_random_direction(r,e);
+            else
+                move_in_player_direction(r,e);
+
+
+
             time_now(now);
             e->set_last_move(now);
         }

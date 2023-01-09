@@ -1,6 +1,8 @@
 #pragma once
 #define STR_LENGTH 20
 
+#define MAX_SMARTNESS 10
+
 #define Zombie_s "zombie"
 #define Zombie_display 'z'
 #define Zombie_damage 1
@@ -45,7 +47,7 @@
 #define Fantasma_ms 260
 #define Fantasma_range 6
 #define Fantasma_tr 5
-#define Fantasma_smartness 0
+#define Fantasma_smartness 5
 #define Fantasma_ds 1
 #define Fantasma_hs 1
 
@@ -69,7 +71,7 @@
 #define Mummia_ms 330
 #define Mummia_range 6
 #define Mummia_tr 5
-#define Mummia_smartness 0
+#define Mummia_smartness 7
 #define Mummia_ds 1
 #define Mummia_hs 3
 
