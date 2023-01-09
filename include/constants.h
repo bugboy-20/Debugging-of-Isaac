@@ -11,7 +11,7 @@
 #define Zombie_ms 280
 #define Zombie_range 6
 #define Zombie_tr 5
-#define Zombie_smartness 0
+#define Zombie_smartness 6
 #define Zombie_ds 1
 #define Zombie_hs 2
 
@@ -23,7 +23,7 @@
 #define Scheletro_ms 280
 #define Scheletro_range 15
 #define Scheletro_tr 13
-#define Scheletro_smartness 0
+#define Scheletro_smartness 3
 #define Scheletro_ds 1
 #define Scheletro_hs 2
 
@@ -35,7 +35,7 @@
 #define Goblin_ms 230
 #define Goblin_range 4
 #define Goblin_tr 3
-#define Goblin_smartness 0
+#define Goblin_smartness 1
 #define Goblin_ds 3
 #define Goblin_hs 1
 
@@ -47,7 +47,7 @@
 #define Fantasma_ms 260
 #define Fantasma_range 6
 #define Fantasma_tr 5
-#define Fantasma_smartness 5
+#define Fantasma_smartness 7
 #define Fantasma_ds 1
 #define Fantasma_hs 1
 
@@ -59,7 +59,7 @@
 #define Ragno_ms 250
 #define Ragno_range 4
 #define Ragno_tr 3
-#define Ragno_smartness 0
+#define Ragno_smartness 1
 #define Ragno_ds 2
 #define Ragno_hs 1
 
@@ -71,7 +71,7 @@
 #define Mummia_ms 330
 #define Mummia_range 6
 #define Mummia_tr 5
-#define Mummia_smartness 7
+#define Mummia_smartness 4
 #define Mummia_ds 1
 #define Mummia_hs 3
 
