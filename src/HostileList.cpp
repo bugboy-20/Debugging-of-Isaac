@@ -14,7 +14,7 @@ mob(Goblin);
 mob(Fantasma);
 mob(Ragno);
 mob(Mummia);
-mob(Vampiro);
+mob(Torretta);
 
 mob(Golem);
 mob(Mago);

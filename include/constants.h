@@ -75,17 +75,17 @@
 #define Mummia_ds 1
 #define Mummia_hs 3
 
-#define Vampiro_s "vampiro"
-#define Vampiro_display 'v'
-#define Vampiro_damage 3
-#define Vampiro_health 4
-#define Vampiro_as 1500
-#define Vampiro_ms 280
-#define Vampiro_range 6
-#define Vampiro_tr 5
-#define Vampiro_smartness 0
-#define Vampiro_ds 2
-#define Vampiro_hs 2
+#define Torretta_s "torretta"
+#define Torretta_display 't'
+#define Torretta_damage 3
+#define Torretta_health 2
+#define Torretta_as 1000
+#define Torretta_ms 5000
+#define Torretta_range 500
+#define Torretta_tr 499
+#define Torretta_smartness MAX_SMARTNESS
+#define Torretta_ds 2
+#define Torretta_hs 2
 
 #define Golem_s "Golem BOSS"
 #define Golem_display 'G'

@@ -14,7 +14,7 @@ mob(Goblin);
 mob(Fantasma);
 mob(Ragno);
 mob(Mummia);
-mob(Vampiro);
+mob(Torretta);
 
 // TODO implementare due boss
 // nemici particolarmente forti senza scaling, tanta vita
