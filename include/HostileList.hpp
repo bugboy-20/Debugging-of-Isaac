@@ -16,4 +16,10 @@ mob(Ragno);
 mob(Mummia);
 mob(Vampiro);
 
+// TODO implementare due boss
+// nemici particolarmente forti senza scaling, tanta vita
+mob(Golem);
+mob(Mago);
+mob(Drago);
+
 #undef mob

@@ -210,9 +210,8 @@ int Screen::print_game_over()
     refresh();
     int key;
     do
-    {
         key = getch();
-    } while (key != 'n' && key != quit_button);
+    while (key != new_game_button && key != quit_button);
     return key;
 }
 

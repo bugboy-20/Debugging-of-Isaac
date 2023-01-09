@@ -87,6 +87,42 @@
 #define Vampiro_ds 2
 #define Vampiro_hs 2
 
+#define Golem_s "Golem BOSS"
+#define Golem_display 'G'
+#define Golem_damage 10
+#define Golem_health 30
+#define Golem_as 1500
+#define Golem_ms 200
+#define Golem_range 9
+#define Golem_tr 8
+#define Golem_smartness 2
+#define Golem_ds 0
+#define Golem_hs 0
+
+#define Mago_s "Mago BOSS"
+#define Mago_display 'M'
+#define Mago_damage 20
+#define Mago_health 23
+#define Mago_as 2500
+#define Mago_ms 200
+#define Mago_range 15
+#define Mago_tr 14
+#define Mago_smartness MAX_SMARTNESS
+#define Mago_ds 0
+#define Mago_hs 0
+
+#define Drago_s "Drago BOSS"
+#define Drago_display 'D'
+#define Drago_damage 16
+#define Drago_health 26
+#define Drago_as 2000
+#define Drago_ms 200
+#define Drago_range 120
+#define Drago_tr 119
+#define Drago_smartness 2
+#define Drago_ds 0
+#define Drago_hs 0
+
 #define player_s "giocatore"
 #define player_inventory_slots 5
 #define player_display '@'
@@ -110,6 +146,7 @@
 #define right_button 'd'
 #define quit_button 'q'
 #define heal_button 'h'
+#define new_game_button 'n'
 
 #define weapon_damage 2
 #define armor_health 2
