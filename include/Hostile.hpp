@@ -18,5 +18,7 @@ public:
 
     int get_trigger_radius();
     int get_smartness();
+    // restituisce il puntatore dell'oggetto del nemico, e successivamente lo elimina
+    // dopo la prima chiamata ritorna NULL
     Item *get_drop();
 };

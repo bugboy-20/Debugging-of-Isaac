@@ -118,8 +118,9 @@ void damage_player(Room& r, Bullet *b){
 void entity_damage(Room& r, Bullet *b, Entity *e){
     e->set_health(e->get_health() - r.p->get_damage());   
     if(e->get_health() <= 0){
-        if(((Hostile*) e)->get_drop() != NULL){
-            ItemOnGround *i = new ItemOnGround({e->get_x(), e->get_y()}, ((Hostile*) e)->get_drop());
+        Item *drop = ((Hostile*)e)->get_drop();
+        if(drop != NULL){
+            ItemOnGround *i = new ItemOnGround({e->get_x(), e->get_y()}, drop);
             r.add_items_on_ground(i);
             r.add_event(new ItemDroppedE({e->get_x(), e->get_y()}));
         }
