@@ -208,12 +208,11 @@ int Screen::print_game_over()
     mvprintw(current_y, current_x, "%s", "(_______)     \\_/     (_______/  |/   \\__/");
     mvprintw(stdscr_height - 5, 0, "%s %c %s", "Premi un tasto per ricominciare oppure premi", quit_button, "per uscire...");
     refresh();
-    // #ifdef _WIN32
-    //     Sleep(2000);
-    // #else
-    //     usleep(utom(2000));
-    // #endif
-    int key = getch();
+    int key;
+    do
+    {
+        key = getch();
+    } while (key != 'n' && key != quit_button);
     return key;
 }
 

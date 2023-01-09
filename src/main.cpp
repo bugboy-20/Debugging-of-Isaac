@@ -30,8 +30,7 @@ using namespace std;
 int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
-void exit_game();  // permette di uscire
-void reset_game(); // reset del game
+void exit_game(); // permette di uscire
 
 // true se deve essere eseguito un altro menù
 bool menu(Screen &); // apre il menu

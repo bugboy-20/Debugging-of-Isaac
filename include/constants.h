@@ -120,6 +120,9 @@
 #define key_d "chiave"
 #define key_display 'k'
 
+#define key_spawn_rate 20
+#define pot_spwan_rate 20
+
 enum level
 {
     lvl1 = 1, // BIANCO
