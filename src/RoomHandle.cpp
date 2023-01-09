@@ -21,14 +21,21 @@ Room *boss_room() {
     switch (rand()%5) {
         case 0:
             i = new Weapon('/',"spada-pistola",lv);
+            break;
         case 1:
             i = new Armor('T',"armatura di mia zia",lv);
+            break;
         case 2:
             i = new Boots('L',"Scarpine di Diego",lv);
+            break;
         case 3:
             i = new Crosshair('X',"Occhio di Lucertola",lv);
+            break;
         case 4:
             i = new Booster('>',"Sppee",lv);
+            break;
+        default:
+            i = new Weapon('c', "placeholder", lv);
     }
 
     Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X', "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
