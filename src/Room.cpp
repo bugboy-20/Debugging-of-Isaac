@@ -38,7 +38,7 @@ int door_in_this_position(coords p) {
     return -1;
 }
 */
-
+/*
 coords *door_position(door_pos pos) {
     coords *dp = new coords[2];
     switch (pos) {
@@ -90,7 +90,7 @@ coords *door_position2(door_pos pos) {
 
     return dp;
 }
-
+*/
 
 Room::Room(int id, List walls, List entities, List cores) : Room(id, walls)
 {

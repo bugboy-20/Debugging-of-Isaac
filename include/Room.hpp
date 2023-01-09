@@ -10,8 +10,6 @@
 #include "Queue.hpp"
 #include "ItemOnGround.hpp"
 
-#define ROOM_HEIGHT 20
-#define ROOM_WIDTH 100
 
 enum door_pos
 {

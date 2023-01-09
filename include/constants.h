@@ -1,6 +1,9 @@
 #pragma once
 #define STR_LENGTH 20
 
+#define ROOM_HEIGHT 20
+#define ROOM_WIDTH 100
+
 #define MAX_SMARTNESS 10
 
 #define Zombie_s "zombie"

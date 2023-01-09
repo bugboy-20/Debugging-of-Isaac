@@ -1,22 +1,9 @@
 #include <cstddef>
-#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include "Core.hpp"
-#include "Entity.hpp"
-#include "Equipment.hpp"
-#include "Hostile.hpp"
-#include "HostileList.hpp"
-#include "ItemOnGround.hpp"
-#include "List.hpp"
 #include "Events.hpp"
-#include "Wall.hpp"
 #include "Map.h"
-#include "Player.hpp"
-#include "Room.hpp"
-#include "geometry.h"
-#include "physics.h"
 #include "Room_handle.hpp"
 
 static struct map game_map;

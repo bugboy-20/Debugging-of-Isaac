@@ -13,6 +13,7 @@
 #include "HostileList.hpp"
 #include "ItemOnGround.hpp"
 #include "Events.hpp"
+#define DEBUG
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -37,7 +38,7 @@ bool menu(Screen &); // apre il menu
 void game_loop();
 void controls(Screen &); // apre l'interfaccia dei controlli
 
-map *dummy_map;
+map *game_map;
 
 char desc5[20] = "sasso";
 char desc1[20] = "mirirono";
@@ -75,25 +76,24 @@ int main()
         } while (again);
 
         // init della mappa
-        dummy_map = init_map(player, 1);
+        game_map = init_map(player, 1);
         player->add_item(veloce);
         player->add_item(cotta);
 
         // aggiungo elementi alla stanza
-        dummy_map->current_room->add_entity(ragno);
-        dummy_map->current_room->add_entity(scheleton);
-        dummy_map->current_room->add_entity(goblin);
-        dummy_map->current_room->add_entity(fantasma);
-        dummy_map->current_room->add_entity(z);
-        dummy_map->current_room->add_Core(rock);
-        dummy_map->current_room->add_items_on_ground(s);
-        dummy_map->current_room->add_wall(w2);
-        // dummy_map->current_room->add_wall(w1);
+        game_map->current_room->add_entity(ragno);
+        game_map->current_room->add_entity(scheleton);
+        game_map->current_room->add_entity(goblin);
+        game_map->current_room->add_entity(fantasma);
+        game_map->current_room->add_entity(z);
+        game_map->current_room->add_items_on_ground(s);
+        game_map->current_room->add_wall(w2);
+        // game_map->current_room->add_wall(w1);
 
         game_loop();
         key = schermo.print_game_over();
-        destroy_map(*dummy_map);
-        *dummy_map = {NULL, NULL};
+        destroy_map(*game_map);
+        *game_map = {NULL, NULL};
         delete player;
         schermo.stop_screen();
 
@@ -150,8 +150,7 @@ void controls(Screen &schermo)
 {
     schermo.start_gamecontrols();
     int key = '0'; // random key giusto per farlo entrare nel ciclo la prima volta
-    while (getch() != 'q')
-        ;
+    while (getch() != 'q');
     schermo.gc.clean();
 }
 
@@ -159,7 +158,7 @@ void game_loop()
 {
     timeval inizio_frame, fine_frame;
 
-    schermo.start_gameinterface(dummy_map->current_room);
+    schermo.start_gameinterface(game_map->current_room);
     while (!game_over(*player))
     {
         // il secondo parametro è la timezone, non importa usare quella giusta basta che sia uguale ovunque
@@ -167,8 +166,8 @@ void game_loop()
 
         controller(player);
 
-        do_room(dummy_map->current_room);
-        schermo.gi.set_room(dummy_map->current_room);
+        do_room(game_map->current_room);
+        schermo.gi.set_room(game_map->current_room);
         schermo.gi.handle_events();
 
         time_now(fine_frame);
@@ -192,27 +191,25 @@ void controller(Player *player)
             int slot = key - '0' - 1;
             if (player->get_inventory().items[slot] != NULL)
             {
-                drop_item(*dummy_map->current_room, slot);
+                drop_item(*game_map->current_room, slot);
             }
             continue;
         }
         switch (key)
         {
         case up_button:
-            player->move_up(dummy_map->current_room);
+            player->move_up(game_map->current_room);
             break;
         case left_button:
-            player->move_left(dummy_map->current_room);
+            player->move_left(game_map->current_room);
             break;
         case right_button:
-            player->move_right(dummy_map->current_room);
+            player->move_right(game_map->current_room);
             break;
         case down_button:
-            player->move_down(dummy_map->current_room);
+            player->move_down(game_map->current_room);
             break;
-        case quit_button:
-            exit_game();
-            break;
+
         case KEY_UP:
             bullet_creation(player, UP);
             break;
@@ -225,15 +222,20 @@ void controller(Player *player)
         case KEY_LEFT:
             bullet_creation(player, LEFT);
             break;
+
         case heal_button:
-            player->use_potion(dummy_map->current_room);
+            player->use_potion(game_map->current_room);
+            break;
+#ifdef DEBUG
+        case quit_button:
+            exit_game();
             break;
         case 'p': // tasto suicidio
             player->set_health(0);
             break;
+#endif
         default:
             break;
-            // ...
         }
     } while (key != ERR); // finché ci sono tasti da leggere
 }
@@ -241,7 +243,6 @@ void controller(Player *player)
 void exit_game()
 {
     schermo.stop_screen();
-    // destroy_map(*dummy_map);
     exit(EXIT_SUCCESS);
 }
 
