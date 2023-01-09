@@ -90,36 +90,36 @@
 #define Golem_s "Golem BOSS"
 #define Golem_display 'G'
 #define Golem_damage 10
-#define Golem_health 30
-#define Golem_as 1500
-#define Golem_ms 200
+#define Golem_health 35
+#define Golem_as 2200
+#define Golem_ms 500
 #define Golem_range 9
 #define Golem_tr 8
-#define Golem_smartness 2
+#define Golem_smartness 4
 #define Golem_ds 0
 #define Golem_hs 0
 
 #define Mago_s "Mago BOSS"
 #define Mago_display 'M'
 #define Mago_damage 20
-#define Mago_health 23
-#define Mago_as 2500
+#define Mago_health 28
+#define Mago_as 1700
 #define Mago_ms 200
-#define Mago_range 15
-#define Mago_tr 14
-#define Mago_smartness MAX_SMARTNESS
+#define Mago_range 30
+#define Mago_tr 29
+#define Mago_smartness 5
 #define Mago_ds 0
 #define Mago_hs 0
 
 #define Drago_s "Drago BOSS"
 #define Drago_display 'D'
-#define Drago_damage 16
-#define Drago_health 26
+#define Drago_damage 13
+#define Drago_health 30
 #define Drago_as 2000
 #define Drago_ms 200
-#define Drago_range 120
-#define Drago_tr 119
-#define Drago_smartness 2
+#define Drago_range 15
+#define Drago_tr 14
+#define Drago_smartness 5
 #define Drago_ds 0
 #define Drago_hs 0
 
