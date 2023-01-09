@@ -422,18 +422,25 @@ Room *add_loot(Room *r) {
 }
 
 Room *add_hostiles(Room* r) {
-    int x,y,lv;
-    for(int i=difficulty; i>0;) {
+    int lv;
+    coords p;
+    Hostile *h;
 
-        do {
-            x=rand()%ROOM_WIDTH;
-            y=rand()%ROOM_HEIGHT;
-        } while(r->get_element_in_this_position({x,y})!=NULL);
+    for(int i=difficulty; i>0;) {
+        p=safe_random_spawn(*r);
+
 
         lv=rand()%i;
         i-=lv+1; //entità di livello 0 (virtualmente) potrebbero essere generate infinitamente
 
-        Hostile *h = new Zombie({x,y},lv);
+        switch (rand()%6) {
+			case 0: h = new Zombie(p,lv); break;
+			case 1: h = new Scheletro(p,lv); break;
+			case 2: h = new Goblin(p,lv); break;
+			case 3: h = new Fantasma(p,lv); break;
+			case 4: h = new Ragno(p,lv); break;
+			case 5: h = new Mummia(p,lv); break;
+        }
 
 
         r->add_entity(h);
