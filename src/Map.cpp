@@ -19,7 +19,7 @@
 #include "physics.h"
 
 #define ROOM_TYPES 5 // numero di varianti di stanze disponibili
-#define BOSS_FREQ 100 // vedi next_boss_room
+#define BOSS_FREQ 10 // vedi next_boss_room
 static struct map game_map;
 static int difficulty;
 
@@ -30,7 +30,7 @@ Room *add_loot(Room *r);
 Room *close_some_doors(Room *r);
 
 static int id=0; // generazione di un ID unico per ogni stanza
-static bool next_boss_room = false; // ogni BOSS_FREQ punti la prossima stanza generata è una boss_room
+static bool next_boss_room = false; // ogni BOSS_FREQ stanze la prossima stanza generata è una boss_room
 
 int new_id() {
     return id++;
@@ -71,8 +71,6 @@ void change_room(Room *new_room)
         game_map.current_room=new_room;
         new_room->add_event(new RoomChangedE());
         
-        if(game_map.current_room->p->get_score()/BOSS_FREQ > difficulty*10)
-            next_boss_room=true;
         difficulty=game_map.current_room->p->get_score()/10;
 
     }
@@ -140,6 +138,9 @@ Room *add_room(Room *r, enum door_pos p) {
      *
      *  immaginando le porte nella posizione data dall'enum si nota che rappresentano un anello, per cui possiamo ricondurci ad una soluzione in algebra modulare.
      */
+    if (new_room->door[i]==NULL)
+        new_room->door[i]=new door;
+
     new_room->door[i]->position=i;
     new_room->door[i]->next_room=r;
     new_room->door[i]->locked=false;
@@ -154,6 +155,9 @@ Room *add_room(Room *r, enum door_pos p) {
         create_loop(new_room, i, false);
     }
 
+
+    if(new_room->get_id() % BOSS_FREQ == BOSS_FREQ - 1)
+        next_boss_room = true;
 
     return new_room;
 
@@ -180,7 +184,9 @@ Room *boss_room() {
     }
 
     Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X', "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
+    r->add_entity(boss);
 
+    next_boss_room=false;
     return r;
 }
 
