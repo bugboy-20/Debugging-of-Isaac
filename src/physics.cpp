@@ -7,6 +7,8 @@
 #include "Map.h"
 #include "time_handle.h"
 #include "ItemOnGround.hpp"
+#include "constants.h"
+
 using namespace std;
 List bullets = List();
 
@@ -69,6 +71,7 @@ void door_collision(coords p, Room& r){
 }
 
 void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_pos p1){
+    /*
     coords old_pos, new_pos;
     if(pos.x == door_position(p)[0].x &&  pos.y == door_position(p)[0].y){
         old_pos = door_position(p)[0];
@@ -78,6 +81,19 @@ void repos_player_in_new_room(coords pos, Room& r, enum door_pos p, enum door_po
         new_pos = door_position2(p1)[1];
     }
     r.next_room(p)->p->reposition(new_pos);
+    */
+
+    int nx,ny,w,h;
+
+    w=ROOM_WIDTH-2;
+    h=ROOM_HEIGHT-2;
+
+    nx=1+((pos.x-1+w)%w);
+    ny=1+((pos.y-1+h)%h);
+
+
+    r.next_room(p)->p->reposition({nx,ny});
+    
 }
 
 bool next_room_position(Room& r, enum door_pos p){
