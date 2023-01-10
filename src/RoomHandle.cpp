@@ -38,9 +38,9 @@ Room *boss_room() {
     }
 
     switch(rand()%3) {
-        case 0: boss = new Golem(safe_random_spawn(*r),0,i);
-        case 1: boss = new Golem(safe_random_spawn(*r),0,i);
-        case 2: boss = new Golem(safe_random_spawn(*r),0,i);
+        case 0: boss = new Golem(safe_random_spawn(*r),0,i); break;
+        case 1: boss = new Mago(safe_random_spawn(*r),0,i); break;
+        case 2: boss = new Drago(safe_random_spawn(*r),0,i); break;
     }
     r->add_entity(boss);
 
@@ -257,8 +257,8 @@ coords safe_random_spawn(Room& r) {
 
 Room *add_loot(Room *r) {
 
-    const int potion_probabitilty = 50;
-    const int key_probability = 50;
+    const int potion_probabitilty = pot_spwan_rate;
+    const int key_probability = key_spawn_rate;
     coords c;
     Potion *p;
     Key *k;
