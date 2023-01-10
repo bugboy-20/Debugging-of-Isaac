@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Events.hpp"
 #include "Map.h"
-#include "Room_handle.hpp"
+#include "Room_handle.h"
 
 static struct map game_map;
 static int difficulty;

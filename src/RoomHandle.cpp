@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cstddef>
-#include "Room_handle.hpp"
+#include "Room_handle.h"
 #include "Hostile.hpp"
 #include "HostileList.hpp"
 
@@ -284,15 +284,15 @@ Room *add_loot(Room *r) {
 }
 
 Room *add_hostiles(Room* r, int difficulty) {
-    int lv;
+    int lv,i=difficulty;
     coords p;
     Hostile *h;
 
-    for(int i=difficulty; i>0;) {
+    while(i>=0) {
         p=safe_random_spawn(*r);
 
 
-        lv=rand()%i;
+        lv=rand()%(i+1);
         i-=lv+1; //entità di livello 0 (virtualmente) potrebbero essere generate infinitamente
 
         switch (rand()%7) {
