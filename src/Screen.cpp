@@ -218,5 +218,4 @@ int Screen::print_game_over()
 void Screen::stop_screen()
 {
     endwin();
-    refresh();
 }
