@@ -1,19 +1,10 @@
-#include <cstddef>
-#include <iostream>
-#include <ctime>
 #include "time_handle.h"
+#include "Screen.hpp"
 #include "Map.h"
 #include "Player.hpp"
-#include "Room.hpp"
-#include "geometry.h"
 #include "physics.h"
-#include "Screen.hpp"
-#include "Wall.hpp"
-#include "Hostile.hpp"
-#include "HostileList.hpp"
-#include "ItemOnGround.hpp"
-#include "Events.hpp"
-#define DEBUG
+#include "constants.h"
+// #define DEBUG
 
 #ifdef _WIN32 // sleep fn
 #include <Windows.h>
@@ -27,7 +18,6 @@ using namespace std;
 
 #define FRAMETIME 30       // durata di un frame ~~> velocità del gioco
 #define utom(x) (1000 * x) // from micro to milli
-// #define sleep_time(ti,tf) (FRAMETIME - (tf - ti))
 int sleep_time(timeval start, timeval end);
 void controller(Player *); // gestisce la tastiera
 
@@ -39,26 +29,9 @@ void game_loop();
 void controls(Screen &); // apre l'interfaccia dei controlli
 
 map *game_map;
-
-char desc5[20] = "sasso";
-char desc1[20] = "mirirono";
-
-Zombie *z = new Zombie({45, 15});
-Ragno *ragno = new Ragno({40, 15});
-Scheletro *scheleton = new Scheletro({60, 7});
-Goblin *goblin = new Goblin({20, 10});
-Torretta *fantasma = new Torretta({22, 4});
-Core *rock = new Core({35, 7}, 'O', desc5);
-Wall *w1 = new Wall({{ROOM_WIDTH / 2, ROOM_HEIGHT / 4}, false, ROOM_WIDTH / 4});
-Wall *w2 = new Wall({{10, 7}, true, ROOM_HEIGHT / 4});
-Booster *veloce = new Booster('L', desc1, lvl2);
-Weapon *spada = new Weapon('\\', desc1, 8);
-Armor *cotta = new Armor('H', desc1, lvl7);
-ItemOnGround *s = new ItemOnGround({5, 5}, spada);
-
 Player *player;
-
 Screen schermo;
+
 int main()
 {
     int key;
@@ -66,7 +39,7 @@ int main()
     {
         // init schermo e player
         schermo = Screen();
-        player = new Player({20, 15});
+        player = new Player({ROOM_WIDTH / 2, ROOM_HEIGHT / 2});
 
         // apro il menu
         bool again;
@@ -77,18 +50,6 @@ int main()
 
         // init della mappa
         game_map = init_map(player, 1);
-        player->add_item(veloce);
-        player->add_item(cotta);
-
-        // aggiungo elementi alla stanza
-        game_map->current_room->add_entity(ragno);
-        game_map->current_room->add_entity(scheleton);
-        game_map->current_room->add_entity(goblin);
-        game_map->current_room->add_entity(fantasma);
-        game_map->current_room->add_entity(z);
-        game_map->current_room->add_items_on_ground(s);
-        game_map->current_room->add_wall(w2);
-        // game_map->current_room->add_wall(w1);
 
         game_loop();
         key = schermo.print_game_over();
@@ -116,9 +77,9 @@ bool menu(Screen &schermo)
             selected_menu = schermo.gm.get_selected_item();
             break;
         }
-        else if (key == KEY_DOWN || key == 's')
+        else if (key == KEY_DOWN || key == down_button)
             schermo.gm.select_next_item();
-        else if (key == KEY_UP || key == 'w')
+        else if (key == KEY_UP || key == up_button)
             schermo.gm.select_prev_item();
     } while (true);
     schermo.gm.clean();
@@ -149,8 +110,7 @@ bool menu(Screen &schermo)
 void controls(Screen &schermo)
 {
     schermo.start_gamecontrols();
-    int key = '0'; // random key giusto per farlo entrare nel ciclo la prima volta
-    while (getch() != 'q');
+    while (getch() != quit_button);
     schermo.gc.clean();
 }
 
