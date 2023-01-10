@@ -1,3 +1,4 @@
+#include <iostream>
 #include "time_handle.h"
 #include "Screen.hpp"
 #include "Map.h"
@@ -110,7 +111,8 @@ bool menu(Screen &schermo)
 void controls(Screen &schermo)
 {
     schermo.start_gamecontrols();
-    while (getch() != quit_button);
+    while (getch() != quit_button)
+        ;
     schermo.gc.clean();
 }
 
