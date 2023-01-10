@@ -89,7 +89,7 @@ Boots::Boots(char display, const char desc[STR_LENGTH], int level) : Item(item, 
 {
     this->item_stats.movement_speed = boots_speed + (level - 1); // esprime quante volte al secondo si muove
 }
-int Boots::get_move_speed() { return this->item_stats.movement_speed; }
+double Boots::get_move_speed() { return this->item_stats.movement_speed; }
 
 Crosshair::Crosshair(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
@@ -101,4 +101,4 @@ Booster::Booster(char display, const char desc[STR_LENGTH], int level) : Item(it
 {
     this->item_stats.attack_speed = booster_speed + (level - 1) * 0.5;
 }
-int Booster::get_attack_speed() { return this->item_stats.attack_speed; }
+double Booster::get_attack_speed() { return this->item_stats.attack_speed; }

@@ -94,7 +94,7 @@ class Boots : public Item
 public:
     Boots(char display, const char desc[STR_LENGTH], int level = 1);
 
-    int get_move_speed();
+    double get_move_speed();
 };
 
 // un Crosshair è un item che aumenta il range,
@@ -114,5 +114,5 @@ class Booster : public Item
 public:
     Booster(char display, const char desc[STR_LENGTH], int level = 1);
 
-    int get_attack_speed();
+    double get_attack_speed();
 };
