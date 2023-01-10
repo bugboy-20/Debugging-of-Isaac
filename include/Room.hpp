@@ -86,9 +86,6 @@ class Room {
 // toglie dalla coda un evento
         RoomEvent *get_event();
 
-        //debug
-        void prinmt_room_menmb();
-
         //svuota la stanza
         void empty();
 
