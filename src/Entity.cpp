@@ -12,7 +12,7 @@ Entity::Entity(coords pos, char display, const char description[STR_LENGTH], sta
 
     this->attack_speed = s.attack_speed; // 1 secondo
     time_now(this->last_shot);
-    this->last_shot.tv_sec -= (attack_speed / 1000) + 1; // faccio in modo che per il primo controllo sia sempre
+    this->last_shot.tv_sec -= (attack_speed / 1000) + 1; // faccio in modo che per il primo controllo sia sempre vero
 
     this->movement_speed = s.movement_speed;
     time_now(this->last_move);

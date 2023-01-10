@@ -2,7 +2,7 @@
 
 ## Compilazione ed esecuzione
 
-La compilazione avviene tramite g++ e l'uso di un Makefile.
+La compilazione avviene tramite Makefile, il quale richiama il compilatore g++
 
 Per creare l'eseguibile utilizzare:
 ```sh
@@ -23,15 +23,14 @@ $ make
 
 I comandi sono:
 * `wasd` per muoversi nelle quattro direzioni
-* *arrow keys* per sparare nelle quattro direzioni
+* `arrow keys` per sparare nelle quattro direzioni
 * `h` per usare una pozione
 * `1 2 3 4 5` per lasciare a terra l'oggetto corrispondente al numero
-* `p` permette di chiudere del tutto il gioco
 
 ## Supporto
 
-Il gioco è stato sviluppato e testato su Windows e Linux, su quest'ultimo abbiamo provato alacritty
+Il gioco è stato sviluppato e testato su Windows e Linux
 
 ## Autori
 
-Gli autori sono Emanuele Pischetola, Diego Roberto Ammirabile, Saad Farqad Medhat.
+Gli autori sono Diego Roberto *Ammirabile*, Saad Farqad *Medhat*, Emanuele *Pischetola*.
