@@ -14,31 +14,34 @@ int new_id() {
 Room *boss_room() {
     Room *r = new Room(new_id());
     //nessuna porta, è una stanza "foglia"
-    //TODO  infilarci i boss
 
-    int lv = 1; //TODO
+    int lv = r->get_id()/10;
+    Hostile *boss;
     Item *i;
+
     switch (rand()%5) {
         case 0:
-            i = new Weapon('/',"spada-pistola",lv);
+            i = new Weapon('/',"Spada-pistola",lv);
             break;
         case 1:
-            i = new Armor('T',"armatura di mia zia",lv);
+            i = new Armor('T',"Elmo di mia zia",lv);
             break;
         case 2:
-            i = new Boots('L',"Scarpine di Diego",lv);
+            i = new Boots('L',"Scarpine fatate",lv);
             break;
         case 3:
             i = new Crosshair('X',"Occhio di Lucertola",lv);
             break;
         case 4:
-            i = new Booster('>',"Sppee",lv);
+            i = new Booster('>',"Speeeed",lv);
             break;
-        default:
-            i = new Weapon('c', "placeholder", lv);
     }
 
-    Hostile *boss = new Hostile({ROOM_WIDTH/2,ROOM_HEIGHT/2},'X', "Er BOSSU", {3,40,2,3,10}, ROOM_WIDTH, 3, i);
+    switch(rand()%3) {
+        case 0: boss = new Golem(safe_random_spawn(*r),0,i);
+        case 1: boss = new Golem(safe_random_spawn(*r),0,i);
+        case 2: boss = new Golem(safe_random_spawn(*r),0,i);
+    }
     r->add_entity(boss);
 
     return r;
@@ -292,13 +295,14 @@ Room *add_hostiles(Room* r, int difficulty) {
         lv=rand()%i;
         i-=lv+1; //entità di livello 0 (virtualmente) potrebbero essere generate infinitamente
 
-        switch (rand()%6) {
+        switch (rand()%7) {
 			case 0: h = new Zombie(p,lv); break;
 			case 1: h = new Scheletro(p,lv); break;
 			case 2: h = new Goblin(p,lv); break;
 			case 3: h = new Fantasma(p,lv); break;
 			case 4: h = new Ragno(p,lv); break;
 			case 5: h = new Mummia(p,lv); break;
+            case 6: h = new Torretta(p,lv); break;
         }
 
 

@@ -16,8 +16,11 @@ Room *add_hostiles(Room* r, int difficulty);
 //aggiunge le chiavi e le posizioni alla stanza
 Room *add_loot(Room *r);
 
-//importa come chiuse dalle 0 alle 2 porte per la stanza r
+//imposta come chiuse dalle 0 alle 2 porte per la stanza r
 Room *close_some_doors(Room *r);
 
 //genera un id unico per la nuova stanza
 int new_id();
+
+// restituisce le coordinate di una posizione libera all'interno della stanza
+coords safe_random_spawn(Room& r);

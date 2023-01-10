@@ -340,18 +340,18 @@ void move_in_player_direction(Room &r, Hostile *e){
 void collect_item_on_ground(Room &r){
     List items_on_ground = r.get_items_on_ground();
     node *items_tmp = items_on_ground.head;
-
     while(items_tmp != NULL){
         ItemOnGround *i = (ItemOnGround*)items_tmp->element;
         bool flag = r.p->get_x() == i->get_x() && r.p->get_y() == i->get_y();
-        if(flag && i->get_item()->get_id() == item){
+        bool full_inventory = r.p->get_inventory().item_n == player_inventory_slots;
+        if(flag && i->get_item()->get_id() == item && !full_inventory){
             r.p->add_item(i->get_item());
         }else if(flag && i->get_item()->get_id() == potions){
             r.p->add_potion(&r,(Potion*) i->get_item());
         }else if(flag && i->get_item()->get_id() == keys){
             r.p->add_key(&r, (Key*) i->get_item());
         }
-        if(flag){
+        if(flag && !full_inventory){
             r.delete_room_menber(i);
             r.add_event(new ItemPickedE(i));
         }
