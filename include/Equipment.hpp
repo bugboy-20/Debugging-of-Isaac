@@ -53,8 +53,6 @@ public:
     int use();
 };
 
-// per ora Key è letteralmente un consumable con un altro nome,
-// TODO forse è una classe da togliere?
 class Key : public Consumable
 {
 public:
@@ -90,16 +88,19 @@ public:
 // un Boots è un item che aumenta la velocità di movimento
 class Boots : public Item
 {
-    // ogni livello aumenta di 30
+    // il cooldown di movimento viene diviso per il valore della statistica
+    // base_speed + (livello-1)
+    // ogni livello la move speed dell'item aumenta di 1
 public:
     Boots(char display, const char desc[STR_LENGTH], int level = 1);
 
     double get_move_speed();
 };
 
-// un Crosshair è un item che aumenta il range,
+// un Crosshair è un item che aumenta il range
 class Crosshair : public Item
 {
+    // range formula: base_range + (level-1)*15
     // ogni livello aumenta di 15
 public:
     Crosshair(char display, const char desc[STR_LENGTH], int level = 1);
@@ -107,10 +108,12 @@ public:
     int get_range();
 };
 
-// una attacck speed up è un item che aumenta la velocità di attacco
+// un Booster è un item che aumenta la velocità di attacco
 class Booster : public Item
 {
-    // ogni livello aumenta di 90
+    // il cooldown di attacco viene diviso per il valore della statistica
+    // base_attack_speed + (level-1)*0.5
+    // ogni livello aumenta di 0.5
 public:
     Booster(char display, const char desc[STR_LENGTH], int level = 1);
 

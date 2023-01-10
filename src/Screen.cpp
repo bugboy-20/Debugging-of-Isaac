@@ -12,7 +12,7 @@
 #define DEFAULT 0
 Screen::Screen()
 {
-    setlocale(LC_ALL, ""); // dovrebbe servire per stampare caratteri speciali, ma non va. TODO documentarsi meglio
+    setlocale(LC_ALL, "");
     initscr();
     cbreak();             // ctrl+c behaviour
     noecho();             // avoids user input from being printed
@@ -26,7 +26,7 @@ Screen::Screen()
     if (!has_colors())
     {
         endwin();
-        std::cerr << "Your terminal does not support color" << std::endl;
+        std::cerr << "Il tuo terminale non supporta i colori" << std::endl;
         exit(EXIT_FAILURE);
     }
     start_color();
@@ -127,7 +127,7 @@ void Screen::start_gameinterface(Room *r)
 
 void Screen::start_gamecontrols()
 {
-    controls = newwin(stdscr_height, stdscr_width, 0,0);
+    controls = newwin(stdscr_height, stdscr_width, 0, 0);
     wrefresh(controls);
     this->gc = GameControls(controls);
 }
@@ -206,7 +206,7 @@ int Screen::print_game_over()
     mvprintw(current_y, current_x, "%s", "| (___) |    \\   /    | (____/\\  | ) \\ \\__");
     current_y += 1;
     mvprintw(current_y, current_x, "%s", "(_______)     \\_/     (_______/  |/   \\__/");
-    mvprintw(stdscr_height - 5, 0, "%s %c %s", "Premi un tasto per ricominciare oppure premi", quit_button, "per uscire...");
+    mvprintw(stdscr_height - 5, 0, "Premi %c per ricominciare, oppure premi %c per uscire...", new_game_button, quit_button);
     refresh();
     int key;
     do
@@ -218,4 +218,5 @@ int Screen::print_game_over()
 void Screen::stop_screen()
 {
     endwin();
+    refresh();
 }

@@ -36,15 +36,6 @@ stats Item::get_stats(bool negate)
     return s;
 }
 
-/* ipotesi per id:
-1- consumabile
-2- armatura
-3- spada a bersaglio singolo
-4- spada aoe
-5- pistola (richiede ammo)
-6- Bacca magica (no ammo)
-*/
-
 Consumable::Consumable(item_id id, char display, const char desc[STR_LENGTH], int level, int n) : Item(id, display, desc, level)
 {
     n_utilizzi = n;
@@ -87,7 +78,7 @@ int Armor::get_health() { return this->item_stats.health; }
 
 Boots::Boots(char display, const char desc[STR_LENGTH], int level) : Item(item, display, desc, level)
 {
-    this->item_stats.movement_speed = boots_speed + (level - 1); // esprime quante volte al secondo si muove
+    this->item_stats.movement_speed = boots_speed + (level - 1);
 }
 double Boots::get_move_speed() { return this->item_stats.movement_speed; }
 

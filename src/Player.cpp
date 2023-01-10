@@ -3,7 +3,6 @@
 #include "constants.h"
 #include "Room.hpp"
 #include <cstddef>
-#include <iostream>
 
 Player::Player(coords pos) : Player(pos, player_display) {}
 
@@ -69,7 +68,7 @@ Item *Player::remove_item(int slot)
 {
     if (inv.items[slot] == NULL)
         return NULL;
-    this->inv.item_n -=1;
+    this->inv.item_n -= 1;
     Item *temp = inv.items[slot];
     inv.items[slot] = NULL;
     add_stats(temp->get_stats(true));
@@ -103,8 +102,8 @@ void Player::add_potion(Room *r, Potion *p)
 
 void Player::use_potion(Room *room)
 {
-    if (health == max_health) // TODO: decidere se tenere o no questa feature
-        return;               // se il player è full vita non viene curato
+    if (health == max_health)
+        return;
     int cura = this->inv.pots.use();
     change_health(cura);
     room->add_event(new PlayerHealthChangedE(this));

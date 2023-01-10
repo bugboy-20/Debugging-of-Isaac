@@ -3,7 +3,6 @@
 #include "geometry.h"
 #include "physics.h"
 #include <cstring>
-#include <iostream>
 
 Entity::Entity(coords pos, char display, const char description[STR_LENGTH], stats s) : Core(pos, display, description)
 {

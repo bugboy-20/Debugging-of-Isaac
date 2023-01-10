@@ -16,8 +16,7 @@ mob(Ragno);
 mob(Mummia);
 mob(Torretta);
 
-// TODO implementare due boss
-// nemici particolarmente forti senza scaling, tanta vita
+// Boss
 mob(Golem);
 mob(Mago);
 mob(Drago);

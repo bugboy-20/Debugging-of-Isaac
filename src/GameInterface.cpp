@@ -149,7 +149,6 @@ void GameInterface::handle_events()
     }
 }
 
-
 void GameInterface::render_room()
 {
     // pulisco lo schermo da rappresentazioni precedenti
@@ -223,12 +222,17 @@ void GameInterface::render_playerstat()
     mvwprintw(playerstat, 3, start_x, "%s: %d", "punti", player->get_score());
 
     // stampo le statistiche
-    int curr_y = 4;
+    int curr_y = 4, temp = player->get_attack_speed();
     mvwprintw(playerstat, curr_y, start_x, "%s: %d", "danno", player->get_damage());
     curr_y += 1;
-    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "vel. attacco", 1000 / player->get_attack_speed());
+    if (temp <= 0)
+        temp = 1;
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "vel. attacco", 1000 / temp);
     curr_y += 1;
-    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "velocita`", 1000 / player->get_movement_speed());
+    temp = player->get_movement_speed();
+    if (temp <= 0)
+        temp = 1;
+    mvwprintw(playerstat, curr_y, start_x, "%s: %d", "velocita`", 1000 / temp);
     curr_y += 1;
     mvwprintw(playerstat, curr_y, start_x, "%s: %d", "gittata", player->get_range());
 
@@ -316,6 +320,7 @@ void GameInterface::render_moblist()
         c->get_description(desc);
         if (start_x + strlen(desc) + 4 >= ROOM_WIDTH || start_x + nFullHeart + nHalfHeart >= ROOM_WIDTH) // +4 alla lunghezza del nome perchè stampo anche altri ch
         {                                                                                                // se il nome o la barra della vita non ci sta
+
             line += 3; // mi sposto sotto
             wmove(moblist, line, col);
         }
