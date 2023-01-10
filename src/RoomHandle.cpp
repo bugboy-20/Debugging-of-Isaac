@@ -198,8 +198,7 @@ Room *room3() {
     return r;
 }
 
-/* TODO sistemare la circolarità
- *   _____  _____
+/*   _____  _____
  *  |            |
  *  |     O      |
  *      O   O
