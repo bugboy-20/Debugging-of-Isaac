@@ -69,6 +69,7 @@ Item *Player::remove_item(int slot)
 {
     if (inv.items[slot] == NULL)
         return NULL;
+    this->inv.item_n -=1;
     Item *temp = inv.items[slot];
     inv.items[slot] = NULL;
     add_stats(temp->get_stats(true));
