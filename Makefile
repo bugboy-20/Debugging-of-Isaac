@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -lncurses -lm -I./include/ -g
+CFLAGS = -lncurses -lm -I./include/
 SOURCES = ./src/*.cpp
  
 
